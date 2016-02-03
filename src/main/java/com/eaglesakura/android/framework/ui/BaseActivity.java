@@ -1,7 +1,8 @@
 package com.eaglesakura.android.framework.ui;
 
 import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.framework.FrameworkCentral;
+import com.eag
+esakur .android.framework.FrameworkCentral;
 import com.eaglesakura.android.framework.ui.state.IStateful;
 import com.eaglesakura.android.framework.util.AppSupportUtil;
 import com.eaglesakura.android.oari.ActivityResult;

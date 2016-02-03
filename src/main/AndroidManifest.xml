@@ -1,4 +1,11 @@
-<manifest
-        package="com.eaglesakura.android.framework">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.eaglesakura.android.framework">
 
+    <application>
+        <!-- ライセンス表示 -->
+        <activity
+                android:name="com.eaglesakura.android.framework.ui.license.LicenseViewActivity"
+                android:theme="@style/EsMaterial.Theme.Grey.NoActionBar"
+                android:screenOrientation="portrait"/>
+    </application>
 </manifest>

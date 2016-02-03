@@ -15,6 +15,7 @@ buildscript {
 
 repositories {
     maven { url "http://eaglesakura.github.io/maven/" }
+    maven { url "https://clojars.org/repo/" }
     mavenCentral()
 }
 
@@ -48,18 +49,31 @@ if (!hasProperty("ANDROID_SUPPORT_LIB_VERSION")) {
 if (!hasProperty("ANDROID_PLAYSERVICE_LIB_VERSION")) {
     ext.ANDROID_PLAYSERVICE_LIB_VERSION = "+"
 }
+// Local or maven
+if (!hasProperty("EGLIBRARY_COMPILE_LOCAL")) {
+    ext.EGLIBRARY_COMPILE_LOCAL = false
+}
 
 dependencies {
-    compile 'com.eaglesakura:simple-utils:1.0.+'
-    compile 'com.eaglesakura:android-simple-utils:1.0.+'
-    compile 'com.eaglesakura:android-text-kvs:1.0.+'
-    compile 'com.eaglesakura:android-thread:1.0.+'
-    compile 'com.eaglesakura:android-canvas-graphics:1.0.+'
-    compile 'com.eaglesakura:android-net:1.0.+'
-
-    // Fixed Libs
-    compile 'com.eaglesakura:onactivityresult-invoke:+'
-    compile 'com.eaglesakura:small-aquery:+'
+    if (EGLIBRARY_COMPILE_LOCAL) {
+        compile project(':eglibrary:simple-utils')
+        compile project(':eglibrary:android-simple-utils')
+        compile project(':eglibrary:android-text-kvs')
+        compile project(':eglibrary:android-thread')
+        compile project(':eglibrary:android-canvas-graphics')
+        compile project(':eglibrary:android-net')
+        compile project(':eglibrary:onactivityresult-invoke')
+        compile project(':eglibrary:small-aquery')
+    } else {
+        compile 'com.eaglesakura:simple-utils:1.0.+'
+        compile 'com.eaglesakura:android-simple-utils:1.0.+'
+        compile 'com.eaglesakura:android-text-kvs:1.0.+'
+        compile 'com.eaglesakura:android-thread:1.0.+'
+        compile 'com.eaglesakura:android-canvas-graphics:1.0.+'
+        compile 'com.eaglesakura:android-net:1.0.+'
+        compile 'com.eaglesakura:onactivityresult-invoke:+'
+        compile 'com.eaglesakura:small-aquery:+'
+    }
 
     /**
      * support libs
@@ -79,11 +93,11 @@ dependencies {
     compile 'com.android.support:support-annotations:+'
 
     /**
-     * Butter Knife & Icepick
+     * Injection / State
      */
-    compile "com.jakewharton:butterknife:7.0.+"
-    compile 'frankiesardo:icepick:3.1.0'
-    provided 'frankiesardo:icepick-processor:3.1.0'
+    compile "com.jakewharton:butterknife:+"
+    compile 'frankiesardo:icepick:+'
+    provided 'frankiesardo:icepick-processor:+'
 }
 
 apply plugin: 'maven'
@@ -148,10 +162,22 @@ uploadArchives {
         }
         dependencies {
             dependency {
-                groupId = 'com.google.http-client'
-                artifactId = 'google-http-client-android'
-                version = '1.21.+'
+                groupId = 'com.jakewharton'
+                artifactId = 'butterknife'
+                version = '7.0.+'
                 scope = 'compile'
+            }
+            dependency {
+                groupId = 'frankiesardo'
+                artifactId = 'icepick:'
+                version = '3.1.+'
+                scope = 'compile'
+            }
+            dependency {
+                groupId = 'frankiesardo'
+                artifactId = 'icepick-processor'
+                version = '3.1.+'
+                scope = 'provided'
             }
         }
     }
