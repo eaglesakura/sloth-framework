@@ -16,7 +16,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.view.Gravity;
 
-//import android.support.v7.internal.widget.ThemeUtils;
 
 /**
  *

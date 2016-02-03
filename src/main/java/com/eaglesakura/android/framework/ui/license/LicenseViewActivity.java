@@ -1,10 +1,8 @@
 package com.eaglesakura.android.framework.ui.license;
 
 import com.eaglesakura.android.framework.R;
-i
-port c m.eaglesakura.android.aquery.AQuery;
-import com.eag
-esakur .android.framework.FrameworkCentral;
+import com.eaglesakura.android.aquery.AQuery;
+import com.eaglesakura.android.framework.FrameworkCentral;
 import com.eaglesakura.android.framework.ui.BaseActivity;
 import com.eaglesakura.android.thread.async.AsyncAction;
 import com.eaglesakura.android.thread.async.AsyncTaskResult;

@@ -5,8 +5,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
 import com.eaglesakura.android.framework.R;
-import com.eag
-esakur .android.framework.FrameworkCentral;
+import com.eaglesakura.android.framework.FrameworkCentral;
 import com.eaglesakura.android.framework.db.BasicSettings;
 import com.eaglesakura.android.framework.ui.BaseActivity;
 import com.eaglesakura.android.oari.OnActivityResult;
