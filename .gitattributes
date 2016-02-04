@@ -1,7 +1,6 @@
 # Resources
 *.xml text eol=lf
 *.properties text=auto
-*.license text=lf
 
 # Source Codes
 *.java text eol=lf
