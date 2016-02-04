@@ -135,12 +135,10 @@ android.libraryVariants.all { variant ->
         source = variant.javaCompile.source
         ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
 
-        def javadocClassPath =files(variant.javaCompile.classpath.files) +
+        classpath = files(variant.javaCompile.classpath.files) +
                 files(ext.androidJar) +
-                files("build/intermediates/classes/${variant.name}/")
-
-        findAAR(javadocClassPath, "build/intermediates/exploded-aar")
-        classpath = javadocClassPath;
+                files("build/intermediates/classes/${variant.name}/") +
+                fileTree("build/intermediates/exploded-aar").include("**/*.jar")
 
         options.links("http://docs.oracle.com/javase/7/docs/api/");
         options.links("http://d.android.com/reference/");
