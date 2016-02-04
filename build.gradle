@@ -124,7 +124,9 @@ android.libraryVariants.all { variant ->
                 files("build/intermediates/classes/${variant.name}/")
 
         def SUPPORT_LIB_DIR = [
+                "support-v4",
                 "appcompat-v7", "cardview-v7", "gridlayout-v7", "mediarouter-v7", "palette-v7", "recyclerview-v7",
+                "support-v13",
                 "customtabs", "design", "multidex", "support-annotations"];
         for (def libName : SUPPORT_LIB_DIR) {
             CLASS_PATH += files("${android.sdkDirectory}/extras/android/m2repository/com/android/support/" +
