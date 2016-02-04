@@ -118,7 +118,20 @@ android.libraryVariants.all { variant ->
         description "Generates Android Javadoc for $variant.name."
         source = variant.javaCompile.source
         ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar) + files("build/intermediates/classes/${variant.name}/")
+
+        def CLASS_PATH = files(variant.javaCompile.classpath.files) +
+                files(ext.androidJar) +
+                files("build/intermediates/classes/${variant.name}/")
+
+        def SUPPORT_LIB_DIR = [
+                "appcompat-v7", "cardview-v7", "gridlayout-v7", "mediarouter-v7", "palette-v7", "recyclerview-v7",
+                "customtabs", "design", "multidex", "support-annotations"];
+        for (def libName : SUPPORT_LIB_DIR) {
+            CLASS_PATH += files("${android.sdkDirectory}/extras/android/m2repository/com/android/support/" +
+                    "${libName}/${ANDROID_SUPPORT_LIB_VERSION}/${libName}-${ANDROID_SUPPORT_LIB_VERSION}.aar");
+        }
+        classpath = CLASS_PATH
+
         options.links("http://docs.oracle.com/javase/7/docs/api/");
         options.links("http://d.android.com/reference/");
         exclude '**/BuildConfig.java'
