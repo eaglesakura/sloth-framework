@@ -141,7 +141,7 @@ android.libraryVariants.all { variant ->
 
         findAAR(javadocClassPath, "build/intermediates/exploded-aar")
         classpath = javadocClassPath;
-
+        
         options.links("http://docs.oracle.com/javase/7/docs/api/");
         options.links("http://d.android.com/reference/");
         exclude '**/BuildConfig.java'
