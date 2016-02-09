@@ -74,8 +74,8 @@ dependencies {
         compile 'com.eaglesakura:android-thread:1.+'
         compile 'com.eaglesakura:android-canvas-graphics:1.+'
         compile 'com.eaglesakura:android-net:1.+'
-        compile 'com.eaglesakura:onactivityresult-invoke:1.+'
-        compile 'com.eaglesakura:small-aquery:1.+'
+        compile 'com.eaglesakura:onactivityresult-invoke:+'
+        compile 'com.eaglesakura:small-aquery:+'
     }
 
     /**
