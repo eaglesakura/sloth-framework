@@ -4,6 +4,7 @@ import com.eaglesakura.android.framework.FrameworkCentral;
 import com.eaglesakura.android.framework.ui.state.IStateful;
 import com.eaglesakura.android.framework.util.AppSupportUtil;
 import com.eaglesakura.android.oari.ActivityResult;
+import com.eaglesakura.android.thread.async.AsyncTaskController;
 import com.eaglesakura.android.thread.async.AsyncTaskResult;
 import com.eaglesakura.android.thread.async.IAsyncTask;
 import com.eaglesakura.android.thread.ui.UIHandler;
@@ -298,14 +299,18 @@ public abstract class BaseFragment extends Fragment implements IStateful {
         UIHandler.postUIorRun(runnable);
     }
 
+    protected AsyncTaskController getTaskController() {
+        return FrameworkCentral.getTaskController();
+    }
+
     /**
      * バックグラウンドで実行する
      */
     protected void runBackground(Runnable runner) {
-        FrameworkCentral.getTaskController().pushBack(runner);
+        getTaskController().pushBack(runner);
     }
 
     protected <T> AsyncTaskResult<T> runBackgroundTask(IAsyncTask<T> task) {
-        return FrameworkCentral.getTaskController().pushBack(task);
+        return getTaskController().pushBack(task);
     }
 }
