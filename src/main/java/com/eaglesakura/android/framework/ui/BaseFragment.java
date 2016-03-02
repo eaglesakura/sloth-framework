@@ -1,12 +1,15 @@
 package com.eaglesakura.android.framework.ui;
 
 import com.eaglesakura.android.framework.FrameworkCentral;
-import com.eaglesakura.android.framework.ui.state.IStateful;
 import com.eaglesakura.android.framework.util.AppSupportUtil;
 import com.eaglesakura.android.oari.ActivityResult;
+import com.eaglesakura.android.rx.LifecycleState;
+import com.eaglesakura.android.rx.ObserveTarget;
+import com.eaglesakura.android.rx.RxTask;
+import com.eaglesakura.android.rx.RxTaskBuilder;
+import com.eaglesakura.android.rx.SubscribeTarget;
+import com.eaglesakura.android.rx.SubscriptionController;
 import com.eaglesakura.android.thread.async.AsyncTaskController;
-import com.eaglesakura.android.thread.async.AsyncTaskResult;
-import com.eaglesakura.android.thread.async.IAsyncTask;
 import com.eaglesakura.android.thread.ui.UIHandler;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.android.util.PermissionUtil;
@@ -28,6 +31,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import icepick.Icepick;
 import icepick.State;
+import rx.subjects.BehaviorSubject;
 
 /**
  * startActivityForResultを行う場合、ParentFragmentが存在していたらそちらのstartActivityForResultを呼び出す。
@@ -36,43 +40,48 @@ import icepick.State;
  * <br>
  * ただし、複数のonActivityResultがハンドリングされる恐れが有るため、RequestCodeの重複には十分に注意すること
  */
-public abstract class BaseFragment extends Fragment implements IStateful {
+public abstract class BaseFragment extends Fragment {
 
     static final int BACKSTACK_NONE = 0xFEFEFEFE;
 
-    private int backstackIndex = BACKSTACK_NONE;
+    private int mBackStackIndex = BACKSTACK_NONE;
 
     @State
-    boolean initializedViews = false;
+    boolean mInitializedViews = false;
 
-    LifecycleState state = LifecycleState.NewObject;
+    private boolean mInjectionViews = false;
 
-    private boolean injectionViews = false;
+    private int mInjectionLayoutId;
 
-    private int injectionLayoutId;
+    private BehaviorSubject<LifecycleState> mLifecycleSubject = BehaviorSubject.create(LifecycleState.NewObject);
 
-    public void requestInjection(@LayoutRes int layoutId) {
-        injectionLayoutId = layoutId;
-        injectionViews = (injectionLayoutId != 0);
+    private SubscriptionController mSubscription = new SubscriptionController();
+
+    public BaseFragment() {
+        mSubscription.bind(mLifecycleSubject);
     }
 
-    @Override
-    public LifecycleState getCurrentState() {
-        return state;
+    /**
+     * ライフサイクル状態を取得する
+     */
+    public LifecycleState getLifecycleState() {
+        return mLifecycleSubject.getValue();
+    }
+
+    public void requestInjection(@LayoutRes int layoutId) {
+        mInjectionLayoutId = layoutId;
+        mInjectionViews = (mInjectionLayoutId != 0);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (injectionViews) {
-            View result = inflater.inflate(injectionLayoutId, container, false);
+        if (mInjectionViews) {
+            View result = inflater.inflate(mInjectionLayoutId, container, false);
             ButterKnife.bind(this, result);
             // getView対策で、１クッション置いて実行する
-            UIHandler.postUI(new Runnable() {
-                @Override
-                public void run() {
-                    onAfterViews();
-                }
+            UIHandler.postUI(() -> {
+                onAfterViews();
             });
             return result;
         } else {
@@ -83,7 +92,7 @@ public abstract class BaseFragment extends Fragment implements IStateful {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (injectionViews) {
+        if (mInjectionViews) {
             ButterKnife.unbind(this);
         }
     }
@@ -125,16 +134,12 @@ public abstract class BaseFragment extends Fragment implements IStateful {
      * View構築が完了した
      */
     protected void onAfterViews() {
-        if (!initializedViews) {
+        if (!mInitializedViews) {
             onInitializeViews();
-            initializedViews = true;
+            mInitializedViews = true;
         } else {
             onRestoreViews();
         }
-    }
-
-    public boolean isFragmentResumed() {
-        return state == LifecycleState.OnResumed;
     }
 
     @Override
@@ -146,46 +151,52 @@ public abstract class BaseFragment extends Fragment implements IStateful {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLifecycleSubject.onNext(LifecycleState.OnCreated);
         if (savedInstanceState != null) {
             Icepick.restoreInstanceState(this, savedInstanceState);
         }
-        state = LifecycleState.OnCreated;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        state = LifecycleState.OnStarted;
+        mLifecycleSubject.onNext(LifecycleState.OnStarted);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        state = LifecycleState.OnResumed;
+        mLifecycleSubject.onNext(LifecycleState.OnResumed);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        state = LifecycleState.OnPaused;
+    public void onStop() {
+        super.onStop();
+        mLifecycleSubject.onNext(LifecycleState.OnStopped);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mLifecycleSubject.onNext(LifecycleState.OnDestroyed);
     }
 
     /**
      * backstack idを指定する
      */
-    void setBackstackIndex(int backstackIndex) {
-        this.backstackIndex = backstackIndex;
+    void setBackStackIndex(int backStackIndex) {
+        this.mBackStackIndex = backStackIndex;
     }
 
     /**
      * Backstackを持つならばtrue
      */
     boolean hasBackstackIndex() {
-        return backstackIndex != BACKSTACK_NONE;
+        return mBackStackIndex != BACKSTACK_NONE;
     }
 
-    public int getBackstackIndex() {
-        return backstackIndex;
+    public int getBackStackIndex() {
+        return mBackStackIndex;
     }
 
     /**
@@ -194,9 +205,9 @@ public abstract class BaseFragment extends Fragment implements IStateful {
     @SuppressLint("NewApi")
     public boolean isCurrentBackstack() {
         if (!ContextUtil.supportedChildFragmentManager() || getParentFragment() == null) {
-            return backstackIndex == getFragmentManager().getBackStackEntryCount();
+            return mBackStackIndex == getFragmentManager().getBackStackEntryCount();
         } else {
-            return backstackIndex == getParentFragment().getFragmentManager().getBackStackEntryCount();
+            return mBackStackIndex == getParentFragment().getFragmentManager().getBackStackEntryCount();
         }
     }
 
@@ -210,26 +221,12 @@ public abstract class BaseFragment extends Fragment implements IStateful {
             @Override
             public void run() {
                 if (withBackStack && hasBackstackIndex()) {
-                    getFragmentManager().popBackStack(backstackIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getFragmentManager().popBackStack(mBackStackIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else {
                     getFragmentManager().beginTransaction().remove(BaseFragment.this).commit();
                 }
             }
         });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        state = LifecycleState.OnDestroyed;
-    }
-
-    public boolean isFragmentDestroyed() {
-        return state == LifecycleState.OnDestroyed;
-    }
-
-    public boolean isDestroyedView() {
-        return isFragmentDestroyed() || getActivity() == null || getView() == null;
     }
 
     protected boolean hasChildBackStack() {
@@ -295,7 +292,7 @@ public abstract class BaseFragment extends Fragment implements IStateful {
     /**
      * UIスレッドで実行する
      */
-    protected void runUI(Runnable runnable) {
+    protected void runOnUiThread(Runnable runnable) {
         UIHandler.postUIorRun(runnable);
     }
 
@@ -304,13 +301,21 @@ public abstract class BaseFragment extends Fragment implements IStateful {
     }
 
     /**
-     * バックグラウンドで実行する
+     * UIに関わる処理を非同期で実行する。
+     *
+     * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
-    protected void runBackground(Runnable runner) {
-        getTaskController().pushBack(runner);
+    public <T> RxTaskBuilder<T> asyncUI(RxTask.Async<T> background) {
+        return async(SubscribeTarget.Pipeline, ObserveTarget.Forground, background);
     }
 
-    protected <T> AsyncTaskResult<T> runBackgroundTask(IAsyncTask<T> task) {
-        return getTaskController().pushBack(task);
+    /**
+     * 規定のスレッドとタイミングで非同期処理を行う
+     */
+    public <T> RxTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, RxTask.Async<T> background) {
+        return new RxTaskBuilder<T>(mSubscription)
+                .subscribeOn(subscribe)
+                .observeOn(observe)
+                .async(background);
     }
 }

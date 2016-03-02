@@ -203,7 +203,7 @@ public class FragmentTransactionBuilder {
         int backStackId = transaction.commit();
         for (Fragment frag : fragments) {
             if (frag instanceof BaseFragment) {
-                ((BaseFragment) frag).setBackstackIndex(backStackId);
+                ((BaseFragment) frag).setBackStackIndex(backStackId);
             }
 
 

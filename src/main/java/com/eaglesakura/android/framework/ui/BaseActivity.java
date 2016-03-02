@@ -1,13 +1,14 @@
 package com.eaglesakura.android.framework.ui;
 
-import com.eaglesakura.android.framework.FrameworkCentral;
 import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.framework.ui.state.IStateful;
 import com.eaglesakura.android.framework.util.AppSupportUtil;
 import com.eaglesakura.android.oari.ActivityResult;
-import com.eaglesakura.android.thread.async.AsyncTaskController;
-import com.eaglesakura.android.thread.async.AsyncTaskResult;
-import com.eaglesakura.android.thread.ui.UIHandler;
+import com.eaglesakura.android.rx.LifecycleState;
+import com.eaglesakura.android.rx.ObserveTarget;
+import com.eaglesakura.android.rx.RxTask;
+import com.eaglesakura.android.rx.RxTaskBuilder;
+import com.eaglesakura.android.rx.SubscribeTarget;
+import com.eaglesakura.android.rx.SubscriptionController;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.util.LogUtil;
 
@@ -29,57 +30,97 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import icepick.State;
+import rx.subjects.BehaviorSubject;
 
 /**
  *
  */
-public abstract class BaseActivity extends AppCompatActivity implements IStateful {
-    private LifecycleState state = LifecycleState.NewObject;
+public abstract class BaseActivity extends AppCompatActivity {
+
+    private BehaviorSubject<LifecycleState> mLifecycleSubject = BehaviorSubject.create(LifecycleState.NewObject);
+
+    private SubscriptionController mSubscription = new SubscriptionController();
+
+    /**
+     * Fragment管理のコールバックを受け付ける
+     */
+    private FragmentChooser.Callback mChooserCallbackImpl = new FragmentChooser.Callback() {
+        @Override
+        public FragmentManager getFragmentManager(FragmentChooser chooser) {
+            return getSupportFragmentManager();
+        }
+
+        @Override
+        public boolean isFragmentExist(FragmentChooser chooser, Fragment fragment) {
+            if (fragment == null) {
+                return false;
+            }
+
+            if (fragment instanceof BaseFragment) {
+                // 廃棄済みはさっさと排除する
+                if (((BaseFragment) fragment).getLifecycleState() == LifecycleState.OnDestroyed) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        @Override
+        public Fragment newFragment(FragmentChooser chooser, String requestTag) {
+            return null;
+        }
+    };
+
+    @State
+    FragmentChooser mFragmentChooser = new FragmentChooser(mChooserCallbackImpl);
 
     protected BaseActivity() {
+        mSubscription.bind(mLifecycleSubject);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        state = LifecycleState.OnStarted;
+    /**
+     * ライフサイクル状態を取得する
+     */
+    public LifecycleState getLifecycleState() {
+        return mLifecycleSubject.getValue();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         edgeColorToPrimaryColor();
+        mLifecycleSubject.onNext(LifecycleState.OnCreated);
+    }
 
-        state = LifecycleState.OnCreated;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mLifecycleSubject.onNext(LifecycleState.OnStarted);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        state = LifecycleState.OnResumed;
+        mLifecycleSubject.onNext(LifecycleState.OnResumed);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        state = LifecycleState.OnPaused;
+        mLifecycleSubject.onNext(LifecycleState.OnPaused);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        state = LifecycleState.OnStopped;
+        mLifecycleSubject.onNext(LifecycleState.OnStopped);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        state = LifecycleState.OnDestroyed;
-    }
-
-    @Override
-    public LifecycleState getCurrentState() {
-        return state;
+        mLifecycleSubject.onNext(LifecycleState.OnDestroyed);
     }
 
     protected void requestInjection(@LayoutRes int layoutId) {
@@ -136,49 +177,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IStatefu
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public boolean isActivityDestroyed() {
-        return state == LifecycleState.OnDestroyed;
-    }
-
-    public boolean isActivityResumed() {
-        return state == LifecycleState.OnResumed;
-    }
-
-
-    /**
-     * Fragment管理のコールバックを受け付ける
-     */
-    protected FragmentChooser.Callback chooserCallbackImpl = new FragmentChooser.Callback() {
-        @Override
-        public FragmentManager getFragmentManager(FragmentChooser chooser) {
-            return getSupportFragmentManager();
-        }
-
-        @Override
-        public boolean isFragmentExist(FragmentChooser chooser, Fragment fragment) {
-            if (fragment == null) {
-                return false;
-            }
-
-            if (fragment instanceof BaseFragment) {
-                // 廃棄済みはさっさと排除する
-                if (((BaseFragment) fragment).isFragmentDestroyed()) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        @Override
-        public Fragment newFragment(FragmentChooser chooser, String requestTag) {
-            return null;
-        }
-    };
-
-    @State
-    FragmentChooser fragmentChooser = new FragmentChooser(chooserCallbackImpl);
-
     /**
      * Fragmentがアタッチされたタイミングで呼び出される。
      * <br>
@@ -189,8 +187,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IStatefu
         super.onAttachFragment(fragment);
 
         // キャッシュに登録する
-        fragmentChooser.compact();
-        fragmentChooser.addFragment(FragmentChooser.ReferenceType.Weak, fragment, fragment.getTag(), 0);
+        mFragmentChooser.compact();
+        mFragmentChooser.addFragment(FragmentChooser.ReferenceType.Weak, fragment, fragment.getTag(), 0);
     }
 
     /**
@@ -203,7 +201,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IStatefu
             return false;
         }
 
-        List<Fragment> list = fragmentChooser.listExistFragments();
+        List<Fragment> list = mFragmentChooser.listExistFragments();
         for (Fragment frag : list) {
             if (frag.isVisible() && frag instanceof BaseFragment) {
                 if (((BaseFragment) frag).handleBackButton()) {
@@ -237,18 +235,22 @@ public abstract class BaseActivity extends AppCompatActivity implements IStatefu
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-
     /**
-     * UIスレッドで実行する
+     * UIに関わる処理を非同期で実行する。
+     *
+     * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
-    protected void runUI(Runnable runnable) {
-        UIHandler.postUIorRun(runnable);
+    public <T> RxTaskBuilder<T> asyncUI(RxTask.Async<T> background) {
+        return async(SubscribeTarget.Pipeline, ObserveTarget.Forground, background);
     }
 
     /**
-     * バックグラウンドで実行する
+     * 規定のスレッドとタイミングで非同期処理を行う
      */
-    protected AsyncTaskResult<AsyncTaskController> runBackground(Runnable runner) {
-        return FrameworkCentral.getTaskController().pushBack(runner);
+    public <T> RxTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, RxTask.Async<T> background) {
+        return new RxTaskBuilder<T>(mSubscription)
+                .subscribeOn(subscribe)
+                .observeOn(observe)
+                .async(background);
     }
 }

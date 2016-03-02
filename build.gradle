@@ -2,8 +2,9 @@
  * 1.0.0 : release
  * 1.0.1 : maven依存のtypo修正
  * 1.0.x : Circle CIに移行
+ * 1.1.x : RxAndroid / ラムダを導入
  */
-def ARTIFACT_VERSION = "1.0"
+def ARTIFACT_VERSION = "1.1"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 
@@ -13,6 +14,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5' // support Lambda
     }
 }
 
@@ -23,13 +25,16 @@ repositories {
 }
 
 apply plugin: 'com.android.library'
-
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+apply plugin: 'me.tatarka.retrolambda' /* Android Lambda Support */
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 
     defaultConfig {
         minSdkVersion 10
@@ -67,6 +72,7 @@ dependencies {
         compile project(':eglibrary:android-net')
         compile project(':eglibrary:onactivityresult-invoke')
         compile project(':eglibrary:small-aquery')
+        compile project(':eglibrary:rxandroid-support')
     } else {
         compile 'com.eaglesakura:simple-utils:1.+'
         compile 'com.eaglesakura:android-simple-utils:1.+'
@@ -74,7 +80,8 @@ dependencies {
         compile 'com.eaglesakura:android-thread:1.+'
         compile 'com.eaglesakura:android-canvas-graphics:1.+'
         compile 'com.eaglesakura:android-net:1.+'
-        compile 'com.eaglesakura:onactivityresult-invoke:+'
+        compile 'com.eaglesakura:rxandroid-support:1.+'
+        compile 'com.eaglesakura:onactivityresult-invoke:1.+'
         compile 'com.eaglesakura:small-aquery:+'
     }
 
@@ -101,6 +108,19 @@ dependencies {
     compile "com.jakewharton:butterknife:+"
     compile 'frankiesardo:icepick:+'
     provided 'frankiesardo:icepick-processor:+'
+}
+
+tasks.withType(Test) {
+    project.tasks
+            .findAll {
+        task -> (task.name ==~ /compile.*?TestJava.*?/)
+    }
+    .each { task ->
+        task.doFirst {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
 }
 
 apply plugin: 'maven'
