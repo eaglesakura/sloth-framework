@@ -1,12 +1,9 @@
 package com.eaglesakura.android.framework.ui.license;
 
-import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.aquery.AQuery;
-import com.eaglesakura.android.framework.FrameworkCentral;
+import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.framework.ui.BaseActivity;
-import com.eaglesakura.android.thread.async.AsyncAction;
-import com.eaglesakura.android.thread.async.AsyncTaskResult;
-import com.eaglesakura.android.thread.async.IAsyncTask;
+import com.eaglesakura.android.rx.RxTask;
 import com.eaglesakura.android.thread.ui.UIHandler;
 import com.eaglesakura.android.util.ViewUtil;
 import com.eaglesakura.material.widget.MaterialLicenseDialog;
@@ -81,51 +78,31 @@ public class LicenseViewActivity extends BaseActivity {
      * 全てのLicenseを読み込む
      */
     void loadLicenseList() {
+        asyncUI((RxTask<List<LicenseItem>> task) -> {
+            List<LicenseItem> licenses = new ArrayList<>();
+            final String LICENSE_PATH = "license";
+            String[] files = getAssets().list(LICENSE_PATH);
+            for (String file : files) {
+                if (isFinishing()) {
+                    return licenses;
+                }
 
-        FrameworkCentral.getTaskController().pushBack(new IAsyncTask<List<LicenseItem>>() {
-            @Override
-            public List<LicenseItem> doInBackground(AsyncTaskResult<List<LicenseItem>> result) throws Exception {
-                List<LicenseItem> licenses = new ArrayList<>();
-                final String LICENSE_PATH = "license";
-                String[] files = getAssets().list(LICENSE_PATH);
-                for (String file : files) {
-                    if (isFinishing()) {
-                        return licenses;
-                    }
-
-                    // 拡張子が一致して、かつignoreリストに含まれていなければ登録する
-                    if (file.endsWith(".license") && ignoreFiles.indexOf(file) < 0) {
-                        LogUtil.log("load license(%s)", file);
-                        // １行目にOSSの表示名が格納されている
-                        final LicenseItem item = newLicense(LICENSE_PATH + "/" + file);
-                        if (item != null) {
-                            licenses.add(item);
-                        }
+                // 拡張子が一致して、かつignoreリストに含まれていなければ登録する
+                if (file.endsWith(".license") && ignoreFiles.indexOf(file) < 0) {
+                    LogUtil.log("load license(%s)", file);
+                    // １行目にOSSの表示名が格納されている
+                    final LicenseItem item = newLicense(LICENSE_PATH + "/" + file);
+                    if (item != null) {
+                        licenses.add(item);
                     }
                 }
-                return licenses;
             }
-        }).setListener(new AsyncTaskResult.Listener<List<LicenseItem>>() {
-            @Override
-            public void onTaskCompleted(AsyncTaskResult<List<LicenseItem>> task, List<LicenseItem> licenses) {
-                addLicenses(licenses);
-            }
-
-            @Override
-            public void onTaskCanceled(AsyncTaskResult<List<LicenseItem>> task) {
-
-            }
-
-            @Override
-            public void onTaskFailed(AsyncTaskResult<List<LicenseItem>> task, Exception error) {
-                onLoadFailed();
-            }
-
-            @Override
-            public void onTaskFinalize(AsyncTaskResult<List<LicenseItem>> task) {
-
-            }
-        });
+            return licenses;
+        }).completed((licenses, task) -> {
+            addLicenses(licenses);
+        }).failed((err, task) -> {
+            onLoadFailed();
+        }).start();
     }
 
     void addLicenses(List<LicenseItem> newItems) {
@@ -232,42 +209,27 @@ public class LicenseViewActivity extends BaseActivity {
             AQuery q = new AQuery(this);
             q.id(R.id.eglibrary_License_Loading).visible();
         }
-        new AsyncAction("License Load") {
-            @Override
-            protected Object onBackgroundAction() throws Exception {
-                InputStream is = null;
-                try {
-                    is = getAssets().open(item.path);
-                    String text = IOUtil.toString(is, false);
-                    text = text.substring(text.indexOf("\n") + 1);
 
-                    return text;
-                } finally {
-                    IOUtil.close(is);
-                }
+        asyncUI((RxTask<String> task) -> {
+            InputStream is = null;
+            try {
+                is = getAssets().open(item.path);
+                String text = IOUtil.toString(is, false);
+                text = text.substring(text.indexOf("\n") + 1);
+
+                return text;
+            } finally {
+                IOUtil.close(is);
             }
-
-            @Override
-            protected void onSuccess(Object object) {
-                MaterialLicenseDialog dialog = new MaterialLicenseDialog(LicenseViewActivity.this);
-                dialog.setTitle(item.title);
-                dialog.setLicense(object.toString());
-                dialog.show();
-            }
-
-            @Override
-            protected void onFailure(Exception exception) {
-                LogUtil.log(exception);
-            }
-
-            @Override
-            protected void onFinalize() {
-                super.onFinalize();
-
-                AQuery q = new AQuery(LicenseViewActivity.this);
-                q.id(R.id.eglibrary_License_Loading).gone();
-            }
-        }.start();
+        }).completed((it, task) -> {
+            MaterialLicenseDialog dialog = new MaterialLicenseDialog(LicenseViewActivity.this);
+            dialog.setTitle(item.title);
+            dialog.setLicense(it);
+            dialog.show();
+        }).finalized(it -> {
+            AQuery q = new AQuery(LicenseViewActivity.this);
+            q.id(R.id.eglibrary_License_Loading).gone();
+        }).start();
     }
 
     /**

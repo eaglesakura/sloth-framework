@@ -247,7 +247,7 @@ public abstract class GoogleAuthActivity extends BaseActivity implements GoogleA
             BasicSettings settings = FrameworkCentral.getSettings();
             settings.setLoginGoogleClientApi(false);
             settings.setLoginGoogleAccount("");
-            settings.commitAsync();
+            settings.commit();
             onFailed(ConnectionResult.CANCELED);
         }
     }

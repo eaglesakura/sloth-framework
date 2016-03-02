@@ -1,13 +1,20 @@
 package com.eaglesakura.android.framework;
 
 import com.eaglesakura.android.framework.db.BasicSettings;
-import com.eaglesakura.android.thread.async.AsyncTaskController;
+import com.eaglesakura.android.rx.LifecycleState;
+import com.eaglesakura.android.rx.ObserveTarget;
+import com.eaglesakura.android.rx.RxTask;
+import com.eaglesakura.android.rx.RxTaskBuilder;
+import com.eaglesakura.android.rx.SubscribeTarget;
+import com.eaglesakura.android.rx.SubscriptionController;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.util.LogUtil;
 
 import android.app.Application;
 
 import java.lang.reflect.Method;
+
+import rx.subjects.BehaviorSubject;
 
 /**
  *
@@ -21,7 +28,7 @@ public class FrameworkCentral {
      */
     private static BasicSettings settings;
 
-    private static AsyncTaskController taskController = new AsyncTaskController(5, 1000);
+    private static SubscriptionController gSubscriptionController = new SubscriptionController();
 
     /**
      * Application#onCreateで呼び出す
@@ -55,10 +62,31 @@ public class FrameworkCentral {
         }
 
         // 設定をコミットする
-        settings.commitAsync();
+        settings.commit();
+
+        BehaviorSubject<LifecycleState> subject = BehaviorSubject.create(LifecycleState.NewObject);
+        gSubscriptionController.bind(subject);
+        subject.onNext(LifecycleState.OnResumed);
     }
 
-//    /**
+    /**
+     * グローバルに動作するタスクを取得する
+     *
+     * デフォルトはグローバルパイプラインで処理され、撃ちっぱなしとなる。
+     * MEMO : .start()は外部で呼び出す必要がある。
+     */
+    public static <T> RxTaskBuilder<T> newGlobalTask(RxTask.Async<T> callback) {
+        return new RxTaskBuilder<T>(gSubscriptionController)
+                .async(callback)
+                .observeOn(ObserveTarget.FireAndForget)
+                .subscribeOn(SubscribeTarget.Pipeline);
+    }
+
+    public static SubscriptionController getSubscription() {
+        return gSubscriptionController;
+    }
+
+    //    /**
 //     * GCMトークンを登録する
 //     */
 //    public static void registerGcm() throws IOException {
@@ -119,10 +147,6 @@ public class FrameworkCentral {
             LogUtil.log("not dependencies Deploygate");
             return false;
         }
-    }
-
-    public static AsyncTaskController getTaskController() {
-        return taskController;
     }
 
     /**

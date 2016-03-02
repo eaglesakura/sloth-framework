@@ -1,6 +1,5 @@
 package com.eaglesakura.android.framework.ui;
 
-import com.eaglesakura.android.framework.FrameworkCentral;
 import com.eaglesakura.android.framework.util.AppSupportUtil;
 import com.eaglesakura.android.oari.ActivityResult;
 import com.eaglesakura.android.rx.LifecycleState;
@@ -9,7 +8,6 @@ import com.eaglesakura.android.rx.RxTask;
 import com.eaglesakura.android.rx.RxTaskBuilder;
 import com.eaglesakura.android.rx.SubscribeTarget;
 import com.eaglesakura.android.rx.SubscriptionController;
-import com.eaglesakura.android.thread.async.AsyncTaskController;
 import com.eaglesakura.android.thread.ui.UIHandler;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.android.util.PermissionUtil;
@@ -294,10 +292,6 @@ public abstract class BaseFragment extends Fragment {
      */
     protected void runOnUiThread(Runnable runnable) {
         UIHandler.postUIorRun(runnable);
-    }
-
-    protected AsyncTaskController getTaskController() {
-        return FrameworkCentral.getTaskController();
     }
 
     /**
