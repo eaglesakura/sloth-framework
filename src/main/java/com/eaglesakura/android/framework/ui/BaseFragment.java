@@ -300,7 +300,7 @@ public abstract class BaseFragment extends Fragment {
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
     public <T> RxTaskBuilder<T> asyncUI(RxTask.Async<T> background) {
-        return async(SubscribeTarget.Pipeline, ObserveTarget.Forground, background);
+        return async(SubscribeTarget.Pipeline, ObserveTarget.Foreground, background);
     }
 
     /**
