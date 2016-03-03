@@ -108,8 +108,17 @@ dependencies {
     compile "com.jakewharton:butterknife:+"
     compile 'frankiesardo:icepick:+'
     provided 'frankiesardo:icepick-processor:+'
+
+    /**
+     * Async
+     */
+    compile 'io.reactivex:rxandroid:1.1.+'
+    compile 'io.reactivex:rxjava:1.1.+'
 }
 
+/**
+ * UnitTest & retro lambda
+ */
 tasks.withType(Test) {
     project.tasks
             .findAll {
