@@ -52,7 +52,7 @@ android {
 
 // check env
 if (!hasProperty("ANDROID_SUPPORT_LIB_VERSION")) {
-    ext.ANDROID_SUPPORT_LIB_VERSION = "+"
+    ext.ANDROID_SUPPORT_LIB_VERSION = "23.+"
 }
 if (!hasProperty("ANDROID_PLAYSERVICE_LIB_VERSION")) {
     ext.ANDROID_PLAYSERVICE_LIB_VERSION = "+"
@@ -60,6 +60,10 @@ if (!hasProperty("ANDROID_PLAYSERVICE_LIB_VERSION")) {
 // Local or maven
 if (!hasProperty("EGLIBRARY_COMPILE_LOCAL")) {
     ext.EGLIBRARY_COMPILE_LOCAL = false
+}
+
+configurations {
+    all*.exclude group: "org.apache.httpcomponents", module: "httpclient"
 }
 
 dependencies {
