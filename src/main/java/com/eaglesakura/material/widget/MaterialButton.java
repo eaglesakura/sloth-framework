@@ -116,17 +116,17 @@ public class MaterialButton extends AppCompatButton {
         }
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        if (isInEditMode()) {
-            Graphics g = new Graphics(canvas);
-            g.setColorARGB(0xFF00FFFF);
-            g.fillRoundRect(0, 0, getWidth(), getHeight(), (float) Math.min(getWidth(), getHeight()) / 10.0f);
-            g.setColorARGB(0xFFFF0000);
-            g.drawRoundRect(0, 0, getWidth(), getHeight(), (float) Math.min(getWidth(), getHeight()) / 10.0f);
-        }
-        super.onDraw(canvas);
-    }
+//    @Override
+//    protected void onDraw(Canvas canvas) {
+//        if (isInEditMode()) {
+//            Graphics g = new Graphics(canvas);
+//            g.setColorARGB(0xFF00FFFF);
+//            g.fillRoundRect(0, 0, getWidth(), getHeight(), (float) Math.min(getWidth(), getHeight()) / 10.0f);
+//            g.setColorARGB(0xFFFF0000);
+//            g.drawRoundRect(0, 0, getWidth(), getHeight(), (float) Math.min(getWidth(), getHeight()) / 10.0f);
+//        }
+//        super.onDraw(canvas);
+//    }
 
     static final int[] DISABLED_STATE_SET = new int[]{-android.R.attr.state_enabled};
     static final int[] FOCUSED_STATE_SET = new int[]{android.R.attr.state_focused};

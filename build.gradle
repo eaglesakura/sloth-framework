@@ -77,6 +77,7 @@ dependencies {
         compile project(':eglibrary:onactivityresult-invoke')
         compile project(':eglibrary:small-aquery')
         compile project(':eglibrary:rxandroid-support')
+        compile project(':eglibrary:margarineknife')
     } else {
         compile 'com.eaglesakura:simple-utils:1.+'
         compile 'com.eaglesakura:android-simple-utils:1.+'
@@ -87,6 +88,7 @@ dependencies {
         compile 'com.eaglesakura:rxandroid-support:1.+'
         compile 'com.eaglesakura:onactivityresult-invoke:1.+'
         compile 'com.eaglesakura:small-aquery:+'
+        compile 'com.eaglesakura:margarineknife:1.+'
     }
 
     /**
@@ -109,7 +111,7 @@ dependencies {
     /**
      * Injection / State
      */
-    compile "com.jakewharton:butterknife:+"
+//    compile "com.jakewharton:butterknife:+"
     compile 'frankiesardo:icepick:+'
     provided 'frankiesardo:icepick-processor:+'
 
