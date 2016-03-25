@@ -18,9 +18,6 @@ dependencies:
   cache_directories:
     - "/home/ubuntu/android-sdk"
     - "/home/ubuntu/build-cache"
-    - "/home/ubuntu/.m2"
-    - "/home/ubuntu/.ivy2"
-    - "/home/ubuntu/.gradle"
   override:
     - sh -c "$(curl -fsSL https://raw.githubusercontent.com/eaglesakura/build-dependencies/master/android-sdk-install-circle.sh)"
     - ./script/circleci-invalidate-cache.sh
