@@ -94,7 +94,7 @@ public abstract class CardAdapter<T> extends RecyclerView.Adapter<CardAdapter.Ca
             @Override
             public void onItemInserted(int index, @Nullable T item) {
                 if (mSupportRecyclerView != null) {
-                    mSupportRecyclerView.setProgressVisibly(false, 0);
+                    mSupportRecyclerView.setProgressVisibly(false, mCollection.size());
                 }
                 notifyItemInserted(index);
             }
