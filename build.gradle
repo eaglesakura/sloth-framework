@@ -78,6 +78,7 @@ dependencies {
         compile project(':eglibrary:small-aquery')
         compile project(':eglibrary:rxandroid-support')
         compile project(':eglibrary:margarineknife')
+        compile project(':eglibrary:garnet')
 
         androidTestCompile project(":eglibrary:android-devicetest-support")
         testCompile project(":eglibrary:android-unittest-support")

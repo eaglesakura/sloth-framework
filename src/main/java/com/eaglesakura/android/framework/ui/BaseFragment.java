@@ -18,12 +18,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -49,7 +52,11 @@ public abstract class BaseFragment extends Fragment {
 
     private boolean mInjectionViews = false;
 
+    @LayoutRes
     private int mInjectionLayoutId;
+
+    @MenuRes
+    private int mInjectionOptionMenuId;
 
     private BehaviorSubject<LifecycleState> mLifecycleSubject = BehaviorSubject.create(LifecycleState.NewObject);
 
@@ -71,6 +78,11 @@ public abstract class BaseFragment extends Fragment {
         mInjectionViews = (mInjectionLayoutId != 0);
     }
 
+    public void requestOptionMenu(@MenuRes int menuId) {
+        mInjectionOptionMenuId = menuId;
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,6 +97,15 @@ public abstract class BaseFragment extends Fragment {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(mInjectionOptionMenuId, menu);
+    }
+
+    public <T extends AppCompatActivity> T getActivity(Class<T> clazz) {
+        return (T) getActivity();
     }
 
     public <T extends View> T findViewById(Class<T> clazz, int id) {
