@@ -293,7 +293,7 @@ public class FrameworkCentral {
         /**
          * Class Unloadを防ぐため、Applicationのローカル変数としてCentralを保持する
          */
-        void onRequestSaveCentral(Object central);
+        void onRequestSaveCentral(@NonNull Object central);
     }
 
     /**

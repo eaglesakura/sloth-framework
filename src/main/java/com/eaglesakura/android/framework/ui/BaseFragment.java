@@ -1,6 +1,7 @@
 package com.eaglesakura.android.framework.ui;
 
 import com.eaglesakura.android.framework.util.AppSupportUtil;
+import com.eaglesakura.android.garnet.Garnet;
 import com.eaglesakura.android.margarine.MargarineKnife;
 import com.eaglesakura.android.oari.ActivityResult;
 import com.eaglesakura.android.rx.LifecycleState;
@@ -16,6 +17,7 @@ import com.eaglesakura.util.ReflectionUtil;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -48,6 +50,11 @@ public abstract class BaseFragment extends Fragment {
     static final int BACKSTACK_NONE = 0xFEFEFEFE;
 
     private int mBackStackIndex = BACKSTACK_NONE;
+
+    /**
+     * 既に依存構築済であればtrue
+     */
+    private boolean mInjectedInstance = false;
 
     @State
     boolean mInitializedViews = false;
@@ -202,12 +209,29 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (!mInjectedInstance) {
+            createInjectionBuilder(context).inject();
+            mInjectedInstance = true;
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLifecycleSubject.onNext(LifecycleState.OnCreated);
         if (savedInstanceState != null) {
             Icepick.restoreInstanceState(this, savedInstanceState);
         }
+    }
+
+    /**
+     * Builderを構築する
+     */
+    @NonNull
+    protected Garnet.Builder createInjectionBuilder(Context context) {
+        return Garnet.create(this).depend(Context.class, context.getApplicationContext());
     }
 
     @Override
