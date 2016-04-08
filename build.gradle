@@ -3,8 +3,9 @@
  * 1.0.1 : maven依存のtypo修正
  * 1.0.x : Circle CIに移行
  * 1.1.x : RxAndroid / ラムダを導入
+ * 1.2.x : コールバック用インターフェースを拡張
  */
-def ARTIFACT_VERSION = "1.1"
+def ARTIFACT_VERSION = "1.2"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 
@@ -37,7 +38,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 10
+        minSdkVersion 15      // 現実的な対応ラインとしてAndroid 4.0.4とする
         targetSdkVersion 23
     }
 
