@@ -99,6 +99,7 @@ dependencies {
         compile 'com.eaglesakura:onactivityresult-invoke:1.+'
         compile 'com.eaglesakura:small-aquery:+'
         compile 'com.eaglesakura:margarineknife:1.+'
+        compile 'com.eaglesakura:garnet:0.+'
 
         androidTestCompile 'com.eaglesakura:android-devicetest-support:1.+'
         testCompile 'com.eaglesakura:android-unittest-support:1.+'
@@ -244,6 +245,12 @@ uploadArchives {
                 scope = 'compile'
             }
             dependency {
+                groupId = 'com.eaglesakura'
+                artifactId = 'garnet'
+                version = dependenceisVersion("com.eaglesakura:garnet", "0.+")
+                scope = 'compile'
+            }
+            dependency {
                 groupId = 'frankiesardo'
                 artifactId = 'icepick'
                 version = dependenceisVersion("frankiesardo:icepick", "3.1.+")
@@ -254,6 +261,12 @@ uploadArchives {
                 artifactId = 'icepick-processor'
                 version = dependenceisVersion("frankiesardo:icepick-processor", "3.1.+")
                 scope = 'provided'
+            }
+            dependency {
+                groupId = 'com.squareup.picasso'
+                artifactId = 'picasso'
+                version = dependenceisVersion("com.squareup.picasso:picasso", "2.3.+")
+                scope = 'compile'
             }
         }
     }
