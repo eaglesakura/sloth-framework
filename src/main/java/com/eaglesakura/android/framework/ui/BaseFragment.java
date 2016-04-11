@@ -110,7 +110,19 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(mInjectionOptionMenuId, menu);
+        if (mInjectionOptionMenuId != 0) {
+            inflater.inflate(mInjectionOptionMenuId, menu);
+            MargarineKnife.bindMenu(menu, this);
+            UIHandler.postUI(() -> {
+                onAfterBindMenu(menu);
+            });
+        }
+    }
+
+    /**
+     * メニュー構築が完了した
+     */
+    protected void onAfterBindMenu(Menu menu) {
     }
 
     public <T extends AppCompatActivity> T getActivity(Class<T> clazz) {
@@ -214,7 +226,17 @@ public abstract class BaseFragment extends Fragment {
         if (!mInjectedInstance) {
             createInjectionBuilder(context).inject();
             mInjectedInstance = true;
+            UIHandler.postUI(() -> {
+                onAfterInjected();
+            });
         }
+    }
+
+    /**
+     * オブジェクトへのInjectが完了した
+     */
+    protected void onAfterInjected() {
+
     }
 
     @Override
@@ -233,6 +255,7 @@ public abstract class BaseFragment extends Fragment {
     protected Garnet.Builder createInjectionBuilder(Context context) {
         return Garnet.create(this).depend(Context.class, context.getApplicationContext());
     }
+
 
     @Override
     public void onStart() {

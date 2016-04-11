@@ -1,7 +1,5 @@
 package com.eaglesakura.android.framework.ui;
 
-import com.eaglesakura.util.ReflectionUtil;
-
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -9,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
 public class ChildFragmentHolder<T extends Fragment> {
     @Nullable
@@ -18,23 +17,56 @@ public class ChildFragmentHolder<T extends Fragment> {
     String mFragmentTag;
 
     @NonNull
-    FragmentManager mFragmentManager;
+    final Class<? extends T> mClass;
 
-    public void onCreate(@Nullable Bundle savedInstanceState, @NonNull FragmentManager fragmentManager,
-                         @NonNull Class<? extends T> clazz, @IdRes int holderId, @NonNull String fragmentTag) {
-        mFragmentManager = fragmentManager;
-        mFragmentTag = fragmentTag;
+    @NonNull
+    final Object mParent;
 
+    @IdRes
+    final int mHolderId;
+
+    public ChildFragmentHolder(@NonNull Fragment parent, @NonNull Class<? extends T> aClass, @IdRes int holderId) {
+        this(parent, aClass, holderId, aClass.getName());
+    }
+
+    public ChildFragmentHolder(@NonNull Fragment parent, @NonNull Class<? extends T> aClass, @IdRes int holderId, @NonNull String tag) {
+        mParent = parent;
+        mClass = aClass;
+        mHolderId = holderId;
+        mFragmentTag = tag;
+    }
+
+    private FragmentManager getFragmentManager() {
+        if (mParent instanceof AppCompatActivity) {
+            return ((AppCompatActivity) mParent).getSupportFragmentManager();
+        } else if (mParent instanceof Fragment) {
+            return ((Fragment) mParent).getChildFragmentManager();
+        }
+        throw new IllegalStateException();
+    }
+
+    @NonNull
+    protected T newFragmentInstance(@Nullable Bundle savedInstanceState) throws Exception {
+        return mClass.newInstance();
+    }
+
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            mFragment = ReflectionUtil.newInstanceOrNull(clazz);
-            transaction.add(holderId, mFragment, fragmentTag);
-            transaction.commit();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            try {
+                mFragment = newFragmentInstance(savedInstanceState);
+                if (mFragment == null) {
+                    throw new IllegalStateException();
+                }
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+            transaction.add(mHolderId, mFragment, mFragmentTag).commit();
         }
     }
 
     public void onResume() {
-        mFragment = (T) mFragmentManager.findFragmentByTag(mFragmentTag);
+        mFragment = (T) getFragmentManager().findFragmentByTag(mFragmentTag);
     }
 
     @NonNull
@@ -50,7 +82,11 @@ public class ChildFragmentHolder<T extends Fragment> {
      * Fragmentを削除する
      */
     public void remove() {
-        mFragmentManager.beginTransaction().remove(get()).commit();
+        getFragmentManager()
+                .beginTransaction()
+                .remove(get())
+                .commit();
+
         mFragment = null;
     }
 }
