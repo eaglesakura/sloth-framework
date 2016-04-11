@@ -1,5 +1,6 @@
 package com.eaglesakura.android.framework.ui;
 
+import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.util.AppSupportUtil;
 import com.eaglesakura.android.garnet.Garnet;
 import com.eaglesakura.android.margarine.MargarineKnife;
@@ -12,11 +13,13 @@ import com.eaglesakura.android.rx.SubscribeTarget;
 import com.eaglesakura.android.rx.SubscriptionController;
 import com.eaglesakura.android.thread.ui.UIHandler;
 import com.eaglesakura.android.util.ContextUtil;
+import com.eaglesakura.android.util.DialogUtil;
 import com.eaglesakura.android.util.PermissionUtil;
 import com.eaglesakura.util.ReflectionUtil;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +36,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import icepick.Icepick;
 import icepick.State;
@@ -70,6 +79,11 @@ public abstract class BaseFragment extends Fragment {
     private BehaviorSubject<LifecycleState> mLifecycleSubject = BehaviorSubject.create(LifecycleState.NewObject);
 
     private SubscriptionController mSubscription = new SubscriptionController();
+
+    /**
+     * 監視対象とするDialog
+     */
+    private List<WeakReference<Dialog>> mAutoDismissDialogs = new LinkedList<>();
 
     public BaseFragment() {
         mSubscription.bind(mLifecycleSubject);
@@ -263,8 +277,21 @@ public abstract class BaseFragment extends Fragment {
         mLifecycleSubject.onNext(LifecycleState.OnStarted);
     }
 
+    // 不要なメモリを破棄する
+    private void compactAutoDismissDialogs() {
+        Iterator<WeakReference<Dialog>> iterator = mAutoDismissDialogs.iterator();
+        while (iterator.hasNext()) {
+            WeakReference<Dialog> next = iterator.next();
+            Dialog dialog = next.get();
+            if (dialog == null) {
+                iterator.remove();
+            }
+        }
+    }
+
     @Override
     public void onResume() {
+        compactAutoDismissDialogs();
         super.onResume();
         mLifecycleSubject.onNext(LifecycleState.OnResumed);
     }
@@ -277,8 +304,27 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        {
+            Iterator<WeakReference<Dialog>> iterator = mAutoDismissDialogs.iterator();
+            while (iterator.hasNext()) {
+                Dialog dialog = iterator.next().get();
+                if (dialog != null) {
+                    FwLog.widget("AutoDismiss :: %s", dialog.getClass());
+                    DialogUtil.dismiss(dialog);
+                }
+            }
+            mAutoDismissDialogs.clear();
+        }
         super.onDestroy();
         mLifecycleSubject.onNext(LifecycleState.OnDestroyed);
+    }
+
+    public <T extends Dialog> T addAutoDismiss(T dialog) {
+        compactAutoDismissDialogs();
+        if (dialog != null) {
+            mAutoDismissDialogs.add(new WeakReference<>(dialog));
+        }
+        return dialog;
     }
 
     /**

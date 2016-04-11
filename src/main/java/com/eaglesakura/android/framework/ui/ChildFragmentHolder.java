@@ -1,5 +1,6 @@
 package com.eaglesakura.android.framework.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -27,6 +28,13 @@ public class ChildFragmentHolder<T extends Fragment> {
 
     public ChildFragmentHolder(@NonNull Fragment parent, @NonNull Class<? extends T> aClass, @IdRes int holderId) {
         this(parent, aClass, holderId, aClass.getName());
+    }
+
+    public ChildFragmentHolder(@NonNull Activity parent, @NonNull Class<? extends T> aClass, @IdRes int holderId, @NonNull String tag) {
+        mParent = parent;
+        mClass = aClass;
+        mHolderId = holderId;
+        mFragmentTag = tag;
     }
 
     public ChildFragmentHolder(@NonNull Fragment parent, @NonNull Class<? extends T> aClass, @IdRes int holderId, @NonNull String tag) {
@@ -67,6 +75,18 @@ public class ChildFragmentHolder<T extends Fragment> {
 
     public void onResume() {
         mFragment = (T) getFragmentManager().findFragmentByTag(mFragmentTag);
+    }
+
+    /**
+     * コンテンツを切り替える
+     */
+    public <T2 extends T> void replace(@NonNull T2 fragment) {
+        get(); // assert
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(mHolderId, fragment, mFragmentTag)
+                .commit();
     }
 
     @NonNull
