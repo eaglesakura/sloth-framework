@@ -13,6 +13,7 @@ def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:2.1.+"
@@ -23,6 +24,7 @@ buildscript {
 repositories {
     maven { url "http://eaglesakura.github.io/maven/" }
     maven { url "https://clojars.org/repo/" }
+    jcenter()
     mavenCentral()
 }
 
