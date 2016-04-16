@@ -159,22 +159,6 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
-void findAAR(FileCollection collection, String path) {
-    def android_jar = file("${path}/classes.jar");
-    if (android_jar.file) {
-        // ファイルを見つけた
-        collection.add(files(android_jar));
-        return;
-    }
-
-    def dir = file(path);
-    for (def file : dir.listFiles()) {
-        if (file.directory) {
-            findAAR(collection, "${path}/${file.name}")
-        }
-    }
-}
-
 android.libraryVariants.all { variant ->
     if (!"release".equals(variant.name) || "".equals(ARTIFACT_VERSION)) {
         return;
