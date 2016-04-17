@@ -8,12 +8,11 @@ import com.eaglesakura.android.framework.FrameworkCentral;
 import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.framework.db.BasicSettings;
-import com.eaglesakura.android.framework.ui.BaseActivity;
+import com.eaglesakura.android.framework.ui.SupportActivity;
 import com.eaglesakura.android.oari.OnActivityResult;
 import com.eaglesakura.android.rx.LifecycleState;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.material.widget.MaterialAlertDialog;
-import com.eaglesakura.util.LogUtil;
 import com.eaglesakura.util.Util;
 
 import android.annotation.SuppressLint;
@@ -29,7 +28,7 @@ import android.view.KeyEvent;
 /**
  * Googleの認証を専門に行うActivity
  */
-public abstract class GoogleAuthActivity extends BaseActivity implements GoogleApiFragment.Callback {
+public abstract class GoogleAuthActivity extends SupportActivity implements GoogleApiFragment.Callback {
 
     static final int REQUEST_GOOGLE_CLIENT_AUTH = 0x1200;
 

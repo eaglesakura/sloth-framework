@@ -3,7 +3,7 @@ package com.eaglesakura.android.framework.ui.license;
 import com.eaglesakura.android.aquery.AQuery;
 import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.framework.ui.BaseActivity;
+import com.eaglesakura.android.framework.ui.SupportActivity;
 import com.eaglesakura.android.rx.RxTask;
 import com.eaglesakura.android.thread.ui.UIHandler;
 import com.eaglesakura.android.util.ViewUtil;
@@ -12,7 +12,6 @@ import com.eaglesakura.material.widget.support.SupportRecyclerView;
 import com.eaglesakura.util.CollectionUtil;
 import com.eaglesakura.util.IOUtil;
 import com.eaglesakura.util.LogUtil;
-import com.eaglesakura.util.Util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -40,7 +39,7 @@ import java.util.List;
  * android:screenOrientation="portrait"
  * </pre>
  */
-public class LicenseViewActivity extends BaseActivity {
+public class LicenseViewActivity extends SupportActivity {
     /**
      * 読み込んだライセンス一覧
      */

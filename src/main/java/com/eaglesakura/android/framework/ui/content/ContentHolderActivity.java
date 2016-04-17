@@ -1,10 +1,9 @@
 package com.eaglesakura.android.framework.ui.content;
 
 import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.framework.ui.BaseActivity;
+import com.eaglesakura.android.framework.ui.SupportActivity;
 import com.eaglesakura.android.framework.ui.BaseFragment;
 import com.eaglesakura.android.framework.ui.ChildFragmentHolder;
-import com.eaglesakura.util.ReflectionUtil;
 import com.eaglesakura.util.StringUtil;
 
 import android.content.Context;
@@ -14,7 +13,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 
 /**
@@ -23,7 +21,7 @@ import android.support.v7.widget.Toolbar;
  * メインコンテンツは @+id/Content.Holder.Root を持たなければならない。
  * Toolbarは @+id/EsMaterial.Toolbar を自動的に検索し、存在するならToolbarとして自動設定する。
  */
-public abstract class ContentHolderActivity extends BaseActivity {
+public abstract class ContentHolderActivity extends SupportActivity {
     static final String EXTRA_ACTIVITY_LAYOUT = "EXTRA_ACTIVITY_LAYOUT";
 
     /**
@@ -61,12 +59,14 @@ public abstract class ContentHolderActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        @LayoutRes
         final int layoutId = getIntent().getIntExtra(EXTRA_ACTIVITY_LAYOUT, getDefaultLayoutId());
         if (layoutId == 0) {
             throw new IllegalStateException();
         }
 
-        requestInjection(layoutId);
+        setContentView(layoutId);
+
         Toolbar toolbar = findViewById(Toolbar.class, R.id.EsMaterial_Toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
