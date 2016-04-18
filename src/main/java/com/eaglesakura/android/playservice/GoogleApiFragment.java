@@ -5,6 +5,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.ui.SupportFragment;
+import com.eaglesakura.android.framework.ui.delegate.FrameworkRequestCodes;
 import com.eaglesakura.android.framework.ui.delegate.SupportFragmentDelegate;
 
 import android.app.Dialog;
@@ -17,8 +18,6 @@ public class GoogleApiFragment extends SupportFragment {
     protected GoogleApiClientToken googleApiClientToken;
 
     Callback callback;
-
-    protected static final int REQUEST_GOOGLEPLAYSERVICE_RECOVER = 0x1100;
 
     @Override
     public void onAttach(Context context) {
@@ -65,13 +64,9 @@ public class GoogleApiFragment extends SupportFragment {
      * エラーダイアログを表示する
      */
     protected void showGoogleErrorDialog(final int statusCode) {
-        Dialog dialog = GooglePlayServicesUtil.getErrorDialog(statusCode, getActivity(), REQUEST_GOOGLEPLAYSERVICE_RECOVER, new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                callback.onGooglePlayServiceRecoverCanceled(GoogleApiFragment.this, statusCode);
-            }
+        GooglePlayServicesUtil.showErrorDialogFragment(statusCode, getActivity(), this, FrameworkRequestCodes.GOOGLEPLAYSERVICE_RECOVER, (it) -> {
+            callback.onGooglePlayServiceRecoverCanceled(GoogleApiFragment.this, statusCode);
         });
-        dialog.show();
     }
 
     public GoogleApiClientToken getGoogleApiClientToken() {

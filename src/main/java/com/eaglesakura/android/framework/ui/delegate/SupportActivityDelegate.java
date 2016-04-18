@@ -161,7 +161,7 @@ public class SupportActivityDelegate extends LifecycleDelegate {
     @CallSuper
     @UiThread
     public boolean onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        return ActivityResult.invoke(this, requestCode, resultCode, data);
+        return ActivityResult.invoke(getActivity(), requestCode, resultCode, data);
     }
 
     /**

@@ -97,7 +97,7 @@ public abstract class SupportActivity extends AppCompatActivity implements Suppo
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mActivityDelegate.onActivityResult(resultCode, requestCode, data)) {
+        if (mActivityDelegate.onActivityResult(requestCode, resultCode, data)) {
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);

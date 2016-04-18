@@ -9,6 +9,7 @@ import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.framework.db.BasicSettings;
 import com.eaglesakura.android.framework.ui.SupportActivity;
+import com.eaglesakura.android.framework.ui.delegate.FrameworkRequestCodes;
 import com.eaglesakura.android.oari.OnActivityResult;
 import com.eaglesakura.android.rx.LifecycleState;
 import com.eaglesakura.android.util.ContextUtil;
@@ -17,7 +18,6 @@ import com.eaglesakura.util.Util;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -29,8 +29,6 @@ import android.view.KeyEvent;
  * Googleの認証を専門に行うActivity
  */
 public abstract class GoogleAuthActivity extends SupportActivity implements GoogleApiFragment.Callback {
-
-    static final int REQUEST_GOOGLE_CLIENT_AUTH = 0x1200;
 
     public static final String EXTRA_AUTH_ERROR_CODE = "EXTRA_AUTH_ERROR_CODE";
 
@@ -189,7 +187,7 @@ public abstract class GoogleAuthActivity extends SupportActivity implements Goog
         runOnUiThread(() -> {
             try {
                 FwLog.google("Attempting to resolve failed connection");
-                connectionResult.startResolutionForResult(GoogleAuthActivity.this, REQUEST_GOOGLE_CLIENT_AUTH);
+                connectionResult.startResolutionForResult(GoogleAuthActivity.this, FrameworkRequestCodes.GOOGLE_CLIENT_AUTH);
             } catch (IntentSender.SendIntentException e) {
                 FwLog.google("Exception while starting resolution activity", e);
             }
@@ -208,21 +206,15 @@ public abstract class GoogleAuthActivity extends SupportActivity implements Goog
             MaterialAlertDialog dialog = new MaterialAlertDialog(GoogleAuthActivity.this);
             dialog.setTitle(R.string.eglibrary_GoogleApi_Error_Title);
             dialog.setMessage(R.string.eglibrary_GoogleApi_Error_Message);
-            dialog.setPositiveButton(R.string.eglibrary_GoogleApi_Error_Retry, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // ユーザーが一度操作しているから回数リセット
-                    initialLogout();
-                }
+            dialog.setPositiveButton(R.string.eglibrary_GoogleApi_Error_Retry, (it, which) -> {
+                // ユーザーが一度操作しているから回数リセット
+                initialLogout();
             });
-            dialog.setNegativeButton(R.string.eglibrary_GoogleApi_Error_Cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_AUTH_ERROR_CODE, errorCode);
-                    setResult(RESULT_CANCELED);
-                    finish();
-                }
+            dialog.setNegativeButton(R.string.eglibrary_GoogleApi_Error_Cancel, (it, which) -> {
+                Intent intent = new Intent();
+                intent.putExtra(EXTRA_AUTH_ERROR_CODE, errorCode);
+                setResult(RESULT_CANCELED);
+                finish();
             });
             dialog.setCancelable(false);
             dialog.show();
@@ -233,7 +225,7 @@ public abstract class GoogleAuthActivity extends SupportActivity implements Goog
     /**
      * ログイン戻りの対応
      */
-    @OnActivityResult(REQUEST_GOOGLE_CLIENT_AUTH)
+    @OnActivityResult(FrameworkRequestCodes.GOOGLE_CLIENT_AUTH)
     protected void resultGoogleClientAuth(int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             // 再度ログイン処理
