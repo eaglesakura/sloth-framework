@@ -1,4 +1,4 @@
-package com.eaglesakura.android.framework.ui.content;
+package com.eaglesakura.material.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,23 +6,23 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 /**
- * Support FragmentでAnimationを行うためのLayout
+ * Animation動作を行うためのFrameLayout
  */
-public class ContentHolderLayout extends FrameLayout {
-    public ContentHolderLayout(Context context) {
+public class AnimationFragmeLayout extends FrameLayout {
+    public AnimationFragmeLayout(Context context) {
         super(context);
     }
 
-    public ContentHolderLayout(Context context, AttributeSet attrs) {
+    public AnimationFragmeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ContentHolderLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AnimationFragmeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @SuppressLint("all")
-    public ContentHolderLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public AnimationFragmeLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

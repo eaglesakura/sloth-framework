@@ -1,11 +1,7 @@
 package com.eaglesakura.material.widget.adapter;
 
-import com.eaglesakura.android.aquery.AQuery;
 import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.framework.ui.SupportAQuery;
-import com.eaglesakura.android.rx.RxTaskBuilder;
-import com.eaglesakura.android.rx.SubscribeTarget;
-import com.eaglesakura.android.rx.SubscriptionController;
+import com.eaglesakura.android.framework.ui.support.SupportAQuery;
 import com.eaglesakura.android.util.ViewUtil;
 import com.eaglesakura.material.widget.support.SupportRecyclerView;
 import com.eaglesakura.util.Util;
@@ -17,10 +13,6 @@ import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * RecyclerViewのシンプルなカードを実現する

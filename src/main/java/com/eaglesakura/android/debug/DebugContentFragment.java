@@ -3,7 +3,7 @@ package com.eaglesakura.android.debug;
 import com.eaglesakura.android.aquery.AQuery;
 import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.framework.ui.SupportFragment;
+import com.eaglesakura.android.framework.ui.support.SupportFragment;
 import com.eaglesakura.android.framework.ui.delegate.SupportFragmentDelegate;
 import com.eaglesakura.android.margarine.OnCheckedChanged;
 import com.eaglesakura.android.margarine.OnClick;

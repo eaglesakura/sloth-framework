@@ -1,5 +1,6 @@
-package com.eaglesakura.android.framework.ui;
+package com.eaglesakura.android.framework.ui.support;
 
+import com.eaglesakura.android.framework.ui.delegate.LifecycleDelegate;
 import com.eaglesakura.android.framework.ui.delegate.SupportFragmentDelegate;
 import com.eaglesakura.android.garnet.Garnet;
 import com.eaglesakura.android.rx.LifecycleState;
@@ -36,16 +37,19 @@ import android.view.ViewGroup;
  */
 public abstract class SupportFragment extends Fragment implements SupportFragmentDelegate.SupportFragmentCompat {
 
+    protected final LifecycleDelegate mLifecycleDelegate = new LifecycleDelegate();
+
     protected final SupportFragmentDelegate mFragmentDelegate = new SupportFragmentDelegate(this);
 
     public SupportFragment() {
+        mFragmentDelegate.bind(mLifecycleDelegate);
     }
 
     /**
      * ライフサイクル状態を取得する
      */
     public LifecycleState getLifecycleState() {
-        return mFragmentDelegate.getLifecycleState();
+        return mLifecycleDelegate.getLifecycleState();
     }
 
     @Nullable
@@ -119,35 +123,36 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLifecycleDelegate.onCreate(savedInstanceState);
         mFragmentDelegate.onCreate(savedInstanceState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mFragmentDelegate.onStart();
+        mLifecycleDelegate.onStart();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mFragmentDelegate.onResume();
+        mLifecycleDelegate.onResume();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mFragmentDelegate.onStop();
+        mLifecycleDelegate.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mFragmentDelegate.onDestroy();
+        mLifecycleDelegate.onDestroy();
     }
 
     public <T extends Dialog> T addAutoDismiss(@NonNull T dialog) {
-        return mFragmentDelegate.addAutoDismiss(dialog);
+        return mLifecycleDelegate.addAutoDismiss(dialog);
     }
 
     /**
@@ -212,14 +217,14 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
      * UIスレッドで実行する
      */
     public void runOnUiThread(@NonNull Runnable runnable) {
-        mFragmentDelegate.runOnUiThread(runnable);
+        mLifecycleDelegate.runOnUiThread(runnable);
     }
 
     /**
      * タスクコントローラを取得する
      */
     public SubscriptionController getSubscription() {
-        return mFragmentDelegate.getSubscription();
+        return mLifecycleDelegate.getSubscription();
     }
 
     /**
@@ -228,14 +233,14 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
     public <T> RxTaskBuilder<T> asyncUI(RxTask.Async<T> background) {
-        return mFragmentDelegate.asyncUI(background);
+        return mLifecycleDelegate.asyncUI(background);
     }
 
     /**
      * 規定のスレッドとタイミングで非同期処理を行う
      */
     public <T> RxTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, RxTask.Async<T> background) {
-        return mFragmentDelegate.async(subscribe, observe, background);
+        return mLifecycleDelegate.async(subscribe, observe, background);
     }
 
     @NonNull

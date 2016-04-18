@@ -1,6 +1,7 @@
 package com.eaglesakura.android.framework.ui.delegate;
 
 import com.eaglesakura.android.framework.FwLog;
+import com.eaglesakura.android.rx.LifecycleState;
 import com.eaglesakura.util.StringUtil;
 
 import android.app.Dialog;
@@ -14,14 +15,25 @@ import android.support.v4.app.FragmentManager;
 /**
  * App側で継承したFragmentでDialogFramentを生成する場合に
  */
-public class DialogFragmentDelegate extends LifecycleDelegate {
+public class DialogFragmentDelegate {
     private Dialog mDialog;
 
     @NonNull
     private SupportDialogFragmentCompat mCompat;
 
+    private LifecycleDelegate mLifecycleDelegate;
+
     public DialogFragmentDelegate(@NonNull SupportDialogFragmentCompat compat) {
         mCompat = compat;
+    }
+
+    public void bind(LifecycleDelegate lifecycleDelegate) {
+        mLifecycleDelegate = lifecycleDelegate;
+        mLifecycleDelegate.getSubscription().getObservable().subscribe(it -> {
+            if (it == LifecycleState.OnDestroyed) {
+                onDestroy();
+            }
+        });
     }
 
     @Nullable
@@ -30,9 +42,8 @@ public class DialogFragmentDelegate extends LifecycleDelegate {
     }
 
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate();
         FwLog.widget("show dialog");
-        mDialog = addAutoDismiss(mCompat.onCreateDialog(this, savedInstanceState));
+        mDialog = mLifecycleDelegate.addAutoDismiss(mCompat.onCreateDialog(this, savedInstanceState));
         mDialog.setOnDismissListener(it -> {
             if (mDialog == null) {
                 return;
@@ -43,32 +54,7 @@ public class DialogFragmentDelegate extends LifecycleDelegate {
         mDialog.show();
     }
 
-    @UiThread
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @UiThread
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @UiThread
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @UiThread
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    public void onDestroy() {
-        super.onDestroy();
+    private void onDestroy() {
         FwLog.widget("suspend dialog");
         if (mDialog != null && mDialog.isShowing()) {
             Dialog dialog = mDialog;

@@ -1,8 +1,12 @@
 package com.eaglesakura.android.debug;
 
 import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.framework.ui.SupportFragment;
-import com.eaglesakura.android.framework.ui.content.ContentHolderActivity;
+import com.eaglesakura.android.framework.ui.delegate.ContentHolderActivityDelegate;
+import com.eaglesakura.android.framework.ui.support.SupportFragment;
+import com.eaglesakura.android.framework.ui.support.ContentHolderActivity;
+
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 
 /**
  * デフォルトのデバッグメニューを表示するActivity
@@ -10,12 +14,13 @@ import com.eaglesakura.android.framework.ui.content.ContentHolderActivity;
 public class DebugMenuActivity extends ContentHolderActivity {
 
     @Override
-    protected int getDefaultLayoutId() {
+    public int getDefaultLayoutId(@NonNull ContentHolderActivityDelegate self) {
         return R.layout.esm_activity_debugmenu;
     }
 
+    @NonNull
     @Override
-    protected SupportFragment newDefaultContentFragment() {
+    public Fragment newDefaultContentFragment(@NonNull ContentHolderActivityDelegate self) {
         return new DebugContentFragment();
     }
 }

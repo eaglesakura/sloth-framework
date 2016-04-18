@@ -3,6 +3,7 @@ package com.eaglesakura.android.framework.ui.delegate;
 import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.framework.util.AppSupportUtil;
 import com.eaglesakura.android.oari.ActivityResult;
+import com.eaglesakura.android.rx.LifecycleState;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -29,8 +30,7 @@ import icepick.Icepick;
 /**
  *
  */
-public class SupportActivityDelegate extends LifecycleDelegate {
-
+public class SupportActivityDelegate {
     @NonNull
     private final SupportActivityCompat mCompat;
 
@@ -42,6 +42,13 @@ public class SupportActivityDelegate extends LifecycleDelegate {
         mCompat = compat;
     }
 
+    public void bind(@NonNull LifecycleDelegate lifecycle) {
+    }
+
+    public void onCreate(Bundle instanceState) {
+        edgeColorToPrimaryColor();
+    }
+
     @CallSuper
     @UiThread
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -51,70 +58,35 @@ public class SupportActivityDelegate extends LifecycleDelegate {
 
     @CallSuper
     @UiThread
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        edgeColorToPrimaryColor();
-        super.onCreate();
-    }
-
-    @CallSuper
-    @UiThread
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @CallSuper
-    @UiThread
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @CallSuper
-    @UiThread
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @CallSuper
-    @UiThread
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         Icepick.saveInstanceState(getActivity(), outState);
         Icepick.saveInstanceState(this, outState);
-    }
-
-    @CallSuper
-    @UiThread
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @CallSuper
-    @UiThread
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     public <T extends View> T findViewById(@NonNull Class<T> clazz, @IdRes int id) {
         return (T) getActivity().findViewById(id);
     }
 
-    protected final Activity getActivity() {
+    @NonNull
+    public Activity getActivity() {
         return mCompat.getActivity(this);
     }
 
-    protected final Resources getResources() {
+    @Nullable
+    public Intent getIntent() {
+        return getActivity().getIntent();
+    }
+
+    @NonNull
+    public Resources getResources() {
         return getActivity().getResources();
     }
 
-    protected final Resources.Theme getTheme() {
+    @NonNull
+    public Resources.Theme getTheme() {
         return getActivity().getTheme();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setStatusBarColor(int argb) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getActivity().getWindow().setStatusBarColor(argb);

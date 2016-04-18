@@ -4,13 +4,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import com.eaglesakura.android.framework.FwLog;
-import com.eaglesakura.android.framework.ui.SupportFragment;
+import com.eaglesakura.android.framework.ui.support.SupportFragment;
 import com.eaglesakura.android.framework.ui.delegate.FrameworkRequestCodes;
 import com.eaglesakura.android.framework.ui.delegate.SupportFragmentDelegate;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 

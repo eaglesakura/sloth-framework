@@ -42,7 +42,7 @@ import icepick.State;
  * <br>
  * ただし、複数のonActivityResultがハンドリングされる恐れが有るため、RequestCodeの重複には十分に注意すること
  */
-public class SupportFragmentDelegate extends LifecycleDelegate {
+public class SupportFragmentDelegate {
 
     public interface SupportFragmentCompat {
         int FLAG_AFTERVIEW_INITIALIZE = 0x01 << 0;
@@ -115,17 +115,8 @@ public class SupportFragmentDelegate extends LifecycleDelegate {
         mCompat = compat;
     }
 
-    public SupportFragmentDelegate(@NonNull SupportFragmentCompat compat, @Nullable LayoutId layoutId, @Nullable MenuId menuId) {
-        mCompat = compat;
+    public void bind(LifecycleDelegate lifecycleDelegate) {
 
-        if (layoutId != null) {
-            mInjectionLayoutId = layoutId.getId();
-        }
-
-        if (menuId != null) {
-            mInjectionOptionMenuId = menuId.getId();
-            mCompat.setHasOptionsMenu(true);
-        }
     }
 
     /**
@@ -313,38 +304,8 @@ public class SupportFragmentDelegate extends LifecycleDelegate {
     @CallSuper
     @UiThread
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate();
         Icepick.restoreInstanceState(mCompat, savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
-    }
-
-    @CallSuper
-    @UiThread
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @CallSuper
-    @UiThread
-    @Override
-    public void onResume() {
-        super.onResume();
-        compactAutoDismissDialogs();
-    }
-
-    @CallSuper
-    @UiThread
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @CallSuper
-    @UiThread
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.eaglesakura.android.framework.ui;
+package com.eaglesakura.android.framework.ui.support;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,5 +1,6 @@
-package com.eaglesakura.android.framework.ui;
+package com.eaglesakura.android.framework.ui.support;
 
+import com.eaglesakura.android.framework.ui.delegate.LifecycleDelegate;
 import com.eaglesakura.android.framework.ui.delegate.SupportActivityDelegate;
 import com.eaglesakura.android.margarine.MargarineKnife;
 import com.eaglesakura.android.rx.LifecycleState;
@@ -23,13 +24,19 @@ import android.view.View;
  */
 public abstract class SupportActivity extends AppCompatActivity implements SupportActivityDelegate.SupportActivityCompat {
 
+    protected final LifecycleDelegate mLifecycleDelegate = new LifecycleDelegate();
+
     protected final SupportActivityDelegate mActivityDelegate = new SupportActivityDelegate(this);
+
+    protected SupportActivity() {
+        mActivityDelegate.bind(mLifecycleDelegate);
+    }
 
     /**
      * ライフサイクル状態を取得する
      */
     public LifecycleState getLifecycleState() {
-        return mActivityDelegate.getLifecycleState();
+        return mLifecycleDelegate.getLifecycleState();
     }
 
     @Override
@@ -40,25 +47,26 @@ public abstract class SupportActivity extends AppCompatActivity implements Suppo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLifecycleDelegate.onCreate(savedInstanceState);
         mActivityDelegate.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mActivityDelegate.onStart();
+        mLifecycleDelegate.onStart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mActivityDelegate.onResume();
+        mLifecycleDelegate.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mActivityDelegate.onPause();
+        mLifecycleDelegate.onPause();
     }
 
     @Override
@@ -70,13 +78,13 @@ public abstract class SupportActivity extends AppCompatActivity implements Suppo
     @Override
     protected void onStop() {
         super.onStop();
-        mActivityDelegate.onStop();
+        mLifecycleDelegate.onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mActivityDelegate.onDestroy();
+        mLifecycleDelegate.onDestroy();
     }
 
     @Override
@@ -142,14 +150,14 @@ public abstract class SupportActivity extends AppCompatActivity implements Suppo
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
     public <T> RxTaskBuilder<T> asyncUI(RxTask.Async<T> background) {
-        return mActivityDelegate.asyncUI(background);
+        return mLifecycleDelegate.asyncUI(background);
     }
 
     /**
      * 規定のスレッドとタイミングで非同期処理を行う
      */
     public <T> RxTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, RxTask.Async<T> background) {
-        return mActivityDelegate.async(subscribe, observe, background);
+        return mLifecycleDelegate.async(subscribe, observe, background);
     }
 
     @Override

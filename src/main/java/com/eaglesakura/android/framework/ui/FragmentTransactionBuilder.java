@@ -2,6 +2,7 @@ package com.eaglesakura.android.framework.ui;
 
 import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.framework.ui.delegate.SupportFragmentDelegate;
+import com.eaglesakura.android.framework.ui.support.SupportFragment;
 import com.eaglesakura.util.StringUtil;
 
 import android.app.Activity;

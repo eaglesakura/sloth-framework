@@ -24,7 +24,7 @@ import java.util.List;
 
 import rx.subjects.BehaviorSubject;
 
-public abstract class LifecycleDelegate {
+public class LifecycleDelegate {
 
     private BehaviorSubject<LifecycleState> mLifecycleSubject = BehaviorSubject.create(LifecycleState.NewObject);
 
@@ -76,37 +76,39 @@ public abstract class LifecycleDelegate {
 
     @CallSuper
     @UiThread
-    protected void onCreate() {
+    public void onCreate(Bundle state) {
         mLifecycleSubject.onNext(LifecycleState.OnCreated);
     }
 
     @CallSuper
     @UiThread
-    protected void onStart() {
+    public void onStart() {
         mLifecycleSubject.onNext(LifecycleState.OnStarted);
     }
 
     @CallSuper
     @UiThread
-    protected void onResume() {
+    public void onResume() {
         mLifecycleSubject.onNext(LifecycleState.OnResumed);
+        compactAutoDismissDialogs();
     }
 
     @CallSuper
     @UiThread
-    protected void onPause() {
+    public void onPause() {
         mLifecycleSubject.onNext(LifecycleState.OnPaused);
+        compactAutoDismissDialogs();
     }
 
     @CallSuper
     @UiThread
-    protected void onStop() {
+    public void onStop() {
         mLifecycleSubject.onNext(LifecycleState.OnStopped);
     }
 
     @CallSuper
     @UiThread
-    protected void onDestroy() {
+    public void onDestroy() {
         {
             Iterator<WeakReference<Dialog>> iterator = mAutoDismissDialogs.iterator();
             while (iterator.hasNext()) {
