@@ -180,6 +180,7 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
         mFragmentDelegate.startActivityForResult(intent, requestCode);
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mFragmentDelegate.onActivityResult(requestCode, resultCode, data);

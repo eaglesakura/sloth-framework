@@ -23,6 +23,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.InternalSupportFragmentUtil;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -415,11 +416,15 @@ public class SupportFragmentDelegate extends LifecycleDelegate {
     }
 
     public void startActivityForResult(Intent intent, int requestCode) {
-        if (getParentFragment() != null) {
-            getParentFragment().startActivityForResult(intent, requestCode);
-        } else {
-            getFragment().startActivityForResult(intent, requestCode);
+        startActivityForResult(intent, requestCode, null);
+    }
+
+    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
+        Fragment result = getFragment();
+        while (result.getParentFragment() != null) {
+            result = result.getParentFragment();
         }
+        InternalSupportFragmentUtil.startActivityForResult(result, requestCode, intent, options);
     }
 
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
