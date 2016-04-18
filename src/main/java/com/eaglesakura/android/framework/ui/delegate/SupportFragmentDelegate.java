@@ -149,7 +149,7 @@ public class SupportFragmentDelegate extends LifecycleDelegate {
             View result = inflater.inflate(mInjectionLayoutId, container, false);
             MargarineKnife.from(result).to(mCompat).bind();
             // getView対策で、１クッション置いて実行する
-            runOnUiThread(() -> {
+            UIHandler.postUI(() -> {
                 onAfterViews();
             });
             return result;
@@ -165,7 +165,7 @@ public class SupportFragmentDelegate extends LifecycleDelegate {
         if (mInjectionOptionMenuId != 0) {
             inflater.inflate(mInjectionOptionMenuId, menu);
             MargarineKnife.bindMenu(menu, mCompat);
-            runOnUiThread(() -> {
+            UIHandler.postUI(() -> {
                 mCompat.onAfterBindMenu(this, menu);
             });
         }
@@ -304,7 +304,7 @@ public class SupportFragmentDelegate extends LifecycleDelegate {
             }
             builder.depend(Context.class, context).inject();
             mInjectedInstance = true;
-            runOnUiThread(() -> {
+            UIHandler.postUI(() -> {
                 mCompat.onAfterInjection(this);
             });
         }

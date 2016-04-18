@@ -123,7 +123,7 @@ public abstract class LifecycleDelegate {
     }
 
     /**
-     * UIスレッドで実行する
+     * UIスレッドで実行されたならばそのまでrunnableを実行し、そうでないならUIスレッドキューに登録する
      */
     public void runOnUiThread(@NonNull Runnable runnable) {
         UIHandler.postUIorRun(runnable);
