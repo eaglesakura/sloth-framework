@@ -1,4 +1,4 @@
-package com.eaglesakura.android.framework.ui.dialog;
+package com.eaglesakura.android.framework.ui.delegate;
 
 import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.util.StringUtil;
@@ -7,24 +7,21 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 /**
  * App側で継承したFragmentでDialogFramentを生成する場合に
  */
-public class DialogFragmentDelegate {
+public class DialogFragmentDelegate extends LifecycleDelegate {
     private Dialog mDialog;
 
     @NonNull
-    private InternalCallback mInternalCallback;
+    private SupportDialogFragmentCompat mCompat;
 
-    @NonNull
-    private Fragment mFragment;
-
-    public DialogFragmentDelegate(@NonNull Fragment fragment, @NonNull InternalCallback internalCallback) {
-        mFragment = fragment;
-        mInternalCallback = internalCallback;
+    public DialogFragmentDelegate(@NonNull SupportDialogFragmentCompat compat) {
+        mCompat = compat;
     }
 
     @Nullable
@@ -33,27 +30,45 @@ public class DialogFragmentDelegate {
     }
 
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate();
         FwLog.widget("show dialog");
-        mDialog = mInternalCallback.onCreateDialog(this, savedInstanceState);
+        mDialog = addAutoDismiss(mCompat.onCreateDialog(this, savedInstanceState));
         mDialog.setOnDismissListener(it -> {
             if (mDialog == null) {
                 return;
             }
             FwLog.widget("Detach DialogFragment");
-            mInternalCallback.onDismiss(this);
+            mCompat.onDismiss(this);
         });
         mDialog.show();
     }
 
+    @UiThread
+    @Override
     public void onStart() {
-
+        super.onStart();
     }
 
-    public void onStop() {
+    @UiThread
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
+    @UiThread
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @UiThread
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     public void onDestroy() {
+        super.onDestroy();
         FwLog.widget("suspend dialog");
         if (mDialog != null && mDialog.isShowing()) {
             Dialog dialog = mDialog;
@@ -77,11 +92,11 @@ public class DialogFragmentDelegate {
 
         fragmentManager
                 .beginTransaction()
-                .add(mFragment, tag)
+                .add(mCompat.getFragment(this), tag)
                 .commit();
     }
 
-    public interface InternalCallback {
+    public interface SupportDialogFragmentCompat {
         /**
          * ダイアログの生成を行わせる
          *
@@ -95,5 +110,9 @@ public class DialogFragmentDelegate {
          */
         void onDismiss(DialogFragmentDelegate self);
 
+        /**
+         * Fragment取得
+         */
+        Fragment getFragment(DialogFragmentDelegate self);
     }
 }
