@@ -11,6 +11,7 @@ import com.eaglesakura.android.rx.SubscribeTarget;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -22,13 +23,18 @@ import android.view.View;
  */
 public abstract class SupportActivity extends AppCompatActivity implements SupportActivityDelegate.SupportActivityCompat {
 
-    SupportActivityDelegate mActivityDelegate = new SupportActivityDelegate(this);
+    protected final SupportActivityDelegate mActivityDelegate = new SupportActivityDelegate(this);
 
     /**
      * ライフサイクル状態を取得する
      */
     public LifecycleState getLifecycleState() {
         return mActivityDelegate.getLifecycleState();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -53,6 +59,12 @@ public abstract class SupportActivity extends AppCompatActivity implements Suppo
     protected void onPause() {
         super.onPause();
         mActivityDelegate.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        mActivityDelegate.onSaveInstanceState(outState, outPersistentState);
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.eaglesakura.android.framework.ui;
 
 import com.eaglesakura.android.framework.R;
+import com.eaglesakura.android.framework.ui.delegate.SupportFragmentDelegate;
 import com.eaglesakura.util.StringUtil;
 
 import android.app.Activity;
@@ -202,11 +203,9 @@ public class FragmentTransactionBuilder {
     public void commit() {
         int backStackId = transaction.commit();
         for (Fragment frag : fragments) {
-            if (frag instanceof BaseFragment) {
-                ((BaseFragment) frag).setBackStackIndex(backStackId);
+            if (frag instanceof SupportFragmentDelegate.SupportFragmentCompat) {
+                ((SupportFragment) frag).setBackStackIndex(backStackId);
             }
-
-
         }
     }
 }

@@ -53,7 +53,7 @@ public abstract class GoogleAuthActivity extends SupportActivity implements Goog
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             {
                 GoogleApiFragment fragment = new GoogleApiFragment();
-                transaction.add(fragment, fragment.createSimpleTag());
+                transaction.add(fragment, fragment.getClass().getName());
             }
             transaction.commit();
         }

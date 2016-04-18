@@ -2,7 +2,7 @@ package com.eaglesakura.android.framework.ui.content;
 
 import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.framework.ui.SupportActivity;
-import com.eaglesakura.android.framework.ui.BaseFragment;
+import com.eaglesakura.android.framework.ui.SupportFragment;
 import com.eaglesakura.android.framework.ui.ChildFragmentHolder;
 import com.eaglesakura.util.StringUtil;
 
@@ -107,7 +107,7 @@ public abstract class ContentHolderActivity extends SupportActivity {
      */
     public static Intent createIntent(Context context,
                                       Class<? extends ContentHolderActivity> activityClass, int activityLayoutId,
-                                      Class<? extends BaseFragment> contentFragment, Bundle argments) {
+                                      Class<? extends SupportFragment> contentFragment, Bundle argments) {
         Intent intent = new Intent(context, activityClass);
         intent.putExtra(EXTRA_CONTENT_FRAGMENT_CLASS, contentFragment.getName());
         if (activityLayoutId != 0) {

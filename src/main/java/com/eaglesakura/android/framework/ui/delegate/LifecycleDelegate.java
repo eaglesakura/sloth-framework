@@ -1,11 +1,26 @@
 package com.eaglesakura.android.framework.ui.delegate;
 
+import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.rx.LifecycleState;
 import com.eaglesakura.android.rx.ObserveTarget;
 import com.eaglesakura.android.rx.RxTask;
 import com.eaglesakura.android.rx.RxTaskBuilder;
 import com.eaglesakura.android.rx.SubscribeTarget;
 import com.eaglesakura.android.rx.SubscriptionController;
+import com.eaglesakura.android.thread.ui.UIHandler;
+import com.eaglesakura.android.util.DialogUtil;
+
+import android.app.Dialog;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
+
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import rx.subjects.BehaviorSubject;
 
@@ -14,6 +29,11 @@ public abstract class LifecycleDelegate {
     private BehaviorSubject<LifecycleState> mLifecycleSubject = BehaviorSubject.create(LifecycleState.NewObject);
 
     private SubscriptionController mSubscription = new SubscriptionController();
+
+    /**
+     * 監視対象とするDialog
+     */
+    private List<WeakReference<Dialog>> mAutoDismissDialogs = new LinkedList<>();
 
     public LifecycleDelegate() {
         mSubscription.bind(mLifecycleSubject);
@@ -30,28 +50,83 @@ public abstract class LifecycleDelegate {
         return mSubscription;
     }
 
+    @UiThread
+    public <T extends Dialog> T addAutoDismiss(@NonNull T dialog) {
+        compactAutoDismissDialogs();
+        if (dialog != null) {
+            mAutoDismissDialogs.add(new WeakReference<>(dialog));
+        }
+        return dialog;
+    }
+
+    /**
+     * Dialogを全て開放する
+     */
+    @UiThread
+    public void compactAutoDismissDialogs() {
+        Iterator<WeakReference<Dialog>> iterator = mAutoDismissDialogs.iterator();
+        while (iterator.hasNext()) {
+            WeakReference<Dialog> next = iterator.next();
+            Dialog dialog = next.get();
+            if (dialog == null) {
+                iterator.remove();
+            }
+        }
+    }
+
+    @CallSuper
+    @UiThread
     protected void onCreate() {
         mLifecycleSubject.onNext(LifecycleState.OnCreated);
     }
 
+    @CallSuper
+    @UiThread
     protected void onStart() {
         mLifecycleSubject.onNext(LifecycleState.OnStarted);
     }
 
+    @CallSuper
+    @UiThread
     protected void onResume() {
         mLifecycleSubject.onNext(LifecycleState.OnResumed);
     }
 
+    @CallSuper
+    @UiThread
     protected void onPause() {
         mLifecycleSubject.onNext(LifecycleState.OnPaused);
     }
 
+    @CallSuper
+    @UiThread
     protected void onStop() {
         mLifecycleSubject.onNext(LifecycleState.OnStopped);
     }
 
+    @CallSuper
+    @UiThread
     protected void onDestroy() {
+        {
+            Iterator<WeakReference<Dialog>> iterator = mAutoDismissDialogs.iterator();
+            while (iterator.hasNext()) {
+                Dialog dialog = iterator.next().get();
+                if (dialog != null) {
+                    FwLog.widget("AutoDismiss :: %s", dialog.getClass());
+                    DialogUtil.dismiss(dialog);
+                }
+            }
+            mAutoDismissDialogs.clear();
+        }
+
         mLifecycleSubject.onNext(LifecycleState.OnDestroyed);
+    }
+
+    /**
+     * UIスレッドで実行する
+     */
+    public void runOnUiThread(@NonNull Runnable runnable) {
+        UIHandler.postUIorRun(runnable);
     }
 
     /**

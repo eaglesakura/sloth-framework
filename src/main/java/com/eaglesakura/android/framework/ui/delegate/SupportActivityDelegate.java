@@ -2,7 +2,6 @@ package com.eaglesakura.android.framework.ui.delegate;
 
 import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.framework.util.AppSupportUtil;
-import com.eaglesakura.android.margarine.MargarineKnife;
 import com.eaglesakura.android.oari.ActivityResult;
 
 import android.annotation.TargetApi;
@@ -14,14 +13,18 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.KeyEvent;
 import android.view.View;
+
+import icepick.Icepick;
 
 /**
  *
@@ -39,34 +42,60 @@ public class SupportActivityDelegate extends LifecycleDelegate {
         mCompat = compat;
     }
 
+    @CallSuper
+    @UiThread
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Icepick.restoreInstanceState(getActivity(), savedInstanceState);
+        Icepick.restoreInstanceState(this, savedInstanceState);
+    }
+
+    @CallSuper
+    @UiThread
     public void onCreate(@Nullable Bundle savedInstanceState) {
         edgeColorToPrimaryColor();
         super.onCreate();
     }
 
+    @CallSuper
+    @UiThread
     @Override
     public void onStart() {
         super.onStart();
     }
 
+    @CallSuper
+    @UiThread
     @Override
     public void onResume() {
         super.onResume();
     }
 
+    @CallSuper
+    @UiThread
     @Override
     public void onPause() {
         super.onPause();
     }
 
+    @CallSuper
+    @UiThread
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        Icepick.saveInstanceState(getActivity(), outState);
+        Icepick.saveInstanceState(this, outState);
+    }
+
+    @CallSuper
+    @UiThread
     @Override
     public void onStop() {
         super.onStop();
     }
 
+    @CallSuper
+    @UiThread
     @Override
     public void onDestroy() {
-//        super.onDestroy();
+        super.onDestroy();
     }
 
     public <T extends View> T findViewById(@NonNull Class<T> clazz, @IdRes int id) {
@@ -129,6 +158,8 @@ public class SupportActivityDelegate extends LifecycleDelegate {
      *
      * @return ハンドリングを行った場合trueを返却する
      */
+    @CallSuper
+    @UiThread
     public boolean onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         return ActivityResult.invoke(this, requestCode, resultCode, data);
     }
@@ -138,6 +169,8 @@ public class SupportActivityDelegate extends LifecycleDelegate {
      * <br>
      * このFragmentは最上位階層のみが扱われる。
      */
+    @CallSuper
+    @UiThread
     public void onAttachFragment(@NonNull Fragment fragment) {
     }
 
@@ -146,6 +179,8 @@ public class SupportActivityDelegate extends LifecycleDelegate {
      *
      * @return ハンドリングを行った場合true
      */
+    @CallSuper
+    @UiThread
     public boolean dispatchKeyEvent(KeyEvent event) {
         return false;
     }
@@ -155,10 +190,14 @@ public class SupportActivityDelegate extends LifecycleDelegate {
      *
      * @return パーミッション取得を開始した場合はtrue
      */
+    @CallSuper
+    @UiThread
     public boolean requestRuntimePermissions(String[] permissions) {
         return AppSupportUtil.requestRuntimePermissions(getActivity(), permissions);
     }
 
+    @CallSuper
+    @UiThread
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         AppSupportUtil.onRequestPermissionsResult(getActivity(), requestCode, permissions, grantResults);
     }

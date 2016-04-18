@@ -5,9 +5,9 @@
  * 1.1.x    : RxAndroid / ラムダを導入
  * 1.2.x    : コールバック用インターフェースを拡張
  * 1.3.x    : ContentHolder内部で不要だったクラスを保持しないように修正
- * 1.23.0.x : バージョン規則を修正
+ * 2.23.0.x : バージョン規則を修正, 構成を大幅変更
  */
-def ARTIFACT_VERSION = "1.23.0"
+def ARTIFACT_VERSION = "2.23.0"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 

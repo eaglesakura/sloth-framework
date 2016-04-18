@@ -4,15 +4,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import com.eaglesakura.android.framework.FwLog;
-import com.eaglesakura.android.framework.ui.BaseFragment;
-import com.eaglesakura.util.LogUtil;
+import com.eaglesakura.android.framework.ui.SupportFragment;
+import com.eaglesakura.android.framework.ui.delegate.SupportFragmentDelegate;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
 
-public class GoogleApiFragment extends BaseFragment {
+public class GoogleApiFragment extends SupportFragment {
     protected GoogleApiClientToken googleApiClientToken;
 
     Callback callback;
@@ -43,6 +44,21 @@ public class GoogleApiFragment extends BaseFragment {
         } else {
             FwLog.google("Google Play Service OK!");
         }
+    }
+
+    @Override
+    public void onAfterViews(SupportFragmentDelegate self, int flags) {
+
+    }
+
+    @Override
+    public void onAfterBindMenu(SupportFragmentDelegate self, Menu menu) {
+
+    }
+
+    @Override
+    public void onAfterInjection(SupportFragmentDelegate self) {
+
     }
 
     /**
