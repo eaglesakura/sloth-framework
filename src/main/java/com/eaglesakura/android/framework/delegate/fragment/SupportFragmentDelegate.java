@@ -57,8 +57,6 @@ public class SupportFragmentDelegate {
         @NonNull
         ActionBar getActionBar();
 
-        void setHasOptionsMenu(boolean set);
-
         /**
          * BackstackIndexが確定した
          *

@@ -157,30 +157,6 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
         return mLifecycleDelegate.addAutoDismiss(dialog);
     }
 
-    /**
-     * バックスタックが一致したらtrue
-     */
-    public boolean isCurrentBackstack() {
-        return mFragmentDelegate.isCurrentBackstack();
-    }
-
-    /**
-     * 自身をFragmentから外す
-     *
-     * @param withBackStack backstack階層も含めて排除する場合はtrue
-     */
-    public void detatchSelf(boolean withBackStack) {
-        mFragmentDelegate.detatchSelf(withBackStack);
-    }
-
-    /**
-     * 戻るボタンのハンドリングを行う
-     *
-     * @return ハンドリングを行えたらtrue
-     */
-    public boolean handleBackButton() {
-        return mFragmentDelegate.handleBackButton();
-    }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
