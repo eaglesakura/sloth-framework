@@ -1,7 +1,7 @@
 package com.eaglesakura.android.framework.ui.support;
 
-import com.eaglesakura.android.framework.ui.delegate.LifecycleDelegate;
-import com.eaglesakura.android.framework.ui.delegate.SupportFragmentDelegate;
+import com.eaglesakura.android.framework.delegate.lifecycle.FragmentLifecycleDelegate;
+import com.eaglesakura.android.framework.delegate.fragment.SupportFragmentDelegate;
 import com.eaglesakura.android.garnet.Garnet;
 import com.eaglesakura.android.rx.LifecycleState;
 import com.eaglesakura.android.rx.ObserveTarget;
@@ -37,13 +37,9 @@ import android.view.ViewGroup;
  */
 public abstract class SupportFragment extends Fragment implements SupportFragmentDelegate.SupportFragmentCompat {
 
-    protected final LifecycleDelegate mLifecycleDelegate = new LifecycleDelegate();
+    protected final FragmentLifecycleDelegate mLifecycleDelegate = new FragmentLifecycleDelegate();
 
-    protected final SupportFragmentDelegate mFragmentDelegate = new SupportFragmentDelegate(this);
-
-    public SupportFragment() {
-        mFragmentDelegate.bind(mLifecycleDelegate);
-    }
+    protected final SupportFragmentDelegate mFragmentDelegate = new SupportFragmentDelegate(this, mLifecycleDelegate);
 
     /**
      * ライフサイクル状態を取得する
@@ -55,7 +51,8 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return mFragmentDelegate.onCreateView(inflater, container, savedInstanceState);
+        mLifecycleDelegate.onCreateView(inflater, container, savedInstanceState);
+        return mFragmentDelegate.getView();
     }
 
     @Override
@@ -111,20 +108,19 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mFragmentDelegate.onSaveInstanceState(outState);
+        mLifecycleDelegate.onSaveInstanceState(outState);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mFragmentDelegate.onAttach(context);
+        mLifecycleDelegate.onAttach(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLifecycleDelegate.onCreate(savedInstanceState);
-        mFragmentDelegate.onCreate(savedInstanceState);
     }
 
     @Override
@@ -143,6 +139,12 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
     public void onStop() {
         super.onStop();
         mLifecycleDelegate.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mLifecycleDelegate.onDestroyView();
     }
 
     @Override
@@ -212,13 +214,6 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
         return mFragmentDelegate.requestRuntimePermission(type);
     }
 
-
-    /**
-     * UIスレッドで実行する
-     */
-    public void runOnUiThread(@NonNull Runnable runnable) {
-        mLifecycleDelegate.runOnUiThread(runnable);
-    }
 
     /**
      * タスクコントローラを取得する

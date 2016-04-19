@@ -1,12 +1,14 @@
 package com.eaglesakura.android.framework.service;
 
 import com.eaglesakura.android.garnet.Garnet;
+import com.eaglesakura.android.rx.LifecycleEvent;
 import com.eaglesakura.android.rx.LifecycleState;
 import com.eaglesakura.android.rx.ObserveTarget;
 import com.eaglesakura.android.rx.RxTask;
 import com.eaglesakura.android.rx.RxTaskBuilder;
 import com.eaglesakura.android.rx.SubscribeTarget;
 import com.eaglesakura.android.rx.SubscriptionController;
+import com.eaglesakura.android.rx.event.LifecycleEventImpl;
 import com.eaglesakura.android.thread.ui.UIHandler;
 
 import android.annotation.SuppressLint;
@@ -30,7 +32,7 @@ import rx.subjects.BehaviorSubject;
 /**
  * 便利系メソッドを固めたUtilクラス
  */
-public abstract class BaseService extends Service {
+public abstract class SupportService extends Service {
 
     /**
      * 呼び出しリクエストを指定する
@@ -63,12 +65,12 @@ public abstract class BaseService extends Service {
     @NonNull
     PowerManager.WakeLock wakeLock;
 
-    private BehaviorSubject<LifecycleState> mLifecycleSubject = BehaviorSubject.create(LifecycleState.NewObject);
+    private BehaviorSubject<LifecycleEvent> mLifecycleSubject = BehaviorSubject.create(new LifecycleEventImpl(LifecycleState.NewObject));
 
     @NonNull
     private SubscriptionController mSubscriptionController = new SubscriptionController();
 
-    public BaseService() {
+    public SupportService() {
         mSubscriptionController.bind(mLifecycleSubject);
     }
 
@@ -82,9 +84,9 @@ public abstract class BaseService extends Service {
         this.ACTION_SELF_WAKEUP_BROADCAST = getPackageName() + "/" + getClass().getName() + ".ACTION_SELF_WAKEUP_BROADCAST" + "/" + hashCode();
         registerReceiver(wakeupBroadcastReceiver, new IntentFilter(ACTION_SELF_WAKEUP_BROADCAST));
 
-        mLifecycleSubject.onNext(LifecycleState.OnCreated);
-        mLifecycleSubject.onNext(LifecycleState.OnStarted);
-        mLifecycleSubject.onNext(LifecycleState.OnResumed);
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnCreated));
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStarted));
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnResumed));
 
         createInjectionBuilder().inject();
     }
@@ -109,9 +111,9 @@ public abstract class BaseService extends Service {
             }
         }
         unregisterReceiver(wakeupBroadcastReceiver);
-        mLifecycleSubject.onNext(LifecycleState.OnPaused);
-        mLifecycleSubject.onNext(LifecycleState.OnStopped);
-        mLifecycleSubject.onNext(LifecycleState.OnDestroyed);
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnPaused));
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStopped));
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnDestroyed));
     }
 
     @NonNull
@@ -133,7 +135,7 @@ public abstract class BaseService extends Service {
     }
 
     public boolean isDestroyed() {
-        return mLifecycleSubject.getValue() == LifecycleState.OnDestroyed;
+        return mLifecycleSubject.getValue().getState() == LifecycleState.OnDestroyed;
     }
 
     /**
@@ -266,7 +268,7 @@ public abstract class BaseService extends Service {
         UIHandler.postUIorRun(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(BaseService.this, String.format(fmt, args), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SupportService.this, String.format(fmt, args), Toast.LENGTH_SHORT).show();
             }
         });
 
