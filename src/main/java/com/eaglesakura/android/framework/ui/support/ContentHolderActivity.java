@@ -11,8 +11,8 @@ import android.support.v4.app.FragmentManager;
 /**
  * 親となるFragmentを指定して起動するActivityの雛形
  * <p/>
- * メインコンテンツは @+id/Content.Holder.Root を持たなければならない。
- * Toolbarは @+id/EsMaterial.Toolbar を自動的に検索し、存在するならToolbarとして自動設定する。
+ * メインコンテンツは @+id/Content_Holder_Root を持たなければならない。
+ * Toolbarは @+id/EsMaterial_Toolbar を自動的に検索し、存在するならToolbarとして自動設定する。
  */
 public abstract class ContentHolderActivity extends SupportActivity implements ContentHolderActivityDelegate.ContentHolderActivityCompat {
     protected final ContentHolderActivityDelegate mContentHolderDelegate = new ContentHolderActivityDelegate(this, mLifecycleDelegate);

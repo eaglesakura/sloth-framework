@@ -12,7 +12,7 @@
             android:visibility="gone"/>
 
     <FrameLayout
-            android:id="@+id/Content.Holder.Root"
+            android:id="@+id/Content_Holder_Root"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 </FrameLayout>
