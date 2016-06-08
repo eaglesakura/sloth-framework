@@ -48,6 +48,33 @@ public class BundleFreezer {
         }
     }
 
+    static boolean instanceOf(Class checkType, Class clazz) {
+        try {
+            return checkType.asSubclass(clazz) != null;
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
+    @NonNull
+    Freezer getFreezer(@NonNull Field field) {
+        Class<?> type = field.getType();
+        Freezer result = mFreezers.get(type);
+        if (result == null) {
+            if (instanceOf(type, Parcelable.class)) {
+                result = mFreezers.get(Parcelable.class);
+            } else if (instanceOf(type, Serializable.class)) {
+                result = mFreezers.get(Serializable.class);
+            }
+        }
+
+        if (result == null) {
+            throw new IllegalStateException("Field : " + field.getName());
+        }
+
+        return result;
+    }
+
     /**
      * ステートの保存を行う
      */
@@ -56,7 +83,7 @@ public class BundleFreezer {
         for (Field field : fields) {
             field.setAccessible(true);
             String key = getKey(field);
-            Freezer freezer = mFreezers.get(field.getType());
+            Freezer freezer = getFreezer(field);
             if (freezer == null) {
                 throw new IllegalStateException("freeze failed :: " + key);
             }
@@ -77,7 +104,7 @@ public class BundleFreezer {
         for (Field field : fields) {
             field.setAccessible(true);
             String key = getKey(field);
-            Freezer freezer = mFreezers.get(field.getType());
+            Freezer freezer = getFreezer(field);
             if (freezer == null) {
                 throw new IllegalStateException("freeze failed :: " + key);
             }
@@ -90,12 +117,8 @@ public class BundleFreezer {
         }
     }
 
-    public static Builder create(Object obj) {
-        Builder result = new Builder().target(obj);
-        if (obj instanceof Fragment) {
-            result.tag(((Fragment) obj).getTag());
-        }
-        return result;
+    public static Builder create(Bundle state) {
+        return new Builder().state(state);
     }
 
     public static class Builder {
@@ -137,13 +160,16 @@ public class BundleFreezer {
             }
         }
 
-        public Builder state(Bundle bundle) {
+        private Builder state(Bundle bundle) {
             mState = bundle;
             return this;
         }
 
         public Builder target(Object target) {
             mTargetObject = target;
+            if (target instanceof Fragment) {
+                tag(((Fragment) target).getTag());
+            }
             return this;
         }
 
@@ -165,8 +191,14 @@ public class BundleFreezer {
             return this;
         }
 
+        /**
+         * restoreを行う。
+         * Bundleがnullである場合は何もしない
+         */
         public Builder restore() {
-            new BundleFreezer(mTargetObject, mState, mTag, mFreezerMap).restore();
+            if (mState != null) {
+                new BundleFreezer(mTargetObject, mState, mTag, mFreezerMap).restore();
+            }
             return this;
         }
     }

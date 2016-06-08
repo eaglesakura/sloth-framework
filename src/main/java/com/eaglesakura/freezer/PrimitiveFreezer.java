@@ -27,10 +27,10 @@ class PrimitiveFreezer implements Freezer {
             state.putDouble(key, srcField.getDouble(srcObject));
         } else if (String.class.equals(type)) {
             state.putString(key, (String) srcField.get(srcObject));
-        } else if (Serializable.class.equals(type)) {
-            state.putSerializable(key, (Serializable) srcField.get(srcObject));
-        } else if (Parcelable.class.equals(type)) {
+        } else if (BundleFreezer.instanceOf(type, Parcelable.class)) {
             state.putParcelable(key, (Parcelable) srcField.get(srcObject));
+        } else if (BundleFreezer.instanceOf(type, Serializable.class)) {
+            state.putSerializable(key, (Serializable) srcField.get(srcObject));
         } else {
             throw new IllegalArgumentException("key : " + key);
         }
@@ -56,10 +56,10 @@ class PrimitiveFreezer implements Freezer {
             dstField.setDouble(dstObject, state.getDouble(key, dstField.getDouble(dstObject)));
         } else if (String.class.equals(type)) {
             dstField.set(dstObject, state.getString(key, (String) dstField.get(dstObject)));
-        } else if (Serializable.class.equals(type)) {
-            dstField.set(dstObject, state.getSerializable(key));
-        } else if (Parcelable.class.equals(type)) {
+        } else if (BundleFreezer.instanceOf(type, Parcelable.class)) {
             dstField.set(dstObject, state.getParcelable(key));
+        } else if (BundleFreezer.instanceOf(type, Serializable.class)) {
+            dstField.set(dstObject, state.getSerializable(key));
         } else {
             throw new IllegalArgumentException("key : " + key);
         }

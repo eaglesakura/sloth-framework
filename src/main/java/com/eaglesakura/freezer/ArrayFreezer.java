@@ -12,26 +12,27 @@ class ArrayFreezer implements Freezer {
     @Override
     public void onSaveInstance(Bundle state, String key, Object srcObject, Field srcField) throws Throwable {
         Object value = srcField.get(srcObject);
+        Class<?> type = srcField.getType();
 
-        if (value instanceof boolean[]) {
+        if (boolean[].class.equals(type)) {
             state.putBooleanArray(key, (boolean[]) value);
-        } else if (value instanceof byte[]) {
+        } else if (byte[].class.equals(type)) {
             state.putByteArray(key, (byte[]) value);
-        } else if (value instanceof short[]) {
+        } else if (short[].class.equals(type)) {
             state.putShortArray(key, (short[]) value);
-        } else if (value instanceof int[]) {
+        } else if (int[].class.equals(type)) {
             state.putIntArray(key, (int[]) value);
-        } else if (value instanceof long[]) {
+        } else if (long[].class.equals(type)) {
             state.putLongArray(key, (long[]) value);
-        } else if (value instanceof float[]) {
+        } else if (float[].class.equals(type)) {
             state.putFloatArray(key, (float[]) value);
-        } else if (value instanceof double[]) {
+        } else if (double[].class.equals(type)) {
             state.putDoubleArray(key, (double[]) value);
-        } else if (value instanceof String[]) {
+        } else if (String[].class.equals(type)) {
             state.putStringArray(key, (String[]) value);
-        } else if (value instanceof Parcelable[]) {
+        } else if (Parcelable[].class.equals(type)) {
             state.putParcelableArray(key, (Parcelable[]) value);
-        } else if (value instanceof ArrayList) {
+        } else if (ArrayList.class.equals(type)) {
             Class genericClass = ReflectionUtil.getListGenericClass(srcField);
             if (String.class.equals(genericClass)) {
                 state.putStringArrayList(key, (ArrayList<String>) value);
