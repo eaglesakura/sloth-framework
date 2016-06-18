@@ -31,6 +31,7 @@ public class CpuWakeDelegate {
         lifecycle.getSubscription().getObservable().subscribe(it -> {
             switch (it.getState()) {
                 case OnDestroyed:
+                    onDestroyed();
                     break;
             }
 

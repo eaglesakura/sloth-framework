@@ -195,35 +195,6 @@ public class FrameworkCentral {
         return sImpl.mSubscriptionController;
     }
 
-    //    /**
-//     * GCMトークンを登録する
-//     */
-//    public static void registerGcm() throws IOException {
-//        if (!StringUtil.isEmpty(getSettings().getGcmToken())) {
-//            return;
-//        }
-//        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(getApplication());
-//        String registerId = gcm.register(getApplication().getString(R.string.eglibrary_Gcm_SenderID));
-//
-//        if (StringUtil.isEmpty(registerId)) {
-//            throw new IllegalStateException("GCM register id == null");
-//        }
-//        getSettings().setGcmToken(registerId);
-//        getSettings().commit();
-//    }
-
-//    /**
-//     * GCMトークンを無効化する
-//     *
-//     * @throws IOException
-//     */
-//    public static void unregisterGcm() throws IOException {
-//        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(getApplication());
-//        gcm.unregister();
-//        getSettings().setGcmToken("");
-//        getSettings().commit();
-//    }
-
     /**
      * Frameworkの設定クラスを取得する
      */

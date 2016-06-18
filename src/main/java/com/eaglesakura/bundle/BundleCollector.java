@@ -1,9 +1,8 @@
-package com.eaglesakura.freezer;
+package com.eaglesakura.bundle;
 
 import com.eaglesakura.util.ReflectionUtil;
 import com.eaglesakura.util.StringUtil;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -16,17 +15,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BundleFreezer {
+public class BundleCollector {
 
     private final Object mTarget;
 
     private final Bundle mState;
 
-    private final Map<Class, Freezer> mFreezers;
+    private final Map<Class, Collector> mFreezers;
 
     private String mTag;
 
-    BundleFreezer(Object target, Bundle state, String keyTag, Map<Class, Freezer> freezers) {
+    BundleCollector(Object target, Bundle state, String keyTag, Map<Class, Collector> freezers) {
         mTarget = target;
         mState = state;
         mFreezers = freezers;
@@ -57,9 +56,9 @@ public class BundleFreezer {
     }
 
     @NonNull
-    Freezer getFreezer(@NonNull Field field) {
+    Collector getFreezer(@NonNull Field field) {
         Class<?> type = field.getType();
-        Freezer result = mFreezers.get(type);
+        Collector result = mFreezers.get(type);
         if (result == null) {
             if (instanceOf(type, Parcelable.class)) {
                 result = mFreezers.get(Parcelable.class);
@@ -83,7 +82,7 @@ public class BundleFreezer {
         for (Field field : fields) {
             field.setAccessible(true);
             String key = getKey(field);
-            Freezer freezer = getFreezer(field);
+            Collector freezer = getFreezer(field);
             if (freezer == null) {
                 throw new IllegalStateException("freeze failed :: " + key);
             }
@@ -104,7 +103,7 @@ public class BundleFreezer {
         for (Field field : fields) {
             field.setAccessible(true);
             String key = getKey(field);
-            Freezer freezer = getFreezer(field);
+            Collector freezer = getFreezer(field);
             if (freezer == null) {
                 throw new IllegalStateException("freeze failed :: " + key);
             }
@@ -121,43 +120,57 @@ public class BundleFreezer {
         return new Builder().state(state);
     }
 
+    private static Map<Class, Collector> sDefaultFreezer;
+
+    private static Map<Class, Collector> getDefaultFreezer() {
+        if (sDefaultFreezer == null) {
+            synchronized (BundleCollector.class) {
+                if (sDefaultFreezer == null) {
+                    sDefaultFreezer = new HashMap<>();
+
+                    {
+                        BundlePrimitiveCollector primitiveFreezer = new BundlePrimitiveCollector();
+                        sDefaultFreezer.put(boolean.class, primitiveFreezer);
+                        sDefaultFreezer.put(byte.class, primitiveFreezer);
+                        sDefaultFreezer.put(short.class, primitiveFreezer);
+                        sDefaultFreezer.put(int.class, primitiveFreezer);
+                        sDefaultFreezer.put(long.class, primitiveFreezer);
+                        sDefaultFreezer.put(float.class, primitiveFreezer);
+                        sDefaultFreezer.put(double.class, primitiveFreezer);
+                        sDefaultFreezer.put(String.class, primitiveFreezer);
+                        sDefaultFreezer.put(Serializable.class, primitiveFreezer);
+                        sDefaultFreezer.put(Parcelable.class, primitiveFreezer);
+                    }
+                    {
+                        BundleArrayCollector arrayFreezer = new BundleArrayCollector();
+                        sDefaultFreezer.put(boolean[].class, arrayFreezer);
+                        sDefaultFreezer.put(byte[].class, arrayFreezer);
+                        sDefaultFreezer.put(short[].class, arrayFreezer);
+                        sDefaultFreezer.put(int[].class, arrayFreezer);
+                        sDefaultFreezer.put(long[].class, arrayFreezer);
+                        sDefaultFreezer.put(float[].class, arrayFreezer);
+                        sDefaultFreezer.put(double[].class, arrayFreezer);
+                        sDefaultFreezer.put(String[].class, arrayFreezer);
+                        sDefaultFreezer.put(Parcelable[].class, arrayFreezer);
+                        sDefaultFreezer.put(ArrayList.class, arrayFreezer);
+                    }
+                }
+            }
+        }
+        return sDefaultFreezer;
+    }
+
     public static class Builder {
         private Object mTargetObject;
 
         private Bundle mState;
 
-        private Map<Class, Freezer> mFreezerMap = new HashMap<>();
+        private Map<Class, Collector> mFreezerMap = new HashMap<>(getDefaultFreezer());
 
         private String mTag;
 
         Builder() {
             // デフォルトのフリーザを指定
-            {
-                PrimitiveFreezer primitiveFreezer = new PrimitiveFreezer();
-                mFreezerMap.put(boolean.class, primitiveFreezer);
-                mFreezerMap.put(byte.class, primitiveFreezer);
-                mFreezerMap.put(short.class, primitiveFreezer);
-                mFreezerMap.put(int.class, primitiveFreezer);
-                mFreezerMap.put(long.class, primitiveFreezer);
-                mFreezerMap.put(float.class, primitiveFreezer);
-                mFreezerMap.put(double.class, primitiveFreezer);
-                mFreezerMap.put(String.class, primitiveFreezer);
-                mFreezerMap.put(Serializable.class, primitiveFreezer);
-                mFreezerMap.put(Parcelable.class, primitiveFreezer);
-            }
-            {
-                ArrayFreezer arrayFreezer = new ArrayFreezer();
-                mFreezerMap.put(boolean[].class, arrayFreezer);
-                mFreezerMap.put(byte[].class, arrayFreezer);
-                mFreezerMap.put(short[].class, arrayFreezer);
-                mFreezerMap.put(int[].class, arrayFreezer);
-                mFreezerMap.put(long[].class, arrayFreezer);
-                mFreezerMap.put(float[].class, arrayFreezer);
-                mFreezerMap.put(double[].class, arrayFreezer);
-                mFreezerMap.put(String[].class, arrayFreezer);
-                mFreezerMap.put(Parcelable[].class, arrayFreezer);
-                mFreezerMap.put(ArrayList.class, arrayFreezer);
-            }
         }
 
         private Builder state(Bundle bundle) {
@@ -173,7 +186,7 @@ public class BundleFreezer {
             return this;
         }
 
-        public Builder freezer(Class clazz, Freezer freezer) {
+        public Builder freezer(Class clazz, Collector freezer) {
             mFreezerMap.put(clazz, freezer);
             return this;
         }
@@ -187,7 +200,7 @@ public class BundleFreezer {
         }
 
         public Builder save() {
-            new BundleFreezer(mTargetObject, mState, mTag, mFreezerMap).save();
+            new BundleCollector(mTargetObject, mState, mTag, mFreezerMap).save();
             return this;
         }
 
@@ -197,7 +210,7 @@ public class BundleFreezer {
          */
         public Builder restore() {
             if (mState != null) {
-                new BundleFreezer(mTargetObject, mState, mTag, mFreezerMap).restore();
+                new BundleCollector(mTargetObject, mState, mTag, mFreezerMap).restore();
             }
             return this;
         }

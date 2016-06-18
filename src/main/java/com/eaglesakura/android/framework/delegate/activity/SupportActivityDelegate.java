@@ -6,7 +6,7 @@ import com.eaglesakura.android.framework.util.AppSupportUtil;
 import com.eaglesakura.android.oari.ActivityResult;
 import com.eaglesakura.android.rx.event.OnRestoreEvent;
 import com.eaglesakura.android.rx.event.OnSaveEvent;
-import com.eaglesakura.freezer.BundleFreezer;
+import com.eaglesakura.bundle.BundleCollector;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -60,7 +60,7 @@ public class SupportActivityDelegate {
     @CallSuper
     @UiThread
     protected void onRestoreInstanceState(OnRestoreEvent event) {
-        BundleFreezer.create(event.getBundle())
+        BundleCollector.create(event.getBundle())
                 .target(getActivity()).restore()
                 .target(this).restore();
     }
@@ -68,7 +68,7 @@ public class SupportActivityDelegate {
     @CallSuper
     @UiThread
     protected void onSaveInstanceState(OnSaveEvent event) {
-        BundleFreezer.create(event.getBundle())
+        BundleCollector.create(event.getBundle())
                 .target(getActivity()).save()
                 .target(this).save();
     }

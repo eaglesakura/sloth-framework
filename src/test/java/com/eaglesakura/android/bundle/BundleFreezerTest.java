@@ -1,8 +1,8 @@
-package com.eaglesakura.android.freezer;
+package com.eaglesakura.android.bundle;
 
 import com.eaglesakura.android.framework.UnitTestCase;
-import com.eaglesakura.freezer.BundleFreezer;
-import com.eaglesakura.freezer.BundleState;
+import com.eaglesakura.bundle.BundleCollector;
+import com.eaglesakura.bundle.BundleState;
 import com.eaglesakura.util.RandomUtil;
 
 import org.junit.Test;
@@ -26,10 +26,10 @@ public class BundleFreezerTest extends UnitTestCase {
 
             assertNotEquals(saveTarget, restoreTarget);
 
-            BundleFreezer.create(state)
+            BundleCollector.create(state)
                     .target(saveTarget).save();
 
-            BundleFreezer.create(state)
+            BundleCollector.create(state)
                     .target(restoreTarget).restore();
 
             assertEquals(saveTarget, restoreTarget);

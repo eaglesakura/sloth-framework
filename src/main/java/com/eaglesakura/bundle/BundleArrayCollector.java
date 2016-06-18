@@ -1,4 +1,4 @@
-package com.eaglesakura.freezer;
+package com.eaglesakura.bundle;
 
 import com.eaglesakura.util.ReflectionUtil;
 
@@ -8,7 +8,10 @@ import android.os.Parcelable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-class ArrayFreezer implements Freezer {
+/**
+ * 配列系の値をsave/restoreする
+ */
+class BundleArrayCollector implements Collector {
     @Override
     public void onSaveInstance(Bundle state, String key, Object srcObject, Field srcField) throws Throwable {
         Object value = srcField.get(srcObject);

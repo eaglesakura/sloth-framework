@@ -1,4 +1,4 @@
-package com.eaglesakura.freezer;
+package com.eaglesakura.bundle;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -6,7 +6,10 @@ import android.os.Parcelable;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-class PrimitiveFreezer implements Freezer {
+/**
+ * Primitive系の値をsave/restoreする
+ */
+class BundlePrimitiveCollector implements Collector {
     @Override
     public void onSaveInstance(Bundle state, String key, Object srcObject, Field srcField) throws Throwable {
         Class<?> type = srcField.getType();
@@ -27,9 +30,9 @@ class PrimitiveFreezer implements Freezer {
             state.putDouble(key, srcField.getDouble(srcObject));
         } else if (String.class.equals(type)) {
             state.putString(key, (String) srcField.get(srcObject));
-        } else if (BundleFreezer.instanceOf(type, Parcelable.class)) {
+        } else if (BundleCollector.instanceOf(type, Parcelable.class)) {
             state.putParcelable(key, (Parcelable) srcField.get(srcObject));
-        } else if (BundleFreezer.instanceOf(type, Serializable.class)) {
+        } else if (BundleCollector.instanceOf(type, Serializable.class)) {
             state.putSerializable(key, (Serializable) srcField.get(srcObject));
         } else {
             throw new IllegalArgumentException("key : " + key);
@@ -56,9 +59,9 @@ class PrimitiveFreezer implements Freezer {
             dstField.setDouble(dstObject, state.getDouble(key, dstField.getDouble(dstObject)));
         } else if (String.class.equals(type)) {
             dstField.set(dstObject, state.getString(key, (String) dstField.get(dstObject)));
-        } else if (BundleFreezer.instanceOf(type, Parcelable.class)) {
+        } else if (BundleCollector.instanceOf(type, Parcelable.class)) {
             dstField.set(dstObject, state.getParcelable(key));
-        } else if (BundleFreezer.instanceOf(type, Serializable.class)) {
+        } else if (BundleCollector.instanceOf(type, Serializable.class)) {
             dstField.set(dstObject, state.getSerializable(key));
         } else {
             throw new IllegalArgumentException("key : " + key);

@@ -26,12 +26,6 @@ public class TransparentButton extends FrameLayout {
         init(context, attrs, defStyleAttr, 0);
     }
 
-    @SuppressLint("all")
-    public TransparentButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     /**
      * 初期化する
      */

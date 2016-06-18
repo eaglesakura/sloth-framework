@@ -11,8 +11,8 @@ import com.eaglesakura.android.rx.event.OnSaveEvent;
 import com.eaglesakura.android.rx.event.OnViewCreateEvent;
 import com.eaglesakura.android.thread.ui.UIHandler;
 import com.eaglesakura.android.util.PermissionUtil;
-import com.eaglesakura.freezer.BundleFreezer;
-import com.eaglesakura.freezer.BundleState;
+import com.eaglesakura.bundle.BundleCollector;
+import com.eaglesakura.bundle.BundleState;
 import com.eaglesakura.util.CollectionUtil;
 import com.eaglesakura.util.ReflectionUtil;
 
@@ -322,7 +322,7 @@ public class SupportFragmentDelegate {
     @CallSuper
     @UiThread
     protected void onCreate(OnCreateEvent event) {
-        BundleFreezer.create(event.getBundle())
+        BundleCollector.create(event.getBundle())
                 .target(mCompat).restore()
                 .target(this).restore();
     }
@@ -330,7 +330,7 @@ public class SupportFragmentDelegate {
     @CallSuper
     @UiThread
     protected void onSaveInstanceState(OnSaveEvent event) {
-        BundleFreezer.create(event.getBundle())
+        BundleCollector.create(event.getBundle())
                 .target(mCompat).save()
                 .target(this).save();
     }
