@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
-public class BundleFreezerTest extends UnitTestCase {
+public class BundleCollectorTest extends UnitTestCase {
 
     @Test
     public void オブジェクトの保存と復旧が行える() throws Throwable {
