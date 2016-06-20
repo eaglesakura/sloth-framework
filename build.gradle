@@ -109,6 +109,7 @@ dependencies {
         compile 'com.eaglesakura:small-aquery:+'
         compile 'com.eaglesakura:margarineknife:1.+'
         compile 'com.eaglesakura:garnet:0.+'
+        compile 'com.eaglesakura:light-saver:1.+'
 
         androidTestCompile 'com.eaglesakura:android-devicetest-support:1.+'
         testCompile 'com.eaglesakura:android-unittest-support:1.+'
