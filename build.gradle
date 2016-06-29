@@ -8,8 +8,9 @@
  * 2.23.0.x : バージョン規則を修正, 構成を大幅変更
  * 2.23.1.x : ToolbarのID命名規則を変更
  * 2.24.0.x : Android N対応
+ * 2.24.1.x : PlayService依存を削除
  */
-def ARTIFACT_VERSION = "2.24.0"
+def ARTIFACT_VERSION = "2.24.1"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 
@@ -124,10 +125,6 @@ dependencies {
     compile "com.android.support:palette-v7:${ANDROID_SUPPORT_LIB_VERSION}"
     compile "com.android.support:design:${ANDROID_SUPPORT_LIB_VERSION}"
 
-    /**
-     * Play Service
-     */
-    compile "com.google.android.gms:play-services-plus:${ANDROID_PLAYSERVICE_LIB_VERSION}"
     compile 'com.android.support:support-annotations:+'
 }
 
