@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/EsMaterial.Progress"
              android:clickable="true"
              android:background="@color/EsMaterial.Progress.Background"
              android:orientation="vertical"
@@ -32,11 +33,10 @@
 
             <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/EsMaterial.Progress.BarHeight"
                     app:spb_color="@color/EsMaterial.LightGreen.400"
                     app:spb_interpolator="spb_interpolator_decelerate"
-                    android:indeterminate="true"
-                    android:minHeight="3dp"/>
+                    android:indeterminate="true"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>
