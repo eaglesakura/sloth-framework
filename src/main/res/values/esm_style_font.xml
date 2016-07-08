@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="EsMaterial.Font.SmallSmall">12sp</dimen>
+    <dimen name="EsMaterial.Font.Small">14sp</dimen>
+    <dimen name="EsMaterial.Font.Medium">16sp</dimen>
+    <dimen name="EsMaterial.Font.Large">20sp</dimen>
+    <dimen name="EsMaterial.Font.Title">28sp</dimen>
+    <dimen name="EsMaterial.Font.LargeLarge">34sp</dimen>
+
+    <style name="EsMaterial.Theme.Font.Small" parent="EsMaterial.Theme">
+        <item name="android:textSize">@dimen/EsMaterial.Font.Small</item>
+    </style>
+
+    <style name="EsMaterial.Theme.Font.Normal" parent="EsMaterial.Theme">
+        <item name="android:textSize">@dimen/EsMaterial.Font.Medium</item>
+    </style>
+
+    <style name="EsMaterial.Theme.Font.Header" parent="EsMaterial.Theme">
+        <item name="android:textColor">@color/EsMaterial.Grey.900</item>
+        <item name="android:textSize">@dimen/EsMaterial.Font.Medium</item>
+    </style>
+
+</resources>

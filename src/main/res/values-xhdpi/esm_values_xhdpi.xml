@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="EsMaterial.Widget.License.Card.Margin">1dp</dimen>
+    <dimen name="EsWidget.CardView.Margin.Vertical.Small">1dp</dimen>
+</resources>

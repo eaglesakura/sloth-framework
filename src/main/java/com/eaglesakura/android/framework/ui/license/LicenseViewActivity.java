@@ -59,12 +59,12 @@ public class LicenseViewActivity extends SupportActivity {
         setContentView(R.layout.activity_license_view);
 
 
-        String[] ignoreFiles = getResources().getStringArray(R.array.eglibrary_Licence_IgnoreFiles);
+        String[] ignoreFiles = getResources().getStringArray(R.array.EsMaterial_Widget_Licenses_IgnoreFiles);
         if (!CollectionUtil.isEmpty(ignoreFiles)) {
             this.ignoreFiles = CollectionUtil.asList(ignoreFiles);
         }
         setSupportActionBar((Toolbar) findViewById(R.id.EsMaterial_Toolbar));
-        setTitle(R.string.eglibrary_License_Activity_Title);
+        setTitle(R.string.EsMaterial_Widget_License_Title);
 
         listRoot = (SupportRecyclerView) findViewById(R.id.eglibrary_License_List);
         licenseListView = listRoot.getRecyclerView();

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="EsMaterial.Button.Shadow">#7F000000</color>
+
+    <dimen name="EsMaterial.Button.ShadowRadius">2dp</dimen>
+    <dimen name="EsMaterial.Button.Margin">6dp</dimen>
+    <dimen name="EsMaterial.Button.ExternalMarginHorizontal">4dp</dimen>
+    <dimen name="EsMaterial.Button.ExternalMarginVertical">6dp</dimen>
+    <dimen name="EsMaterial.Button.InternalMarginHorizontal">8dp</dimen>
+    <dimen name="EsMaterial.Button.MinWidth">64dp</dimen>
+    <dimen name="EsMaterial.Button.MinHeight">48dp</dimen>
+
+    <!-- Grey Button -->
+    <color name="EsMaterial.Grey.Button.Disabled">@color/EsMaterial.Grey.100</color>
+    <color name="EsMaterial.Grey.Button.Normal">@color/EsMaterial.Grey.350</color>
+    <color name="EsMaterial.Grey.Button.Focused">@color/EsMaterial.Grey.350</color>
+    <color name="EsMaterial.Grey.Button.Pressed">@color/EsMaterial.Grey.600</color>
+    <color name="EsMaterial.Grey.Button.Ripple">@color/EsMaterial.Grey.700</color>
+
+    <color name="EsMaterial.White.Button.Disabled">@color/EsMaterial.Grey.0</color>
+    <color name="EsMaterial.White.Button.Normal">@color/EsMaterial.Grey.50</color>
+    <color name="EsMaterial.White.Button.Focused">@color/EsMaterial.Grey.200</color>
+    <color name="EsMaterial.White.Button.Pressed">@color/EsMaterial.Grey.500</color>
+    <color name="EsMaterial.White.Button.Ripple">@color/EsMaterial.Grey.600</color>
+
+    <style name="EsMaterial.Grey.DrawerArrow" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/EsMaterial.Grey.800</item>
+    </style>
+
+    <!-- LightGreen Button -->
+    <color name="EsMaterial.LightGreen.Button.Disabled">@color/EsMaterial.LightGreen.300</color>
+    <color name="EsMaterial.LightGreen.Button.Normal">@color/EsMaterial.LightGreen.400</color>
+    <color name="EsMaterial.LightGreen.Button.Focused">@color/EsMaterial.LightGreen.400</color>
+    <color name="EsMaterial.LightGreen.Button.Pressed">@color/EsMaterial.LightGreen.700</color>
+    <color name="EsMaterial.LightGreen.Button.Ripple">@color/EsMaterial.LightGreen.800</color>
+
+    <color name="EsMaterial.Green.Button.Disabled">@color/EsMaterial.Green.300</color>
+    <color name="EsMaterial.Green.Button.Normal">@color/EsMaterial.Green.400</color>
+    <color name="EsMaterial.Green.Button.Focused">@color/EsMaterial.Green.400</color>
+    <color name="EsMaterial.Green.Button.Pressed">@color/EsMaterial.Green.700</color>
+    <color name="EsMaterial.Green.Button.Ripple">@color/EsMaterial.Green.800</color>
+
+    <style name="EsMaterial.LightGreen.DrawerArrow" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/EsMaterial.LightGreen.50</item>
+    </style>
+
+    <!-- Red Button -->
+    <color name="EsMaterial.Red.Button.Disabled">@color/EsMaterial.Red.400</color>
+    <color name="EsMaterial.Red.Button.Normal">@color/EsMaterial.Red.500</color>
+    <color name="EsMaterial.Red.Button.Focused">@color/EsMaterial.Red.500</color>
+    <color name="EsMaterial.Red.Button.Pressed">@color/EsMaterial.Red.800</color>
+    <color name="EsMaterial.Red.Button.Ripple">@color/EsMaterial.Red.900</color>
+    <color name="EsMaterial.Red.Window.Dark">@color/EsMaterial.Grey.300</color>
+
+    <style name="EsMaterial.Red.DrawerArrow" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/EsMaterial.Red.50</item>
+    </style>
+
+    <!-- Teal -->
+    <color name="EsMaterial.Teal.Button.Disabled">@color/EsMaterial.Teal.400</color>
+    <color name="EsMaterial.Teal.Button.Normal">@color/EsMaterial.Teal.500</color>
+    <color name="EsMaterial.Teal.Button.Focused">@color/EsMaterial.Teal.500</color>
+    <color name="EsMaterial.Teal.Button.Pressed">@color/EsMaterial.Teal.800</color>
+    <color name="EsMaterial.Teal.Button.Ripple">@color/EsMaterial.Teal.900</color>
+    <color name="EsMaterial.Teal.Window.Dark">@color/EsMaterial.Grey.300</color>
+
+    <style name="EsMaterial.Teal.DrawerArrow" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/EsMaterial.Teal.50</item>
+    </style>
+
+    <style name="EsMaterial.Widget.Button" parent="EsMaterial.Theme.Widget">
+        <item name="android:height">@dimen/EsMaterial.Button.MinHeight</item>
+        <item name="android:minWidth">@dimen/EsMaterial.Button.MinWidth</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="EsMaterial.Widget.FlatButton.Blue" parent="EsMaterial.Widget.Button">
+        <item name="android:background">@drawable/esm_button_transparent</item>
+        <item name="android:textColor">@color/esm_button_blue</item>
+    </style>
+
+    <style name="EsMaterial.Widget.FlatButton.LightGreen" parent="EsMaterial.Widget.Button">
+        <item name="android:background">@drawable/esm_button_transparent</item>
+        <item name="android:textColor">@color/esm_button_lightgreen</item>
+    </style>
+
+    <style name="EsMaterial.Widget.FlatButton.Teal" parent="EsMaterial.Widget.Button">
+        <item name="android:background">@drawable/esm_button_transparent</item>
+        <item name="android:textColor">@color/esm_button_teal</item>
+    </style>
+
+    <style name="EsMaterial.Widget.FlatButton.Green" parent="EsMaterial.Widget.Button">
+        <item name="android:background">@drawable/esm_button_transparent</item>
+        <item name="android:textColor">@color/esm_button_green</item>
+    </style>
+
+</resources>

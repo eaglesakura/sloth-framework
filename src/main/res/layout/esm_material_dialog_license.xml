@@ -10,7 +10,7 @@
 
         <TextView
                 android:id="@+id/EsMaterial.Dialog.Message"
-                style="@style/EsMaterial.Font.Normal"
+                style="@style/EsMaterial.Theme.Font.Normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
     </ScrollView>

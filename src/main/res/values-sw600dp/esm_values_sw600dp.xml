@@ -7,8 +7,10 @@
     <dimen name="EsMaterial.Margin.KeyLine2Horizontal">80dp</dimen>
 
     <!-- NavigationDrawer -->
-    <dimen name="EsMaterial.NaviDrawer.Width">320dp</dimen>
+    <dimen name="EsMaterial.Widget.Drawer.Width">320dp</dimen>
 
     <!-- Dialog -->
-    <dimen name="EsMaterial.Dialog.MinWidth">380dp</dimen>
+    <dimen name="EsMaterial.Widget.Dialog.MinWidth">380dp</dimen>
+    <dimen name="EsWidget.CardView.Margin.Vertical.Small">4dp</dimen>
+
 </resources>

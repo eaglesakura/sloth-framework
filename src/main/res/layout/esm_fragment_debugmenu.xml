@@ -4,7 +4,7 @@
               android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
-            style="@style/EsMaterial.CardView.Light"
+            style="@style/EsMaterial.Theme.CardView.Light"
             android:layout_marginTop="@dimen/EsMaterial.Margin.KeyLine1Vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -13,28 +13,28 @@
                       android:layout_height="match_parent">
 
             <!-- パッケージ名 -->
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                      android:id="@+id/EsDebug.Info.PackageName"
-                      style="@style/EsMaterial.Theme.TextInfo"
-                      android:layout_marginTop="@dimen/EsMaterial.Button.Margin"/>
+            <android.support.v7.widget.AppCompatTextView android:layout_width="match_parent"
+                                                         android:layout_height="wrap_content"
+                                                         android:id="@+id/EsDebug.Info.PackageName"
+                                                         android:layout_marginTop="@dimen/EsMaterial.Button.Margin"/>
 
             <include layout="@layout/esm_material_separator" android:layout_width="match_parent"
                      android:layout_height="wrap_content"/>
 
             <!-- バージョン名 -->
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                      android:id="@+id/EsDebug.Info.AppVersionName"
-                      style="@style/EsMaterial.Theme.TextInfo"
-                      android:layout_marginTop="@dimen/EsMaterial.Button.Margin"/>
+            <android.support.v7.widget.AppCompatTextView android:layout_width="match_parent"
+                                                         android:layout_height="wrap_content"
+                                                         android:id="@+id/EsDebug.Info.AppVersionName"
+                                                         android:layout_marginTop="@dimen/EsMaterial.Button.Margin"/>
 
             <include layout="@layout/esm_material_separator" android:layout_width="match_parent"
                      android:layout_height="wrap_content"/>
 
             <!-- バージョンコード -->
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                      android:id="@+id/EsDebug.Info.AppVersionCode"
-                      style="@style/EsMaterial.Theme.TextInfo"
-                      android:layout_marginTop="@dimen/EsMaterial.Button.Margin"/>
+            <android.support.v7.widget.AppCompatTextView android:layout_width="match_parent"
+                                                         android:layout_height="wrap_content"
+                                                         android:id="@+id/EsDebug.Info.AppVersionCode"
+                                                         android:layout_marginTop="@dimen/EsMaterial.Button.Margin"/>
 
             <include layout="@layout/esm_material_separator" android:layout_width="match_parent"
                      android:layout_height="wrap_content"/>
@@ -45,10 +45,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          style="@style/EsMaterial.Theme.TextInfo"
-                          android:text="@string/EsDebug.Dump.Local"/>
+                <android.support.v7.widget.AppCompatTextView android:layout_width="match_parent"
+                                                             android:layout_height="wrap_content"
+                                                             android:text="@string/Widget.Debug.DumpLocal"/>
 
             </com.eaglesakura.material.widget.TransparentButton>
 
@@ -59,8 +58,7 @@
             <android.support.v7.widget.SwitchCompat
                     android:id="@+id/EsDebug.DebugMode.Switch"
                     android:layout_width="match_parent"
-                    style="@style/EsMaterial.Theme.Switch"
-                    android:text="@string/EsDebug.DebugMode.Switch"
+                    android:text="@string/Widget.Debug.ModeSwitch"
                     android:layout_height="wrap_content"/>
 
             <include layout="@layout/esm_material_separator" android:layout_width="match_parent"

@@ -10,7 +10,7 @@
             android:layout_height="wrap_content">
 
         <TextView
-                style="@style/EsMaterial.Font.Normal"
+                style="@style/EsMaterial.Theme.Font.Normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/EsMaterial.Dialog.Input.Header"/>
@@ -23,7 +23,7 @@
                 android:id="@+id/EsMaterial.Dialog.Input.EditText"/>
 
         <TextView
-                style="@style/EsMaterial.Font.Normal"
+                style="@style/EsMaterial.Theme.Font.Normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/EsMaterial.Dialog.Input.Fooder"/>
@@ -31,7 +31,7 @@
 
 
     <TextView
-            style="@style/EsMaterial.Font.Normal"
+            style="@style/EsMaterial.Theme.Font.Normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/EsMaterial.Dialog.Input.ValidateHint"/>

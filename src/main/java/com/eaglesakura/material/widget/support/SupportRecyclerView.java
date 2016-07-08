@@ -80,7 +80,7 @@ public class SupportRecyclerView extends FrameLayout {
 
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SupportRecyclerView);
-            String emptyText = typedArray.getString(R.styleable.SupportRecyclerView_emptyText);
+            String emptyText = typedArray.getString(R.styleable.SupportRecyclerView_esmEmptyText);
             FwLog.widget("SupportRecyclerView_emptyText(%s)", emptyText);
 
             if (!StringUtil.isEmpty(emptyText)) {

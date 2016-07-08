@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="EsMaterial.Widget.License.Title">ライセンス情報</string>
+    <dimen name="EsMaterial.Widget.License.Card.Margin">1dp</dimen>
+
+    <string-array name="EsMaterial_Widget_Licenses_IgnoreFiles">
+    </string-array>
+</resources>

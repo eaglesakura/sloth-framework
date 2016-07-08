@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
     <color name="EsMaterial.Base.Dark">@color/EsMaterial.Grey.800</color>
     <color name="EsMaterial.Base.Light">@color/EsMaterial.Grey.100</color>
 
@@ -123,33 +124,36 @@
     <color name="EsMaterial.Yellow.900">#F57F17</color>
     <color name="EsMaterial.Yellow.Theme">@color/EsMaterial.Yellow.400</color>
 
-    <style name="EsMaterial.Button.Blue" parent="EsMaterial.Button.Base">
-        <item name="android:background">@drawable/esm_button_blue</item>
-        <item name="android:textColor">@color/EsMaterial.Blue.50</item>
-    </style>
+    <string name="Widget.Common.Error">エラー</string>
+    <string name="Widget.Common.Check">確認</string>
+    <string name="Widget.Common.Cancel">キャンセル</string>
+    <string name="Widget.Common.OK">OK</string>
+    <string name="Widget.Common.Load">読み込み中</string>
 
-    <style name="EsMaterial.FlatButton.Blue" parent="EsMaterial.Button.Base">
-        <item name="android:background">@drawable/esm_button_transparent</item>
-        <item name="android:textColor">@color/esm_button_blue</item>
-    </style>
+    <string name="Widget.Debug.DumpLocal">Dump local datas...</string>
+    <string name="Widget.Debug.ModeSwitch">Debug Enable</string>
 
-    <style name="EsMaterial.FlatButton.LightGreen" parent="EsMaterial.Button.Base">
-        <item name="android:background">@drawable/esm_button_transparent</item>
-        <item name="android:textColor">@color/esm_button_lightgreen</item>
-    </style>
+    <dimen name="EsMaterial.Separator.Height">6dp</dimen>
+    <dimen name="EsMaterial.Separator.Bar.Height">1dp</dimen>
+    <dimen name="EsMaterial.Separator.Bar.SideMargin">4dp</dimen>
+    <dimen name="EsMaterial.Navigation.Icon.Size">32dp</dimen>
+    <dimen name="EsMaterial.Navigation.MinHeight">48dp</dimen>
 
-    <style name="EsMaterial.FlatButton.Teal" parent="EsMaterial.Button.Base">
-        <item name="android:background">@drawable/esm_button_transparent</item>
-        <item name="android:textColor">@color/esm_button_teal</item>
-    </style>
+    <!--
+        refs:http://android-developers.blogspot.jp/2014/08/material-design-in-2014-google-io-app.html
+    -->
+    <!-- コンテンツ左右の基本マージン -->
+    <dimen name="EsMaterial.Margin.KeyLine1Horizontal">16dp</dimen>
+    <dimen name="EsMaterial.Margin.KeyLine1Vertical">8dp</dimen>
+    <dimen name="EsMaterial.Margin.KeyLine1Vertical.Half">4dp</dimen>
+    <!-- コンテンツ左右からメインコンテンツまでのマージン -->
+    <dimen name="EsMaterial.Margin.KeyLine2Horizontal">80dp</dimen>
 
-    <style name="EsMaterial.FlatButton.Green" parent="EsMaterial.Button.Base">
-        <item name="android:background">@drawable/esm_button_transparent</item>
-        <item name="android:textColor">@color/esm_button_green</item>
-    </style>
+    <!-- NavigationDrawer -->
+    <dimen name="EsMaterial.Widget.Drawer.Width">240dp</dimen>
 
-    <style name="EsMaterial.FocusFlatButton.Blue" parent="EsMaterial.Button.Base">
-        <item name="android:background">@drawable/esm_button_transparent</item>
-        <item name="android:textColor">@color/esm_button_focus_blue</item>
-    </style>
+    <!-- Dialog -->
+    <dimen name="EsMaterial.Widget.Dialog.MinWidth">280dp</dimen>
+
+    <integer name="EsMaterial.Widget.Fragment.Transition.Duration">1000</integer>
 </resources>

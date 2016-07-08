@@ -10,7 +10,7 @@
  * 2.24.0.x : Android N対応
  * 2.24.1.x : PlayService依存を削除
  */
-def ARTIFACT_VERSION = "2.24.1"
+def ARTIFACT_VERSION = "2.24.2"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 
@@ -132,6 +132,12 @@ dependencies {
     compile "com.android.support:design:${ANDROID_SUPPORT_LIB_VERSION}"
 
     compile 'com.android.support:support-annotations:+'
+
+    /**
+     * Smooth ProgressBar / 160 Method
+     * https://github.com/castorflex/SmoothProgressBar
+     */
+    compile 'com.github.castorflex.smoothprogressbar:library:1.1.0'
 }
 
 /**
