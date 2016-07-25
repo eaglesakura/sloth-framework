@@ -307,7 +307,7 @@ uploadArchives {
             dependency {
                 groupId = 'com.eaglesakura'
                 artifactId = 'rxandroid-support'
-                version = dependenceisVersion("com.eaglesakura:rxandroid-support", "1.+")
+                version = dependenceisVersion("com.eaglesakura:rxandroid-support", "2.+")
                 scope = 'compile'
             }
             dependency {
