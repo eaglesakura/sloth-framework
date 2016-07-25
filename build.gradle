@@ -111,7 +111,7 @@ dependencies {
         compile 'com.eaglesakura:android-text-kvs:1.+'
         compile 'com.eaglesakura:android-thread:1.+'
         compile 'com.eaglesakura:android-net:1.+'
-        compile 'com.eaglesakura:rxandroid-support:1.+'
+        compile 'com.eaglesakura:rxandroid-support:2.+'
         compile 'com.eaglesakura:onactivityresult-invoke:1.+'
         compile 'com.eaglesakura:small-aquery:+'
         compile 'com.eaglesakura:margarineknife:1.+'
