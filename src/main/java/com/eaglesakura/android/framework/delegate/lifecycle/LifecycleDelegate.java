@@ -1,12 +1,14 @@
 package com.eaglesakura.android.framework.delegate.lifecycle;
 
+import com.eaglesakura.android.rx.BackgroundTask;
+import com.eaglesakura.android.rx.BackgroundTaskBuilder;
+import com.eaglesakura.android.rx.CallbackTime;
+import com.eaglesakura.android.rx.ExecuteTarget;
 import com.eaglesakura.android.rx.LifecycleEvent;
 import com.eaglesakura.android.rx.LifecycleState;
 import com.eaglesakura.android.rx.ObserveTarget;
-import com.eaglesakura.android.rx.RxTask;
-import com.eaglesakura.android.rx.RxTaskBuilder;
+import com.eaglesakura.android.rx.PendingCallbackQueue;
 import com.eaglesakura.android.rx.SubscribeTarget;
-import com.eaglesakura.android.rx.SubscriptionController;
 import com.eaglesakura.android.rx.event.LifecycleEventImpl;
 
 import rx.subjects.BehaviorSubject;
@@ -15,10 +17,10 @@ public abstract class LifecycleDelegate {
 
     protected final BehaviorSubject<LifecycleEvent> mLifecycleSubject = BehaviorSubject.create(new LifecycleEventImpl(LifecycleState.NewObject));
 
-    protected final SubscriptionController mSubscription = new SubscriptionController();
+    protected final PendingCallbackQueue mCallbackQueue = new PendingCallbackQueue();
 
     public LifecycleDelegate() {
-        mSubscription.bind(mLifecycleSubject);
+        mCallbackQueue.bind(mLifecycleSubject);
     }
 
     /**
@@ -28,8 +30,8 @@ public abstract class LifecycleDelegate {
         return mLifecycleSubject.getValue().getState();
     }
 
-    public SubscriptionController getSubscription() {
-        return mSubscription;
+    public PendingCallbackQueue getCallbackQueue() {
+        return mCallbackQueue;
     }
 
     /**
@@ -37,15 +39,26 @@ public abstract class LifecycleDelegate {
      *
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
-    public <T> RxTaskBuilder<T> asyncUI(RxTask.Async<T> background) {
-        return async(SubscribeTarget.Pipeline, ObserveTarget.Foreground, background);
+    public <T> BackgroundTaskBuilder<T> asyncUI(BackgroundTask.Async<T> background) {
+        return async(ExecuteTarget.LocalQueue, CallbackTime.Foreground, background);
     }
 
     /**
      * 規定のスレッドとタイミングで非同期処理を行う
      */
-    public <T> RxTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, RxTask.Async<T> background) {
-        return new RxTaskBuilder<T>(mSubscription)
+    public <T> BackgroundTaskBuilder<T> async(ExecuteTarget execute, CallbackTime time, BackgroundTask.Async<T> background) {
+        return new BackgroundTaskBuilder<T>(mCallbackQueue)
+                .executeOn(execute)
+                .callbackOn(time)
+                .async(background);
+    }
+
+    /**
+     * 規定のスレッドとタイミングで非同期処理を行う
+     */
+    @Deprecated
+    public <T> BackgroundTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, BackgroundTask.Async<T> background) {
+        return new BackgroundTaskBuilder<T>(mCallbackQueue)
                 .subscribeOn(subscribe)
                 .observeOn(observe)
                 .async(background);

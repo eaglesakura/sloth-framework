@@ -1,7 +1,7 @@
 package com.eaglesakura.android.framework.ui.progress;
 
-import com.eaglesakura.android.rx.ObserveTarget;
-import com.eaglesakura.android.rx.SubscriptionController;
+import com.eaglesakura.android.rx.CallbackTime;
+import com.eaglesakura.android.rx.PendingCallbackQueue;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,13 +15,13 @@ public class ProgressStackManager {
     List<ProgressToken> mTokens = new ArrayList<>();
 
     @NonNull
-    final SubscriptionController mSubscriptionController;
+    final PendingCallbackQueue mCallbackQueue;
 
     @NonNull
     Listener mListener;
 
-    public ProgressStackManager(@NonNull SubscriptionController subscriptionController) {
-        mSubscriptionController = subscriptionController;
+    public ProgressStackManager(@NonNull PendingCallbackQueue callbackQueue) {
+        mCallbackQueue = callbackQueue;
     }
 
     public void setListener(@NonNull Listener listener) {
@@ -55,7 +55,7 @@ public class ProgressStackManager {
             sort();
             if (topToken == null) {
                 // 処理が開始された
-                mSubscriptionController.run(ObserveTarget.Foreground, () -> {
+                mCallbackQueue.run(CallbackTime.Foreground, () -> {
                     mListener.onProgressStarted(this, token);
                 });
             } else {
@@ -63,7 +63,7 @@ public class ProgressStackManager {
                 ProgressToken newTopToken = getTopToken();
                 if (topToken != newTopToken) {
                     // 新しいトークンを発信する
-                    mSubscriptionController.run(ObserveTarget.Foreground, () -> {
+                    mCallbackQueue.run(CallbackTime.Foreground, () -> {
                         mListener.onProgressTopChanged(this, newTopToken);
                     });
                 }
@@ -80,14 +80,14 @@ public class ProgressStackManager {
 
             if (mTokens.isEmpty()) {
                 // 処理が終了した
-                mSubscriptionController.run(ObserveTarget.Foreground, () -> {
+                mCallbackQueue.run(CallbackTime.Foreground, () -> {
                     mListener.onProgressFinished(this);
                 });
             } else {
                 // トークンが切り替わった
                 ProgressToken newTopToken = getTopToken();
                 if (newTopToken != topToken) {
-                    mSubscriptionController.run(ObserveTarget.Foreground, () -> {
+                    mCallbackQueue.run(CallbackTime.Foreground, () -> {
                         mListener.onProgressTopChanged(this, newTopToken);
                     });
                 }

@@ -1,7 +1,7 @@
 package com.eaglesakura.android.framework.util;
 
 import com.eaglesakura.android.framework.ui.message.LocalMessageReceiver;
-import com.eaglesakura.android.rx.RxTask;
+import com.eaglesakura.android.rx.BackgroundTask;
 import com.eaglesakura.android.util.PermissionUtil;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.util.CollectionUtil;
@@ -57,14 +57,14 @@ public class AppSupportUtil {
         }
     }
 
-    public static CancelCallback asCancelCallback(RxTask task) {
+    public static CancelCallback asCancelCallback(BackgroundTask task) {
         return () -> task.isCanceled();
     }
 
     /**
      * タイムアウト時間を指定してキャンセルコールバックを生成する
      */
-    public static CancelCallback asCancelCallback(RxTask task, long time, TimeUnit unit) {
+    public static CancelCallback asCancelCallback(BackgroundTask task, long time, TimeUnit unit) {
         final long timeout = unit.toMillis(time);
         return new CancelCallback() {
             Timer mTimer = new Timer();

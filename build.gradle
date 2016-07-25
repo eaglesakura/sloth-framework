@@ -9,8 +9,9 @@
  * 2.23.1.x : ToolbarのID命名規則を変更
  * 2.24.0.x : Android N対応
  * 2.24.1.x : PlayService依存を削除
+ * 2.24.3.x : RxAndroid-Supportの依存バージョンを変更
  */
-def ARTIFACT_VERSION = "2.24.2"
+def ARTIFACT_VERSION = "2.24.3"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 

@@ -78,7 +78,7 @@ public class AlarmEventManager {
         mCallback = callback;
 
         ACTION_SELF_WAKEUP_BROADCAST = context.getPackageName() + "/" + getClass().getName() + ".ACTION_SELF_WAKEUP_BROADCAST" + "/" + hashCode();
-        lifecycleDelegate.getSubscription().getObservable().subscribe(it -> {
+        lifecycleDelegate.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
                 case OnCreated:
                     onCreate();

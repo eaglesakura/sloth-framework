@@ -3,12 +3,14 @@ package com.eaglesakura.android.framework.ui.support;
 import com.eaglesakura.android.framework.delegate.fragment.SupportFragmentDelegate;
 import com.eaglesakura.android.framework.delegate.lifecycle.FragmentLifecycleDelegate;
 import com.eaglesakura.android.garnet.Garnet;
+import com.eaglesakura.android.rx.BackgroundTask;
+import com.eaglesakura.android.rx.BackgroundTaskBuilder;
+import com.eaglesakura.android.rx.CallbackTime;
+import com.eaglesakura.android.rx.ExecuteTarget;
 import com.eaglesakura.android.rx.LifecycleState;
 import com.eaglesakura.android.rx.ObserveTarget;
-import com.eaglesakura.android.rx.RxTask;
-import com.eaglesakura.android.rx.RxTaskBuilder;
+import com.eaglesakura.android.rx.PendingCallbackQueue;
 import com.eaglesakura.android.rx.SubscribeTarget;
-import com.eaglesakura.android.rx.SubscriptionController;
 import com.eaglesakura.android.util.PermissionUtil;
 
 import android.app.Activity;
@@ -205,8 +207,16 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
     /**
      * タスクコントローラを取得する
      */
-    public SubscriptionController getSubscription() {
-        return mLifecycleDelegate.getSubscription();
+    @Deprecated
+    public PendingCallbackQueue getSubscription() {
+        return mLifecycleDelegate.getCallbackQueue();
+    }
+
+    /**
+     * コールバックキューを取得する
+     */
+    public PendingCallbackQueue getCallbackQueue() {
+        return mLifecycleDelegate.getCallbackQueue();
     }
 
     /**
@@ -214,7 +224,7 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
      *
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
-    public <T> RxTaskBuilder<T> asyncUI(RxTask.Async<T> background) {
+    public <T> BackgroundTaskBuilder<T> asyncUI(BackgroundTask.Async<T> background) {
         return mLifecycleDelegate.asyncUI(background)
                 .cancelSignal((Fragment) this);
     }
@@ -222,7 +232,16 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
     /**
      * 規定のスレッドとタイミングで非同期処理を行う
      */
-    public <T> RxTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, RxTask.Async<T> background) {
+    public <T> BackgroundTaskBuilder<T> async(ExecuteTarget execute, CallbackTime time, BackgroundTask.Async<T> background) {
+        return mLifecycleDelegate.async(execute, time, background);
+    }
+
+
+    /**
+     * 規定のスレッドとタイミングで非同期処理を行う
+     */
+    @Deprecated
+    public <T> BackgroundTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, BackgroundTask.Async<T> background) {
         return mLifecycleDelegate.async(subscribe, observe, background);
     }
 
@@ -232,12 +251,12 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
      * 新たなスレッドを作成する。
      * null以外を返却した場合、モニタリングを終了する。
      *
-     * @param target          処理が持続する条件
+     * @param callbackTime    処理が持続する条件
      * @param monitorCallback モニタリング処理
      * @param callbackSpanMs  コールバックチェックを行うスパン
      */
-    public <T> RxTaskBuilder<T> asyncMonitor(ObserveTarget target, RxTask.Async<T> monitorCallback, long callbackSpanMs) {
-        return async(SubscribeTarget.NewThread, target, (RxTask<T> task) -> {
+    public <T> BackgroundTaskBuilder<T> asyncMonitor(CallbackTime callbackTime, BackgroundTask.Async<T> monitorCallback, long callbackSpanMs) {
+        return async(ExecuteTarget.NewThread, callbackTime, (BackgroundTask<T> task) -> {
 
             T result = null;
             while ((result = monitorCallback.call(task)) == null) {

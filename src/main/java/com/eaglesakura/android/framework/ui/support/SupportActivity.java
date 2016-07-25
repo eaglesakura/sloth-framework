@@ -3,10 +3,12 @@ package com.eaglesakura.android.framework.ui.support;
 import com.eaglesakura.android.framework.delegate.activity.SupportActivityDelegate;
 import com.eaglesakura.android.framework.delegate.lifecycle.ActivityLifecycleDelegate;
 import com.eaglesakura.android.margarine.MargarineKnife;
+import com.eaglesakura.android.rx.BackgroundTask;
+import com.eaglesakura.android.rx.BackgroundTaskBuilder;
+import com.eaglesakura.android.rx.CallbackTime;
+import com.eaglesakura.android.rx.ExecuteTarget;
 import com.eaglesakura.android.rx.LifecycleState;
 import com.eaglesakura.android.rx.ObserveTarget;
-import com.eaglesakura.android.rx.RxTask;
-import com.eaglesakura.android.rx.RxTaskBuilder;
 import com.eaglesakura.android.rx.SubscribeTarget;
 
 import android.app.Activity;
@@ -127,14 +129,23 @@ public abstract class SupportActivity extends AppCompatActivity implements Suppo
      *
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
-    public <T> RxTaskBuilder<T> asyncUI(RxTask.Async<T> background) {
+    public <T> BackgroundTaskBuilder<T> asyncUI(BackgroundTask.Async<T> background) {
         return mLifecycleDelegate.asyncUI(background);
     }
 
     /**
      * 規定のスレッドとタイミングで非同期処理を行う
      */
-    public <T> RxTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, RxTask.Async<T> background) {
+    public <T> BackgroundTaskBuilder<T> async(ExecuteTarget execute, CallbackTime time, BackgroundTask.Async<T> background) {
+        return mLifecycleDelegate.async(execute, time, background);
+    }
+
+
+    /**
+     * 規定のスレッドとタイミングで非同期処理を行う
+     */
+    @Deprecated
+    public <T> BackgroundTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, BackgroundTask.Async<T> background) {
         return mLifecycleDelegate.async(subscribe, observe, background);
     }
 

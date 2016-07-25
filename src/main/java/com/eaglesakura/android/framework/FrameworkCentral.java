@@ -3,13 +3,13 @@ package com.eaglesakura.android.framework;
 import com.eaglesakura.android.device.display.DisplayInfo;
 import com.eaglesakura.android.framework.db.BasicSettings;
 import com.eaglesakura.android.framework.ui.message.LocalMessageReceiver;
+import com.eaglesakura.android.rx.BackgroundTask;
+import com.eaglesakura.android.rx.BackgroundTaskBuilder;
+import com.eaglesakura.android.rx.CallbackTime;
+import com.eaglesakura.android.rx.ExecuteTarget;
 import com.eaglesakura.android.rx.LifecycleEvent;
 import com.eaglesakura.android.rx.LifecycleState;
-import com.eaglesakura.android.rx.ObserveTarget;
-import com.eaglesakura.android.rx.RxTask;
-import com.eaglesakura.android.rx.RxTaskBuilder;
-import com.eaglesakura.android.rx.SubscribeTarget;
-import com.eaglesakura.android.rx.SubscriptionController;
+import com.eaglesakura.android.rx.PendingCallbackQueue;
 import com.eaglesakura.android.rx.event.LifecycleEventImpl;
 import com.eaglesakura.android.util.ContextUtil;
 
@@ -47,7 +47,7 @@ public class FrameworkCentral {
         final BehaviorSubject<LifecycleEvent> mSubject = BehaviorSubject.create(new LifecycleEventImpl(LifecycleState.NewObject));
 
         @NonNull
-        final SubscriptionController mSubscriptionController = new SubscriptionController();
+        final PendingCallbackQueue mCallbackQueue = new PendingCallbackQueue();
 
         @NonNull
         final Set<ApplicationStateListener> mStateListeners = new HashSet<>();
@@ -69,7 +69,7 @@ public class FrameworkCentral {
             mApplication.registerActivityLifecycleCallbacks(this);
             loadSettings();
 
-            mSubscriptionController.bind(mSubject);
+            mCallbackQueue.bind(mSubject);
             mSubject.onNext(new LifecycleEventImpl(LifecycleState.OnCreated));
             mSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStarted));
 
@@ -200,16 +200,22 @@ public class FrameworkCentral {
      * デフォルトはグローバルパイプラインで処理され、撃ちっぱなしとなる。
      * MEMO : .start()は外部で呼び出す必要がある。
      */
-    public static <T> RxTaskBuilder<T> newGlobalTask(RxTask.Async<T> callback) {
-        return new RxTaskBuilder<T>(sImpl.mSubscriptionController)
+    public static <T> BackgroundTaskBuilder<T> newGlobalTask(BackgroundTask.Async<T> callback) {
+        return new BackgroundTaskBuilder<T>(sImpl.mCallbackQueue)
                 .async(callback)
-                .observeOn(ObserveTarget.FireAndForget)
-                .subscribeOn(SubscribeTarget.Pipeline);
+                .callbackOn(CallbackTime.FireAndForget)
+                .executeOn(ExecuteTarget.LocalQueue);
     }
 
-    public static SubscriptionController getSubscription() {
-        return sImpl.mSubscriptionController;
+    @Deprecated
+    public static PendingCallbackQueue getSubscription() {
+        return sImpl.mCallbackQueue;
     }
+
+    public static PendingCallbackQueue getCallbackQueue() {
+        return sImpl.mCallbackQueue;
+    }
+
 
     /**
      * Frameworkの設定クラスを取得する

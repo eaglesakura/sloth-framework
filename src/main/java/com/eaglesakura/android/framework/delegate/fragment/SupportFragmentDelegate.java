@@ -120,7 +120,7 @@ public class SupportFragmentDelegate {
     public SupportFragmentDelegate(@NonNull SupportFragmentCompat compat, @NonNull FragmentLifecycleDelegate lifecycle) {
         mCompat = compat;
 
-        lifecycle.getSubscription().getObservable().subscribe(it -> {
+        lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
                 case OnCreated:
                     onCreate((OnCreateEvent) it);

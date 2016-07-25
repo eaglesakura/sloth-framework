@@ -145,7 +145,7 @@ public abstract class FragmentHolder<T extends Fragment> {
     }
 
     public FragmentHolder<T> bind(FragmentLifecycleDelegate delegate) {
-        delegate.getSubscription().getObservable().subscribe(it -> {
+        delegate.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
                 case OnCreated:
                     onCreate(((OnCreateEvent) it).getBundle());

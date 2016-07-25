@@ -87,7 +87,7 @@ public class ContentHolderActivityDelegate {
             }
         };
 
-        lifecycle.getSubscription().getObservable().subscribe(it -> {
+        lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
             LifecycleState state = it.getState();
             switch (state) {
                 case OnCreated:

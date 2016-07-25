@@ -28,7 +28,7 @@ public class DialogFragmentDelegate {
     public DialogFragmentDelegate(@NonNull SupportDialogFragmentCompat compat, @NonNull FragmentLifecycleDelegate lifecycle) {
         mCompat = compat;
         mLifecycleDelegate = lifecycle;
-        lifecycle.getSubscription().getObservable().subscribe(it -> {
+        lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
                 case OnCreated:
                     onCreate((OnCreateEvent) it);

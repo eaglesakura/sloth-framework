@@ -36,7 +36,7 @@ public class SupportActivityDelegate {
 
     public SupportActivityDelegate(@NonNull SupportActivityCompat compat, @NonNull ActivityLifecycleDelegate lifecycle) {
         mCompat = compat;
-        lifecycle.getSubscription().getObservable().subscribe(it -> {
+        lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
                 case OnCreated:
                     onCreate();

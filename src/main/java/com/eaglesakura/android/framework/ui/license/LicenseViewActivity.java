@@ -4,7 +4,7 @@ import com.eaglesakura.android.aquery.AQuery;
 import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.framework.ui.support.SupportActivity;
-import com.eaglesakura.android.rx.RxTask;
+import com.eaglesakura.android.rx.BackgroundTask;
 import com.eaglesakura.android.thread.ui.UIHandler;
 import com.eaglesakura.android.util.ViewUtil;
 import com.eaglesakura.material.widget.MaterialLicenseDialog;
@@ -79,7 +79,7 @@ public class LicenseViewActivity extends SupportActivity {
      * 全てのLicenseを読み込む
      */
     void loadLicenseList() {
-        asyncUI((RxTask<List<LicenseItem>> task) -> {
+        asyncUI((BackgroundTask<List<LicenseItem>> task) -> {
             List<LicenseItem> licenses = new ArrayList<>();
             final String LICENSE_PATH = "license";
             String[] files = getAssets().list(LICENSE_PATH);
@@ -208,7 +208,7 @@ public class LicenseViewActivity extends SupportActivity {
             q.id(R.id.eglibrary_License_Loading).visible();
         }
 
-        asyncUI((RxTask<String> task) -> {
+        asyncUI((BackgroundTask<String> task) -> {
             InputStream is = null;
             try {
                 is = getAssets().open(item.path);
