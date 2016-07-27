@@ -62,6 +62,16 @@ public class FwLog {
         LogUtil.out(tag, fmt, args);
     }
 
+    public static void cursor(String fmt, Object... args) {
+        if (true) {
+            return;
+        }
+        String tag = "Fw.DB.Cursor";
+
+        LogUtil.setLogger(tag, sAppLogger);
+        LogUtil.out(tag, fmt, args);
+    }
+
     public static void google(String fmt, Object... args) {
         String tag = "Fw.Google";
 

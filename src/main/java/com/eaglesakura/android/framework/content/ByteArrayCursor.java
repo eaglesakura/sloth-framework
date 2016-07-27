@@ -1,12 +1,10 @@
 package com.eaglesakura.android.framework.content;
 
-import android.content.ContentResolver;
-import android.database.CharArrayBuffer;
-import android.database.ContentObserver;
+import com.eaglesakura.android.framework.FwLog;
+import com.eaglesakura.util.StringUtil;
+
+import android.database.AbstractCursor;
 import android.database.Cursor;
-import android.database.DataSetObserver;
-import android.net.Uri;
-import android.os.Bundle;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,14 +17,15 @@ import java.util.List;
  *
  * ApplicationDataProvider専用のCursorなので、最低限の実装しかされていない。
  */
-public class ByteArrayCursor implements Cursor {
+public class ByteArrayCursor extends AbstractCursor {
     List<byte[]> mSerializedData = new ArrayList<>();
 
-    int mCursorIndex;
+    int mCursorIndex = -1;
 
     public static final String COLUMN_NAME_VALUE_FRAGMENT = "values";
 
     public ByteArrayCursor(byte[] buffer) {
+        FwLog.cursor("ByteArrayCursor[%d bytes]", buffer.length);
 
         if (buffer.length == 0) {
             // 空配列を挿入する
@@ -47,6 +46,7 @@ public class ByteArrayCursor implements Cursor {
 
     @Override
     public int getCount() {
+        FwLog.cursor("ByteArrayCursor.getCount[%d]", mSerializedData.size());
         return mSerializedData.size();
     }
 
@@ -58,111 +58,22 @@ public class ByteArrayCursor implements Cursor {
     }
 
     @Override
-    public int getPosition() {
-        return mCursorIndex;
-    }
-
-    @Override
-    public boolean move(int pos) {
-        if (pos >= 0 && pos < mSerializedData.size()) {
-            mCursorIndex = pos;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean moveToPosition(int pos) {
-        if (pos >= 0 && pos < mSerializedData.size()) {
-            mCursorIndex = pos;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean moveToFirst() {
-        mCursorIndex = 0;
-        return true;
-    }
-
-    @Override
-    public boolean moveToLast() {
-        mCursorIndex = mSerializedData.size() - 1;
-        return true;
-    }
-
-    @Override
-    public boolean moveToNext() {
-        if (!isLast()) {
-            ++mCursorIndex;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean moveToPrevious() {
-        if (mCursorIndex > 0) {
-            --mCursorIndex;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isFirst() {
-        return mCursorIndex == 0;
-    }
-
-    @Override
-    public boolean isLast() {
-        return mCursorIndex == (mSerializedData.size() - 1);
-    }
-
-    @Override
-    public boolean isBeforeFirst() {
-        return false;
-    }
-
-    @Override
-    public boolean isAfterLast() {
-        return mCursorIndex >= mSerializedData.size();
-    }
-
-    @Override
-    public int getColumnIndex(String s) {
-        return 0;
-    }
-
-    @Override
-    public int getColumnIndexOrThrow(String s) throws IllegalArgumentException {
-        return 0;
-    }
-
-    @Override
-    public String getColumnName(int i) {
-        return null;
-    }
-
-    @Override
-    public int getColumnCount() {
-        return 1;
+    public boolean onMove(int oldPosition, int newPosition) {
+        FwLog.cursor("ByteArrayCursor.onMove old[%d] new[%d]", oldPosition, newPosition);
+        mCursorIndex = newPosition;
+        return super.onMove(oldPosition, newPosition);
     }
 
     @Override
     public byte[] getBlob(int column) {
-        return mSerializedData.get(mCursorIndex);
-    }
-
-    @Override
-    public String getString(int column) {
+        FwLog.cursor("ByteArrayCursor.getString column[%d], %d bytes", column, mSerializedData.get(mCursorIndex).length);
         return null;
     }
 
     @Override
-    public void copyStringToBuffer(int i, CharArrayBuffer charArrayBuffer) {
-
+    public String getString(int column) {
+//        FwLog.system("ByteArrayCursor.getString column[%d], %d bytes", column, mSerializedData.get(mCursorIndex).length);
+        return StringUtil.toString(mSerializedData.get(mCursorIndex));
     }
 
     @Override
@@ -191,83 +102,8 @@ public class ByteArrayCursor implements Cursor {
     }
 
     @Override
-    public int getType(int i) {
-        return 0;
-    }
-
-    @Override
     public boolean isNull(int i) {
         return false;
-    }
-
-    @Override
-    public void deactivate() {
-
-    }
-
-    @Override
-    public boolean requery() {
-        return false;
-    }
-
-    @Override
-    public void close() {
-
-    }
-
-    @Override
-    public boolean isClosed() {
-        return false;
-    }
-
-    @Override
-    public void registerContentObserver(ContentObserver contentObserver) {
-
-    }
-
-    @Override
-    public void unregisterContentObserver(ContentObserver contentObserver) {
-
-    }
-
-    @Override
-    public void registerDataSetObserver(DataSetObserver dataSetObserver) {
-
-    }
-
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
-
-    }
-
-    @Override
-    public void setNotificationUri(ContentResolver contentResolver, Uri uri) {
-
-    }
-
-    @Override
-    public Uri getNotificationUri() {
-        return null;
-    }
-
-    @Override
-    public boolean getWantsAllOnMoveCalls() {
-        return false;
-    }
-
-    @Override
-    public void setExtras(Bundle bundle) {
-
-    }
-
-    @Override
-    public Bundle getExtras() {
-        return null;
-    }
-
-    @Override
-    public Bundle respond(Bundle bundle) {
-        return null;
     }
 
     /**
@@ -281,10 +117,11 @@ public class ByteArrayCursor implements Cursor {
         if (!cursor.moveToFirst()) {
             throw new IllegalStateException();
         }
-
+//
         try {
             do {
-                os.write(cursor.getBlob(0));
+                byte[] blob = StringUtil.toByteArray(cursor.getString(0));
+                os.write(blob);
             } while (cursor.moveToNext());
 
             return os.toByteArray();
