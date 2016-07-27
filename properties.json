@@ -1,0 +1,24 @@
+{
+  "classesOutputPath": "src/main/gen/java",
+  "configOutputPath": "src/main/gen/assets/framework",
+  "packageName": "com.eaglesakura.android.framework.gen.props",
+  "groups": [
+    {
+      "name": "SystemSettings",
+      "properties": [
+        {
+          "comment": "最後に起動されたバージョンコード",
+          "type": "int",
+          "name": "lastBootedAppVersionCode",
+          "value": "0"
+        },
+        {
+          "comment": "最後に起動されたアプリバージョン",
+          "type": "String",
+          "name": "lastBootedAppVersionName",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

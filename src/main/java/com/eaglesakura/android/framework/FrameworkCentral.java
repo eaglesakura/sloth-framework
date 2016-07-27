@@ -1,8 +1,11 @@
 package com.eaglesakura.android.framework;
 
 import com.eaglesakura.android.device.display.DisplayInfo;
-import com.eaglesakura.android.framework.db.BasicSettings;
+import com.eaglesakura.android.framework.gen.props.SystemSettings;
 import com.eaglesakura.android.framework.ui.message.LocalMessageReceiver;
+import com.eaglesakura.android.property.PropertyStore;
+import com.eaglesakura.android.property.TextDatabasePropertyStore;
+import com.eaglesakura.android.property.model.PropertySource;
 import com.eaglesakura.android.rx.BackgroundTask;
 import com.eaglesakura.android.rx.BackgroundTaskBuilder;
 import com.eaglesakura.android.rx.CallbackTime;
@@ -12,7 +15,9 @@ import com.eaglesakura.android.rx.LifecycleState;
 import com.eaglesakura.android.rx.PendingCallbackQueue;
 import com.eaglesakura.android.rx.event.LifecycleEventImpl;
 import com.eaglesakura.android.util.ContextUtil;
+import com.eaglesakura.json.JSON;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
@@ -21,6 +26,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,7 +47,7 @@ public class FrameworkCentral {
         final FrameworkApplication mFrameworkApplication;
 
         @NonNull
-        final BasicSettings mSettings;
+        SystemSettings mSettings;
 
 
         @NonNull
@@ -64,8 +71,6 @@ public class FrameworkCentral {
             } else {
                 mFrameworkApplication = null;
             }
-            mSettings = new BasicSettings(mApplication);
-
             mApplication.registerActivityLifecycleCallbacks(this);
             loadSettings();
 
@@ -106,7 +111,18 @@ public class FrameworkCentral {
             }
         }
 
+        @SuppressLint("NewApi")
         void loadSettings() {
+
+            try (InputStream is = mApplication.getAssets().open("framework/properties.json")) {
+                PropertyStore store = new TextDatabasePropertyStore(mApplication, "framework.db")
+                        .loadProperties(JSON.decode(is, PropertySource.class));
+
+                mSettings = new SystemSettings(store);
+            } catch (IOException e) {
+                throw new IllegalStateException(e);
+            }
+
             // 設定を読み出す
             final String oldVersionName = mSettings.getLastBootedAppVersionName();
             final String versionName = ContextUtil.getVersionName(mApplication);
@@ -218,9 +234,12 @@ public class FrameworkCentral {
 
 
     /**
-     * Frameworkの設定クラスを取得する
+     * Frameworkの設定クラスを取得する]
+     *
+     * MEMO: 将来的に削除予定
      */
-    public static BasicSettings getSettings() {
+    @Deprecated
+    public static SystemSettings getSettings() {
         return sImpl.mSettings;
     }
 

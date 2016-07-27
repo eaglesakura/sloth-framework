@@ -10,8 +10,9 @@
  * 2.24.0.x : Android N対応
  * 2.24.1.x : PlayService依存を削除
  * 2.24.3.x : RxAndroid-Supportの依存バージョンを変更
+ * 2.24.4.x : Text-KeyValueStoreの依存バージョンを変更
  */
-def ARTIFACT_VERSION = "2.24.3"
+def ARTIFACT_VERSION = "2.24.4"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 
@@ -19,9 +20,11 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url "http://eaglesakura.github.io/maven/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.+'
+        classpath "com.eaglesakura:plugin-android-dbgenerator:2.1.162"
         classpath 'me.tatarka:gradle-retrolambda:3.2.5' // support Lambda
     }
 }
@@ -34,10 +37,16 @@ repositories {
 
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda' /* Android Lambda Support */
+apply plugin: 'com.eaglesakura.android-props'
+
+
+props {
+    property file("properties.json")
+}
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24"
+    buildToolsVersion "24.0.1"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -57,8 +66,11 @@ android {
 
     sourceSets {
         main {
-            java.srcDirs = [
-                    "src/main/java", "src/main/generated/prop",
+            java.srcDirs += [
+                    "src/main/gen/java",
+            ]
+            assets.srcDirs += [
+                    "src/main/gen/assets"
             ]
         }
     }
@@ -93,6 +105,7 @@ dependencies {
     if (EGLIBRARY_COMPILE_LOCAL) {
         compile project(':eglibrary:simple-utils')
         compile project(':eglibrary:android-simple-utils')
+        compile project(':eglibrary:android-command-service')
         compile project(':eglibrary:android-text-kvs')
         compile project(':eglibrary:android-thread')
         compile project(':eglibrary:android-net')
@@ -117,6 +130,7 @@ dependencies {
         compile 'com.eaglesakura:margarineknife:1.+'
         compile 'com.eaglesakura:garnet:0.+'
         compile 'com.eaglesakura:light-saver:1.+'
+        compile 'com.eaglesakura:android-command-service:1.+'
 
         androidTestCompile 'com.eaglesakura:android-devicetest-support:1.+'
         testCompile 'com.eaglesakura:android-unittest-support:1.+'
@@ -314,6 +328,12 @@ uploadArchives {
                 groupId = 'com.eaglesakura'
                 artifactId = 'light-saver'
                 version = dependenceisVersion("com.eaglesakura:light-saver", "1.0.+")
+                scope = 'compile'
+            }
+            dependency {
+                groupId = 'com.eaglesakura'
+                artifactId = 'android-command-service'
+                version = dependenceisVersion("com.eaglesakura:android-command-service", "1.+")
                 scope = 'compile'
             }
         }
