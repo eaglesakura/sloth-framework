@@ -11,8 +11,9 @@
  * 2.24.1.x : PlayService依存を削除
  * 2.24.3.x : RxAndroid-Supportの依存バージョンを変更
  * 2.24.4.x : Text-KeyValueStoreの依存バージョンを変更
+ * 2.24.5.x : support library 24.1.+に対応
  */
-def ARTIFACT_VERSION = "2.24.4"
+def ARTIFACT_VERSION = "2.24.5"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 
