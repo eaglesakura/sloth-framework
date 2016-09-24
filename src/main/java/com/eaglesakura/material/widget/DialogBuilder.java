@@ -39,12 +39,22 @@ public class DialogBuilder<T> {
      */
     protected Action2<Integer, T> mSelector;
 
+    protected Integer mLayoutWidth;
+
+    protected Integer mLayoutHeight;
+
     public DialogBuilder(AlertDialog.Builder builder) {
         mBuilder = builder;
     }
 
     public DialogBuilder title(@StringRes int titleId) {
         mBuilder.setTitle(titleId);
+        return this;
+    }
+
+    public DialogBuilder layout(int width, int height) {
+        mLayoutWidth = width;
+        mLayoutHeight = height;
         return this;
     }
 
@@ -61,6 +71,11 @@ public class DialogBuilder<T> {
         if (mBuilder.getContext() instanceof Activity) {
             ContextUtil.closeIME((Activity) mBuilder.getContext());
         }
+
+        if (CollectionUtil.allNotNull(mLayoutWidth, mLayoutHeight)) {
+            dialog.getWindow().setLayout(mLayoutWidth, mLayoutHeight);
+        }
+
         return dialog;
     }
 
