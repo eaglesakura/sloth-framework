@@ -234,6 +234,11 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
         return mFragmentDelegate.requestRuntimePermission(type);
     }
 
+    /**
+     * Permissionの取得を開始する。
+     *
+     * OSによるハンドリングを開始した場合はtrue
+     */
     public boolean requestRuntimePermission(List<PermissionUtil.PermissionType> types) {
         return mFragmentDelegate.requestRuntimePermission(types);
     }
