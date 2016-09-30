@@ -322,4 +322,8 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
     public Garnet.Builder newInjectionBuilder(SupportFragmentDelegate self, Context context) {
         return Garnet.create(this).depend(Context.class, context);
     }
+
+    public void startActivityForResultWithCarryData(Intent intent, int requestCode, Bundle carryState) {
+        mFragmentDelegate.startActivityForResultWithCarryData(intent, requestCode, carryState);
+    }
 }
