@@ -7,8 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 
 public class DrawableImageLoader extends ImageLoader<DrawableImageLoader> {
 
@@ -37,8 +37,8 @@ public class DrawableImageLoader extends ImageLoader<DrawableImageLoader> {
     @Override
     protected Object onLoad() throws Throwable {
         Drawable drawable = ResourcesCompat.getDrawable(mContext.getResources(), mDrawableId, mContext.getTheme());
-        if (mTintColor != null && drawable instanceof VectorDrawableCompat) {
-            ((VectorDrawableCompat) drawable).setTint(mTintColor);
+        if (mTintColor != null) {
+            DrawableCompat.setTint(drawable, mTintColor);
         }
         return drawable;
     }

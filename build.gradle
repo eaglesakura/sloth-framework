@@ -12,8 +12,9 @@
  * 2.24.3.x : RxAndroid-Supportの依存バージョンを変更
  * 2.24.4.x : Text-KeyValueStoreの依存バージョンを変更
  * 2.24.5.x : support library 24.1.+に対応
+ * 2.25.0.x : API Level 25(Android 7.1)対応
  */
-def ARTIFACT_VERSION = "2.24.5"
+def ARTIFACT_VERSION = "2.25.0"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 
@@ -74,7 +75,7 @@ android {
     }
 
     lintOptions {
-        disable "NewApi"
+//        disable "NewApi"
     }
 }
 
@@ -269,7 +270,7 @@ uploadArchives {
             }
             dependency {
                 groupId = 'com.android.support'
-                artifactId = 'palette-v7'
+                artifactId = 'design'
                 version = dependenceisVersion("com.android.support:design", "${ANDROID_SUPPORT_LIB_VERSION}")
                 scope = 'compile'
             }
