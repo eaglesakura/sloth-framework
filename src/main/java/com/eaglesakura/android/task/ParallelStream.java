@@ -19,7 +19,8 @@ import java.util.List;
 /**
  * 順不同、かつ複数スレッドでタスクを処理する
  */
-public class ParallelStream<Src> {
+@Deprecated
+class ParallelStream<Src> {
     final ServiceLifecycleDelegate mDelegate = new ServiceLifecycleDelegate();
 
     final List<Src> mSource;

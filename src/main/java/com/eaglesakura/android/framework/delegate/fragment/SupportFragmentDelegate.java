@@ -2,6 +2,7 @@ package com.eaglesakura.android.framework.delegate.fragment;
 
 import com.eaglesakura.android.framework.delegate.activity.SupportActivityDelegate;
 import com.eaglesakura.android.framework.delegate.lifecycle.FragmentLifecycleDelegate;
+import com.eaglesakura.android.framework.ui.support.annotation.BindInterface;
 import com.eaglesakura.android.framework.ui.support.annotation.FragmentLayout;
 import com.eaglesakura.android.framework.ui.support.annotation.FragmentMenu;
 import com.eaglesakura.android.framework.util.AppSupportUtil;
@@ -42,7 +43,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -391,6 +394,45 @@ public class SupportFragmentDelegate {
         }
     }
 
+    /**
+     * インターフェースのバインディングを行なう
+     */
+    private void bindInterface(Field field) {
+        BindInterface annotation = field.getAnnotation(BindInterface.class);
+        try {
+            Object value;
+            if (ReflectionUtil.isListInterface(field)) {
+                // リストオブジェクト
+                // 通常Object
+                if (annotation.parentOnly()) {
+                    value = Arrays.asList(getParent(field.getType()));
+                } else if (annotation.childrenOnly()) {
+                    value = FragmentUtil.listFragments(getChildFragmentManager(), it -> ReflectionUtil.instanceOf(it, field.getType()));
+                } else {
+                    value = FragmentUtil.listFragments(getActivity(AppCompatActivity.class).getSupportFragmentManager(), it -> ReflectionUtil.instanceOf(it, field.getType()));
+                }
+            } else {
+                // 通常Object
+                if (annotation.parentOnly()) {
+                    value = getParent(field.getType());
+                } else if (annotation.childrenOnly()) {
+                    List<Fragment> fragments = FragmentUtil.listFragments(getChildFragmentManager(), it -> ReflectionUtil.instanceOf(it, field.getType()));
+                    value = fragments.get(0);
+                } else {
+                    List objects = listInterfacesOrThrow(field.getType());
+                    value = objects.get(0);
+                }
+            }
+            field.setAccessible(true);
+            field.set(mCompat, value);
+        } catch (Exception e) {
+            // null許容しないなら、例外を投げて終了する
+            if (!annotation.nullable()) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @CallSuper
     @UiThread
     protected void onAttach(OnAttachEvent event) {
@@ -400,10 +442,16 @@ public class SupportFragmentDelegate {
                 builder = Garnet.create(mCompat);
             }
             builder.depend(Context.class, event.getContext()).inject();
-            mInjectedInstance = true;
             UIHandler.postUI(() -> {
                 mCompat.onAfterInjection(this);
             });
+
+            // バインド対象のインターフェースを検索する
+            for (Field field : ReflectionUtil.listAnnotationFields(mCompat.getClass(), BindInterface.class)) {
+                bindInterface(field);
+            }
+
+            mInjectedInstance = true;
         }
     }
 
