@@ -168,6 +168,11 @@ public class DialogBuilder<T> {
         return this;
     }
 
+    public DialogBuilder negativeButton(@NonNull String text, Action0 action) {
+        mBuilder.setNegativeButton(text, wrap(action));
+        return this;
+    }
+
     public DialogBuilder neutralButton(@StringRes int textId, Action0 action) {
         mBuilder.setNeutralButton(textId, wrap(action));
         return this;
