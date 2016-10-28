@@ -12,7 +12,10 @@ import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.util.Util;
+import com.squareup.otto.AnnotatedHandlerFinder2;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Bus2;
+import com.squareup.otto.ThreadEnforcer;
 
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -38,7 +41,7 @@ public abstract class DataBus<DataType> {
     Handler mHandler = UIHandler.getInstance();
 
     @NonNull
-    final Bus mBus = new Bus() {
+    final Bus mBus = new Bus2(ThreadEnforcer.ANY, Bus.DEFAULT_IDENTIFIER, AnnotatedHandlerFinder2.newInstance()) {
         @Override
         public void post(Object event) {
             if (mHandler == null || AndroidThreadUtil.isHandlerThread(mHandler)) {
