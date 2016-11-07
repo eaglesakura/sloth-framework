@@ -82,10 +82,16 @@ public class SupportProgressFragment extends SupportFragment {
     /**
      * Fragmentを付与する
      */
-    public static void attach(AppCompatActivity activity, @IdRes int containerId) {
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+    public static FragmentTransaction attach(FragmentTransaction transaction, @IdRes int containerId) {
         transaction.add(containerId, new SupportProgressFragment(), SupportProgressFragment.class.getName());
-        transaction.commit();
+        return transaction;
+    }
+
+    /**
+     * Fragmentを付与する
+     */
+    public static void attach(AppCompatActivity activity, @IdRes int containerId) {
+        attach(activity.getSupportFragmentManager().beginTransaction(), containerId).commit();
     }
 
     /**
