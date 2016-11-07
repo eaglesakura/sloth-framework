@@ -24,6 +24,8 @@ public class ToolbarBuilder {
     protected String mTitle;
 
     protected DrawerLayout mDrawerLayout;
+    private int mOpenDrawerContentDescRes;
+    private int mCloseDrawerContentDescRes;
 
     /**
      * 生成されるDrawer Toggle
@@ -38,16 +40,17 @@ public class ToolbarBuilder {
     /**
      * Navigation Drawerを指定する
      */
-    public ToolbarBuilder drawer(@IdRes int id) {
-        mDrawerLayout = (DrawerLayout) mRoot.findViewById(id);
-        return this;
+    public ToolbarBuilder drawer(@IdRes int id, @StringRes int openDrawerContentDescRes, @StringRes int closeDrawerContentDescRes) {
+        return drawer((DrawerLayout) mRoot.findViewById(id), openDrawerContentDescRes, closeDrawerContentDescRes);
     }
 
     /**
      * Navigation Drawerを指定する
      */
-    public ToolbarBuilder drawer(DrawerLayout drawerLayout) {
+    public ToolbarBuilder drawer(DrawerLayout drawerLayout, @StringRes int openDrawerContentDescRes, @StringRes int closeDrawerContentDescRes) {
         mDrawerLayout = drawerLayout;
+        mOpenDrawerContentDescRes = openDrawerContentDescRes;
+        mCloseDrawerContentDescRes = closeDrawerContentDescRes;
         return this;
     }
 
@@ -68,13 +71,14 @@ public class ToolbarBuilder {
         ActionBar actionBar = mRoot.getSupportActionBar();
 
         if (mDrawerLayout != null) {
-            mDrawerToggle = new ActionBarDrawerToggle(
-                    mRoot, mDrawerLayout, mToolbar,
-                    0, 0
-            );
-            mDrawerLayout.addDrawerListener(mDrawerToggle);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
+
+            mDrawerToggle = new ActionBarDrawerToggle(
+                    mRoot, mDrawerLayout, mToolbar,
+                    mOpenDrawerContentDescRes, mCloseDrawerContentDescRes
+            );
+            mDrawerLayout.addDrawerListener(mDrawerToggle);
             mDrawerToggle.syncState();
         }
 
