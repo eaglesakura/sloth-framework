@@ -1,11 +1,10 @@
 package com.eaglesakura.android.framework.delegate.fragment;
 
+import android.content.Context;
+
 /**
  * Fragmentにタイトルをもたせるインターフェース
- *
- * FragmentPagerTitleを推奨する
  */
-@Deprecated
-public interface IFragmentPagerTitle {
-    CharSequence getTitle();
+public interface FragmentPagerTitle {
+    CharSequence getTitle(Context context);
 }

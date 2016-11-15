@@ -1,5 +1,6 @@
 package com.eaglesakura.android.framework.delegate.fragment;
 
+import com.eaglesakura.android.framework.FrameworkCentral;
 import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.ui.support.SupportFragment;
 import com.eaglesakura.android.rx.LifecycleState;
@@ -54,7 +55,9 @@ public class SupportFragmentPager {
 
     public CharSequence getFragmentTitle(FragmentManager fragmentManager, int index) {
         Fragment fragment = getFragment(fragmentManager, index);
-        if (fragment instanceof IFragmentPagerTitle) {
+        if (fragment instanceof FragmentPagerTitle) {
+            return ((FragmentPagerTitle) fragment).getTitle(FrameworkCentral.getApplication());
+        } else if (fragment instanceof IFragmentPagerTitle) {
             return ((IFragmentPagerTitle) fragment).getTitle();
         } else {
             return null;

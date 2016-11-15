@@ -4,7 +4,11 @@ import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.lambda.Action2;
 import com.eaglesakura.lambda.Matcher1;
 import com.eaglesakura.lambda.ResultAction1;
+import com.eaglesakura.util.CollectionUtil;
 
+import android.content.Context;
+import android.support.annotation.ArrayRes;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,9 +34,20 @@ public class SpinnerAdapterBuilder<T> {
 
     Action1<T> mSelectedAction;
 
+    Action2<Integer, T> mSelectedAction2;
+
     int mSelected;
 
-    public SpinnerAdapterBuilder(Spinner spinner) {
+    Context mContext;
+
+    public SpinnerAdapterBuilder(Context context, Spinner spinner) {
+        if (context == null) {
+            throw new NullPointerException("Context == null");
+        }
+        if (spinner == null) {
+            throw new NullPointerException("Spinner == null");
+        }
+        mContext = context;
         mSpinner = spinner;
     }
 
@@ -81,8 +96,14 @@ public class SpinnerAdapterBuilder<T> {
         return this;
     }
 
+
+    public SpinnerAdapterBuilder<T> selected(Action2<Integer, T> action) {
+        mSelectedAction2 = action;
+        return this;
+    }
+
     public SpinnerAdapterBuilder<T> build() {
-        ArrayAdapter<String> adapter = new ArrayAdapter(mSpinner.getContext(), android.R.layout.simple_spinner_item) {
+        ArrayAdapter adapter = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item) {
 
             ArrayAdapter init() {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -129,29 +150,42 @@ public class SpinnerAdapterBuilder<T> {
 
         mSpinner.setAdapter(adapter);
         mSpinner.setSelection(mSelected);
-
-        if (mSelectedAction != null) {
-            mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                    try {
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                try {
+                    if (mSelectedAction != null) {
                         mSelectedAction.action((T) mItems.get(position));
-                    } catch (Throwable e) {
-                        throw new RuntimeException(e);
                     }
+                    if (mSelectedAction2 != null) {
+                        mSelectedAction2.action(position, mItems.get(position));
+                    }
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
                 }
+            }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-                }
-            });
-        }
+            }
+        });
         return this;
     }
 
-    public static <T> SpinnerAdapterBuilder<T> from(Spinner spinner, Class<T> clazz) {
-        SpinnerAdapterBuilder<T> builder = new SpinnerAdapterBuilder(spinner);
+    public static <T> SpinnerAdapterBuilder<T> from(@NonNull Spinner spinner, Class<T> clazz) {
+        return from(spinner.getContext(), spinner, clazz);
+    }
+
+    public static <T> SpinnerAdapterBuilder<T> from(@NonNull Context context, @NonNull Spinner spinner, Class<T> clazz) {
+        SpinnerAdapterBuilder<T> builder = new SpinnerAdapterBuilder(context, spinner);
+        return builder;
+    }
+
+
+    public static SpinnerAdapterBuilder<String> fromStringArray(@NonNull Spinner spinner, @NonNull Context context, @ArrayRes int resId) {
+        SpinnerAdapterBuilder<String> builder = new SpinnerAdapterBuilder(context, spinner);
+        builder.items(CollectionUtil.asList(context.getResources().getStringArray(resId)), it -> it);
         return builder;
     }
 }
