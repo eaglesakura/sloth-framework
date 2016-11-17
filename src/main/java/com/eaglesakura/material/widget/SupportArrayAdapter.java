@@ -75,7 +75,7 @@ public class SupportArrayAdapter<T> extends BaseAdapter {
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(mDropdownLayoutId, null, false);
+            convertView = LayoutInflater.from(mContext).inflate(mDropdownLayoutId, parent, false);
         }
         try {
             mDropdownViewConverter.action(position, getItem(position), convertView);
@@ -88,7 +88,7 @@ public class SupportArrayAdapter<T> extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(mItemLayoutId, null, false);
+            convertView = LayoutInflater.from(mContext).inflate(mItemLayoutId, parent, false);
         }
         try {
             mSelectionViewConvert.action(position, getItem(position), convertView);
