@@ -2,17 +2,17 @@ package com.eaglesakura.material.widget;
 
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.lambda.Action2;
+import com.eaglesakura.lambda.Action3;
 import com.eaglesakura.lambda.Matcher1;
 import com.eaglesakura.lambda.ResultAction1;
+import com.eaglesakura.lambda.ResultAction2;
 import com.eaglesakura.util.CollectionUtil;
 
 import android.content.Context;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import java.util.List;
@@ -26,15 +26,15 @@ public class SpinnerAdapterBuilder<T> {
 
     List<? extends T> mItems;
 
-    ResultAction1<T, String> mTitleConverter;
+    ResultAction2<Integer, T, String> mTitleConverter;
 
-    Action2<T, View> mDropdownViewConverter;
+    Action3<Integer, T, View> mDropdownViewConverter;
 
-    Action2<T, View> mSelectionViewConvert;
+    Action3<Integer, T, View> mSelectionViewConvert;
 
-    Action1<T> mSelectedAction;
+    Action2<Integer, T> mSelectedAction = (index, item) -> {
 
-    Action2<Integer, T> mSelectedAction2;
+    };
 
     int mSelected;
 
@@ -51,7 +51,21 @@ public class SpinnerAdapterBuilder<T> {
         mSpinner = spinner;
     }
 
+    public SpinnerAdapterBuilder<T> title(ResultAction2<Integer, T, String> titleConverter) {
+        mTitleConverter = titleConverter;
+        return this;
+    }
+
+    public SpinnerAdapterBuilder<T> items(List<? extends T> items) {
+        mItems = items;
+        return this;
+    }
+
     public SpinnerAdapterBuilder<T> items(List<? extends T> items, ResultAction1<T, String> titleConverter) {
+        return items(items, (index, item) -> titleConverter.action(item));
+    }
+
+    public SpinnerAdapterBuilder<T> items(List<? extends T> items, ResultAction2<Integer, T, String> titleConverter) {
         mItems = items;
         mTitleConverter = titleConverter;
         return this;
@@ -82,84 +96,64 @@ public class SpinnerAdapterBuilder<T> {
     }
 
     public SpinnerAdapterBuilder<T> dropdownView(Action2<T, View> dropdownViewConvert) {
+        return dropdownView((index, item, view) -> dropdownViewConvert.action(item, view));
+    }
+
+    public SpinnerAdapterBuilder<T> dropdownView(Action3<Integer, T, View> dropdownViewConvert) {
         mDropdownViewConverter = dropdownViewConvert;
         return this;
     }
 
     public SpinnerAdapterBuilder<T> selectionView(Action2<T, View> selectionViewConvert) {
+        return selectionView((index, item, view) -> selectionViewConvert.action(item, view));
+    }
+
+    public SpinnerAdapterBuilder<T> selectionView(Action3<Integer, T, View> selectionViewConvert) {
         mSelectionViewConvert = selectionViewConvert;
         return this;
     }
 
     public SpinnerAdapterBuilder<T> selected(Action1<T> action) {
-        mSelectedAction = action;
-        return this;
+        return selected((index, item) -> action.action(item));
     }
 
 
     public SpinnerAdapterBuilder<T> selected(Action2<Integer, T> action) {
-        mSelectedAction2 = action;
+        mSelectedAction = action;
         return this;
     }
 
-    public SpinnerAdapterBuilder<T> build() {
-        ArrayAdapter adapter = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item) {
-
-            ArrayAdapter init() {
-                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                return this;
-            }
-
-            // DropDown Viewに変形を加える
-            @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View result = super.getDropDownView(position, convertView, parent);
-                if (mDropdownViewConverter != null) {
-                    try {
-                        mDropdownViewConverter.action(mItems.get(position), result);
-                    } catch (Throwable e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                return result;
-            }
-
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View result = super.getView(position, convertView, parent);
-
-                if (mSelectionViewConvert != null) {
-                    try {
-                        mSelectionViewConvert.action(mItems.get(position), result);
-                    } catch (Throwable e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                return result;
-            }
-        }.init();
-
-        try {
-            for (T item : mItems) {
-                adapter.add(mTitleConverter.action(item));
-            }
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
+    /**
+     * Adapterのみを生成する
+     */
+    public SupportArrayAdapter<T> buildAdapter() {
+        SupportArrayAdapter<T> adapter = new SupportArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, android.R.layout.simple_spinner_dropdown_item);
+        if (mDropdownViewConverter != null) {
+            adapter.setDropdownViewConverter(mDropdownViewConverter);
+        }
+        if (mSelectionViewConvert != null) {
+            adapter.setSelectionViewConvert(mSelectionViewConvert);
+        }
+        if (mTitleConverter != null) {
+            adapter.setTitleConverter(mTitleConverter);
         }
 
-        mSpinner.setAdapter(adapter);
+        if (!CollectionUtil.isEmpty(mItems)) {
+            for (T item : mItems) {
+                adapter.add(item);
+            }
+        }
+        return adapter;
+    }
+
+    public SpinnerAdapterBuilder<T> build() {
+        mSpinner.setAdapter(buildAdapter());
         mSpinner.setSelection(mSelected);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 try {
-                    if (mSelectedAction != null) {
-                        mSelectedAction.action((T) mItems.get(position));
-                    }
-                    if (mSelectedAction2 != null) {
-                        mSelectedAction2.action(position, mItems.get(position));
-                    }
+                    mSelectedAction.action(position, (T) mItems.get(position));
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }
