@@ -6,9 +6,7 @@ import com.eaglesakura.android.rx.CallbackTime;
 import com.eaglesakura.android.rx.ExecuteTarget;
 import com.eaglesakura.android.rx.LifecycleEvent;
 import com.eaglesakura.android.rx.LifecycleState;
-import com.eaglesakura.android.rx.ObserveTarget;
 import com.eaglesakura.android.rx.PendingCallbackQueue;
-import com.eaglesakura.android.rx.SubscribeTarget;
 import com.eaglesakura.android.rx.event.LifecycleEventImpl;
 
 import rx.Subscriber;
@@ -61,17 +59,6 @@ public abstract class LifecycleDelegate {
         return new BackgroundTaskBuilder<T>(mCallbackQueue)
                 .executeOn(execute)
                 .callbackOn(time)
-                .async(background);
-    }
-
-    /**
-     * 規定のスレッドとタイミングで非同期処理を行う
-     */
-    @Deprecated
-    public <T> BackgroundTaskBuilder<T> async(SubscribeTarget subscribe, ObserveTarget observe, BackgroundTask.Async<T> background) {
-        return new BackgroundTaskBuilder<T>(mCallbackQueue)
-                .subscribeOn(subscribe)
-                .observeOn(observe)
                 .async(background);
     }
 }
