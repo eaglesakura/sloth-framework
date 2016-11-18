@@ -10,6 +10,7 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.TextView;
 
 /**
  * SnackBarを制御する
@@ -55,7 +56,9 @@ public class SnackbarBuilder {
 
     public SnackbarBuilder show() {
         mSnackbar = Snackbar.make(mContainer, mMessage, mDuration);
-        mSnackbar.getView().setBackground(new ColorDrawable(ResourceUtil.argb(mContainer.getContext(), R.color.EsMaterial_Grey_50)));
+        View snackbarView = mSnackbar.getView();
+        snackbarView.setBackground(new ColorDrawable(ResourceUtil.argb(mContainer.getContext(), R.color.EsMaterial_Grey_50)));
+        ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor(ResourceUtil.argb(mContainer.getContext(), R.color.EsMaterial_Grey_800));
         if (mAction != null) {
             mSnackbar.setAction(mActionText, view -> mAction.run());
         }
