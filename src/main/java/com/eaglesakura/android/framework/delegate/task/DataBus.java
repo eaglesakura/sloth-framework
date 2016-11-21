@@ -173,7 +173,7 @@ public abstract class DataBus<DataType> {
         }
     }
 
-    public <T extends DataBus> T bind(LifecycleDelegate delegate, Object receiver) {
+    public <T extends DataBus> T bind(@NonNull LifecycleDelegate delegate, @NonNull Object receiver) {
         LifecycleLinkBus.register(delegate, getBus(), receiver);
         return (T) this;
     }

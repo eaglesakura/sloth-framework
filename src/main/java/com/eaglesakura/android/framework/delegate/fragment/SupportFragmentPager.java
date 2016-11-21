@@ -57,8 +57,6 @@ public class SupportFragmentPager {
         Fragment fragment = getFragment(fragmentManager, index);
         if (fragment instanceof FragmentPagerTitle) {
             return ((FragmentPagerTitle) fragment).getTitle(FrameworkCentral.getApplication());
-        } else if (fragment instanceof IFragmentPagerTitle) {
-            return ((IFragmentPagerTitle) fragment).getTitle();
         } else {
             return null;
         }

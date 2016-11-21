@@ -491,26 +491,6 @@ public class SupportFragmentDelegate {
 
     /**
      * 自身のFragmentから排除する
-     *
-     * @param withBackStack この引数は現在使用されていない
-     */
-    @Deprecated
-    public void detatchSelf(boolean withBackStack) {
-        UIHandler.postUIorRun(() -> {
-            getFragmentManager().beginTransaction().remove(getFragment()).commit();
-        });
-    }
-
-    /**
-     * 自身のFragmentから排除する
-     */
-    @Deprecated
-    public void detatchSelf() {
-        detachSelf();
-    }
-
-    /**
-     * 自身のFragmentから排除する
      */
     public void detachSelf() {
         UIHandler.postUIorRun(() -> {

@@ -21,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,6 +46,8 @@ public class DialogBuilder<T> {
     protected Integer mLayoutWidth;
 
     protected Integer mLayoutHeight;
+
+    protected boolean mFullScreen;
 
     public DialogBuilder(AlertDialog.Builder builder) {
         mBuilder = builder;
@@ -82,6 +85,11 @@ public class DialogBuilder<T> {
         return dialog;
     }
 
+    public DialogBuilder<T> fullScreen(boolean set) {
+        mFullScreen = set;
+        return this;
+    }
+
     /**
      * ダイアログの表示を開始する
      */
@@ -90,6 +98,10 @@ public class DialogBuilder<T> {
 
         if (delegate != null) {
             delegate.addAutoDismiss(dialog, tag);
+        }
+
+        if (mFullScreen) {
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         return dialog;
     }
@@ -185,6 +197,17 @@ public class DialogBuilder<T> {
 
     public DialogBuilder<T> canceled(Action0 action) {
         mBuilder.setOnCancelListener(dialog -> {
+            try {
+                action.action();
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return this;
+    }
+
+    public DialogBuilder<T> dismissed(Action0 action) {
+        mBuilder.setOnDismissListener(dialog -> {
             try {
                 action.action();
             } catch (Throwable e) {

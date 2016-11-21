@@ -246,14 +246,6 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
     }
 
     /**
-     * タスクコントローラを取得する
-     */
-    @Deprecated
-    public PendingCallbackQueue getSubscription() {
-        return mLifecycleDelegate.getCallbackQueue();
-    }
-
-    /**
      * コールバックキューを取得する
      */
     public PendingCallbackQueue getCallbackQueue() {
