@@ -16,8 +16,9 @@
  * 2.25.1.x : Event Bus導入
  * 2.25.2.x : SupportFragment構造変更
  * 2.25.3.x : Deprecatedされたメソッドを整理
+ * 2.25.4.x : 文字列リソース名を変更, AS2.2.3対応
  */
-def ARTIFACT_VERSION = "2.25.3"
+def ARTIFACT_VERSION = "2.25.4"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 
