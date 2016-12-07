@@ -124,15 +124,6 @@
     <color name="EsMaterial.Yellow.900">#F57F17</color>
     <color name="EsMaterial.Yellow.Theme">@color/EsMaterial.Yellow.400</color>
 
-    <string name="Widget.Common.Error">エラー</string>
-    <string name="Widget.Common.Check">確認</string>
-    <string name="Widget.Common.Cancel">キャンセル</string>
-    <string name="Widget.Common.OK">OK</string>
-    <string name="Widget.Common.Load">読み込み中</string>
-
-    <string name="Widget.Debug.DumpLocal">Dump local datas...</string>
-    <string name="Widget.Debug.ModeSwitch">Debug Enable</string>
-
     <dimen name="EsMaterial.Separator.Height">6dp</dimen>
     <dimen name="EsMaterial.Separator.Bar.Height">1dp</dimen>
     <dimen name="EsMaterial.Separator.Bar.SideMargin">4dp</dimen>

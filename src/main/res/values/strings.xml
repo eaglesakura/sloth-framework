@@ -2,4 +2,13 @@
 <resources>
     <string name="EsMaterial.Title.Common.Alert">Alert</string>
     <string name="EsMaterial.Title.Common.Information">Info</string>
+    <string name="EsMaterial.Title.Common.Error">エラー</string>
+    <string name="EsMaterial.Title.Common.Check">確認</string>
+    <string name="EsMaterial.Word.Common.Cancel">キャンセル</string>
+    <string name="EsMaterial.Word.Common.OK">OK</string>
+    <string name="EsMaterial.Word.Common.DataLoad">読込中</string>
+
+    <string name="Widget.Debug.DumpLocal">Dump local datas...</string>
+    <string name="Widget.Debug.ModeSwitch">Debug Enable</string>
+
 </resources>

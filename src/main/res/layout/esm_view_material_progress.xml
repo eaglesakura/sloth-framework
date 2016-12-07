@@ -29,7 +29,7 @@
                     android:layout_marginLeft="@dimen/EsMaterial.Margin.KeyLine1Horizontal"
                     android:layout_marginRight="@dimen/EsMaterial.Margin.KeyLine1Horizontal"
                     android:layout_marginTop="@dimen/EsMaterial.Margin.KeyLine1Vertical"
-                    android:text="@string/Widget.Common.Load"/>
+                    android:text="@string/EsMaterial.Word.Common.DataLoad"/>
 
             <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
                     android:layout_width="match_parent"
