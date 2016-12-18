@@ -104,8 +104,8 @@ public class SupportCancelCallbackBuilder {
     /**
      * キャンセルチェック用オブジェクトを生成する
      */
-    public CancelableObject build() {
-        return new CancelableObject(mCancelCallback);
+    public CancelChecker build() {
+        return new CancelChecker(mCancelCallback);
     }
 
     static CancelCallback as(BackgroundTask task) {
@@ -154,14 +154,14 @@ public class SupportCancelCallbackBuilder {
         return new SupportCancelCallbackBuilder(as(dialog));
     }
 
-    public class CancelableObject implements
+    public class CancelChecker implements
             CancelCallback,
             PendingCallbackQueue.CancelCallback,
             NetworkConnector.CancelCallback {
 
         CancelCallback mCancelCallback;
 
-        CancelableObject(CancelCallback cancelCallback) {
+        CancelChecker(CancelCallback cancelCallback) {
             mCancelCallback = cancelCallback;
         }
 

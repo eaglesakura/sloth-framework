@@ -66,7 +66,7 @@ public class SupportCancelCallbackBuilderTest extends UnitTestCase {
 
     @Test
     public void タイムアウトチェックを行える() throws Throwable {
-        SupportCancelCallbackBuilder.CancelableObject cancel = SupportCancelCallbackBuilder.from(() -> false).orTimeout(500, TimeUnit.MILLISECONDS).build();
+        SupportCancelCallbackBuilder.CancelChecker cancel = SupportCancelCallbackBuilder.from(() -> false).orTimeout(500, TimeUnit.MILLISECONDS).build();
         assertFalse(cancel.isCanceled());   // タイムアウト時間を満たしていない
         Util.sleep(1000);
         assertTrue(cancel.isCanceled());    // タイムアウト時間を満たした
