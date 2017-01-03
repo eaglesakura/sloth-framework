@@ -57,6 +57,8 @@ public class DialogBuilder<T> {
 
     protected boolean mFullScreen;
 
+    protected boolean mCanceledOnTouchOutside = true;
+
     public DialogBuilder(AlertDialog.Builder builder) {
         mBuilder = builder;
     }
@@ -96,6 +98,9 @@ public class DialogBuilder<T> {
             dialog.getWindow().setLayout(mLayoutWidth, mLayoutHeight);
         }
 
+        if (!mCanceledOnTouchOutside) {
+            dialog.setCanceledOnTouchOutside(false);
+        }
         return dialog;
     }
 
@@ -207,6 +212,11 @@ public class DialogBuilder<T> {
 
     public DialogBuilder cancelable(boolean cancel) {
         mBuilder.setCancelable(cancel);
+        return this;
+    }
+
+    public DialogBuilder canceledOnTouchOutside(boolean enable) {
+        mCanceledOnTouchOutside = enable;
         return this;
     }
 
