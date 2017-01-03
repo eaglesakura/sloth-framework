@@ -8,6 +8,7 @@ import com.eaglesakura.android.framework.ui.progress.DialogToken;
 import com.eaglesakura.android.thread.ui.UIHandler;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.lambda.Action0;
+import com.eaglesakura.lambda.Action1Throwable;
 import com.eaglesakura.lambda.Action2;
 import com.eaglesakura.lambda.ResultAction1;
 import com.eaglesakura.util.CollectionUtil;
@@ -37,6 +38,8 @@ import java.util.List;
  */
 public class DialogBuilder<T> {
     protected AlertDialog.Builder mBuilder;
+
+    protected View mContent;
 
     /**
      * 選択対象のアイテム
@@ -165,6 +168,7 @@ public class DialogBuilder<T> {
      */
     public DialogBuilder view(View contentView) {
         mBuilder.setView(contentView);
+        mContent = contentView;
         return this;
     }
 
@@ -319,6 +323,18 @@ public class DialogBuilder<T> {
         Dialog show(UiLifecycleDelegate delegate) {
             mDialog = UIHandler.await(() -> mBuilder.show(delegate));
             return mDialog;
+        }
+
+        @Override
+        public void updateContent(Action1Throwable<View, Throwable> action) {
+            try {
+                UIHandler.await(() -> {
+                    action.action(mBuilder.mContent);
+                    return 0;
+                });
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
         }
 
         @Override
