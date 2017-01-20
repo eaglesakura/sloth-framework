@@ -95,11 +95,9 @@
         アプリ標準スタイルテンプレート
      -->
     <style name="EsMaterial.Theme.License" parent="EsMaterial.Theme">
-        <item name="colorPrimaryDark">@color/EsMaterial.Red.600</item>
-        <item name="colorPrimary">@color/EsMaterial.Red.500</item>
-        <item name="colorAccent">@color/EsMaterial.Blue.Button.Normal</item>
+        <item name="colorPrimaryDark">@color/EsMaterial.Grey.600</item>
+        <item name="colorPrimary">@color/EsMaterial.Grey.500</item>
         <item name="android:windowAnimationStyle">@style/EsMaterial.Animation.Activity</item>
-        <item name="drawerArrowStyle">@style/EsMaterial.Red.DrawerArrow</item>
     </style>
 
     <!--
@@ -107,9 +105,9 @@
     -->
     <style name="EsMaterial.Theme.License.AppBarOverlay"
            parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:textColor">@color/EsMaterial.Red.50</item>
+        <item name="android:textColorPrimary">@color/EsMaterial.Grey.750</item>
     </style>
     <style name="EsMaterial.Theme.License.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:textColor">@color/EsMaterial.Grey.800</item>
+        <item name="android:textColorPrimary">@color/EsMaterial.Grey.750</item>
     </style>
 </resources>

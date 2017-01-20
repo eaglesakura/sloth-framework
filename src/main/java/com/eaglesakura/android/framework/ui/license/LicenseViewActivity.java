@@ -28,14 +28,17 @@ public class LicenseViewActivity extends SupportActivity implements LicenseListF
     }
 
     /**
+     * 詳細画面を開く
+     */
+    @Override
+    public void requestDetail(LicenseListFragment self, LicenseListFragment.LicenseItem item) {
+        LicenseDetailActivity.startContent(this, item.getTitle(), item.getText());
+    }
+
+    /**
      * 表示を開始する
      */
     public static void startContent(Context context) {
         context.startActivity(new Intent(context, LicenseViewActivity.class));
-    }
-
-    @Override
-    public void requestDetail(LicenseListFragment self, LicenseListFragment.LicenseItem item) {
-        
     }
 }

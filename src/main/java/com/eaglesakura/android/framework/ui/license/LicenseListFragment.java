@@ -14,7 +14,6 @@ import com.eaglesakura.collection.DataCollection;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.material.widget.adapter.CardAdapter;
 import com.eaglesakura.util.CollectionUtil;
-import com.eaglesakura.util.IOUtil;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -107,10 +106,16 @@ public class LicenseListFragment extends SupportFragment {
                 String path = LICENSE_PATH + "/" + file;
                 try (InputStream is = getContext().getAssets().open(path)) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                    String line = reader.readLine();
-                    FwLog.widget("OSS(%s)", line);
+                    String title = reader.readLine();
+                    FwLog.widget("OSS(%s)", title);
 
-                    result.add(new LicenseItem(line, IOUtil.toString(is, false), path));
+                    StringBuilder lineBuffer = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        lineBuffer.append(line).append("\n");
+                    }
+
+                    result.add(new LicenseItem(title, lineBuffer.toString(), path));
                 }
             }
         }
