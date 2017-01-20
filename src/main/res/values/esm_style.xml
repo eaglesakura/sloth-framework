@@ -66,6 +66,8 @@
     <integer name="EsMaterial.Ripple.Duration">350</integer>
     <integer name="EsMaterial.Fade.Duration">100</integer>
 
+    <integer name="EsMaterial.Animate.Duration">400</integer>
+
     <!-- Widget共通 -->
     <style name="EsMaterial.Widget" parent="EsMaterial.Theme">
         <item name="android:layout_marginTop">@dimen/EsMaterial.Button.ExternalMarginVertical</item>
