@@ -173,6 +173,7 @@ dependencies {
 
     /**
      * Scroll Event Handle / 275
+     * https://github.com/ksoichiro/Android-ObservableScrollView
      */
     compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
 
