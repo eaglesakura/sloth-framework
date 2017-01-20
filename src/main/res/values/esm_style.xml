@@ -91,4 +91,25 @@
         <item name="android:padding">@dimen/EsMaterial.Button.Margin</item>
     </style>
 
+    <!--
+        アプリ標準スタイルテンプレート
+     -->
+    <style name="EsMaterial.Theme.License" parent="EsMaterial.Theme">
+        <item name="colorPrimaryDark">@color/EsMaterial.Red.600</item>
+        <item name="colorPrimary">@color/EsMaterial.Red.500</item>
+        <item name="colorAccent">@color/EsMaterial.Blue.Button.Normal</item>
+        <item name="android:windowAnimationStyle">@style/EsMaterial.Animation.Activity</item>
+        <item name="drawerArrowStyle">@style/EsMaterial.Red.DrawerArrow</item>
+    </style>
+
+    <!--
+        AppBar/Toolbar領域設定
+    -->
+    <style name="EsMaterial.Theme.License.AppBarOverlay"
+           parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColor">@color/EsMaterial.Red.50</item>
+    </style>
+    <style name="EsMaterial.Theme.License.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColor">@color/EsMaterial.Grey.800</item>
+    </style>
 </resources>
