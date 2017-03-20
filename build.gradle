@@ -18,7 +18,7 @@
  * 2.25.3.x : Deprecatedされたメソッドを整理
  * 2.25.4.x : 文字列リソース名を変更, AS2.2.3対応
  */
-def ARTIFACT_VERSION = "2.25.4"
+def ARTIFACT_VERSION = "2.25.5"
 def ARTIFACT_NAME = file(".").absoluteFile.name
 def ARTIFACT_INSTALL_TARGET = getArtifactInstallTarget()
 
@@ -84,13 +84,6 @@ android {
     }
 }
 
-// check env
-if (!hasProperty("ANDROID_SUPPORT_LIB_VERSION")) {
-    ext.ANDROID_SUPPORT_LIB_VERSION = "25.2.+"
-}
-if (!hasProperty("ANDROID_PLAYSERVICE_LIB_VERSION")) {
-    ext.ANDROID_PLAYSERVICE_LIB_VERSION = "10.2.+"
-}
 // Local or maven
 if (!hasProperty("EGLIBRARY_COMPILE_LOCAL")) {
     ext.EGLIBRARY_COMPILE_LOCAL = false
