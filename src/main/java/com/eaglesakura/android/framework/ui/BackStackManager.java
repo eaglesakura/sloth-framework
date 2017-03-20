@@ -2,6 +2,7 @@ package com.eaglesakura.android.framework.ui;
 
 import com.eaglesakura.util.CollectionUtil;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.UiThread;
@@ -67,6 +68,7 @@ public class BackStackManager implements Parcelable {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     protected Fragment findFragmentByTag(FragmentManager fragmentManager, String tag) {
         List<Fragment> fragments = fragmentManager.getFragments();
         if (CollectionUtil.isEmpty(fragments)) {
@@ -98,6 +100,7 @@ public class BackStackManager implements Parcelable {
     /**
      * 戻るボタンが押された
      */
+    @SuppressLint("RestrictedApi")
     @UiThread
     public boolean onBackPressed(FragmentManager fragmentManager, KeyEvent event) {
         if (mStackTags.isEmpty()) {

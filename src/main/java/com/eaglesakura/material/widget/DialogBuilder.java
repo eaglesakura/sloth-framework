@@ -13,8 +13,6 @@ import com.eaglesakura.lambda.Action2;
 import com.eaglesakura.lambda.ResultAction1;
 import com.eaglesakura.util.CollectionUtil;
 
-import org.jetbrains.annotations.NotNull;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -129,7 +127,7 @@ public class DialogBuilder<T> {
      * 同一タグのダイアログが存在しないならば、ダイアログを表示する
      */
     @Nullable
-    public Dialog showOnce(@NonNull UiLifecycleDelegate delegate, @NotNull Object tag) {
+    public Dialog showOnce(@NonNull UiLifecycleDelegate delegate, @NonNull Object tag) {
 
         if (delegate.hasAutoDismissObject(tag)) {
             FwLog.system("cancel dialog boot[%s]", tag.toString());

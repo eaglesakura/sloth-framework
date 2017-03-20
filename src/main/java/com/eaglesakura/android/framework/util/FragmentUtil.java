@@ -4,6 +4,7 @@ import com.eaglesakura.lambda.Matcher1;
 import com.eaglesakura.util.CollectionUtil;
 import com.eaglesakura.util.ReflectionUtil;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,6 +27,7 @@ public class FragmentUtil {
      *
      * このメソッドはChildFragmentを再帰的に検索する
      */
+    @SuppressLint("RestrictedApi")
     @NonNull
     public static List<Fragment> listFragments(FragmentManager fragmentManager, Matcher1<Fragment> matcher) {
         List<Fragment> result = new ArrayList<>();
@@ -59,6 +61,7 @@ public class FragmentUtil {
      *
      * このメソッドはChildFragmentを再帰的に検索する
      */
+    @SuppressLint("RestrictedApi")
     @NonNull
     public static <T> List<T> listInterfaces(FragmentManager fragmentManager, Class<? extends T> checkInterface) {
         List<T> result = new ArrayList<>();
