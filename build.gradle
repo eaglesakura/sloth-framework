@@ -130,7 +130,7 @@ dependencies {
         compile 'com.eaglesakura:android-net:1.+'
         compile "com.eaglesakura:rxandroid-support:2.1.275"
         compile "com.eaglesakura:onactivityresult-invoke:1.0.457"
-        compile "com.eaglesakura:small-aquery:0.26.8.59"
+        compile "com.eaglesakura:small-aquery:1.0.59"
         compile "com.eaglesakura:margarineknife:1.2.242"
         compile "com.eaglesakura:garnet:0.3.194"
         compile "com.eaglesakura:light-saver:1.1.106"
