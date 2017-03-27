@@ -2,7 +2,7 @@ package com.eaglesakura.material.widget;
 
 import com.eaglesakura.android.aquery.AQuery;
 import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.thread.ui.UIHandler;
+import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.util.IOUtil;
 

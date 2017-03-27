@@ -5,7 +5,7 @@ import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.framework.delegate.lifecycle.UiLifecycleDelegate;
 import com.eaglesakura.android.framework.ui.progress.DialogToken;
-import com.eaglesakura.android.thread.ui.UIHandler;
+import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.lambda.Action0;
 import com.eaglesakura.lambda.Action1Throwable;

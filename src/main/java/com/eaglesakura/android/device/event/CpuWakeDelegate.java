@@ -1,4 +1,4 @@
-package com.eaglesakura.android.system;
+package com.eaglesakura.android.device.event;
 
 import com.eaglesakura.android.framework.delegate.lifecycle.LifecycleDelegate;
 

@@ -7,7 +7,7 @@ import com.eaglesakura.android.rx.BackgroundTaskBuilder;
 import com.eaglesakura.android.rx.CallbackTime;
 import com.eaglesakura.android.rx.ExecuteTarget;
 import com.eaglesakura.android.rx.error.TaskCanceledException;
-import com.eaglesakura.android.thread.ui.UIHandler;
+import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.lambda.CancelCallback;
