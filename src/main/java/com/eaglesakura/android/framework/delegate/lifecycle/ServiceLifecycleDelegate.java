@@ -1,7 +1,7 @@
 package com.eaglesakura.android.framework.delegate.lifecycle;
 
-import com.eaglesakura.android.rx.LifecycleState;
-import com.eaglesakura.android.rx.event.LifecycleEventImpl;
+import com.eaglesakura.cerberus.LifecycleState;
+import com.eaglesakura.cerberus.event.LifecycleEventImpl;
 
 public class ServiceLifecycleDelegate extends LifecycleDelegate {
 

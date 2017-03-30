@@ -1,7 +1,7 @@
 package com.eaglesakura.android.framework.ui;
 
 import com.eaglesakura.android.framework.delegate.lifecycle.LifecycleDelegate;
-import com.eaglesakura.android.rx.event.OnCreateEvent;
+import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.util.ReflectionUtil;
 

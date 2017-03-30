@@ -1,0 +1,49 @@
+{
+  "groups": [
+    {
+      "name": "Sample",
+      "properties": [
+        {
+          "name": "intKey",
+          "value": "123",
+          "type": "int"
+        },
+        {
+          "name": "longKey",
+          "value": "456",
+          "type": "long"
+        },
+        {
+          "name": "stringKey",
+          "value": "nil",
+          "type": "String"
+        },
+        {
+          "name": "floatKey",
+          "value": "1.234",
+          "type": "float"
+        },
+        {
+          "name": "doubleKey",
+          "value": "2.345",
+          "type": "double"
+        },
+        {
+          "name": "booleanKey",
+          "value": "false",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "Debug",
+      "properties": [
+        {
+          "name": "booleanKey",
+          "value": "1",
+          "type": "boolean"
+        }
+      ]
+    }
+  ]
+}

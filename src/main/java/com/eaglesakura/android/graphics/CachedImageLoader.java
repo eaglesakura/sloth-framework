@@ -5,9 +5,9 @@ import com.eaglesakura.android.graphics.loader.FileImageLoader;
 import com.eaglesakura.android.graphics.loader.ImageLoader;
 import com.eaglesakura.android.graphics.loader.NetworkImageLoader;
 import com.eaglesakura.android.graphics.loader.UriImageLoader;
-import com.eaglesakura.android.net.NetworkConnector;
-import com.eaglesakura.android.net.request.ConnectRequest;
-import com.eaglesakura.android.net.request.SimpleHttpRequest;
+import com.eaglesakura.alternet.Alternet;
+import com.eaglesakura.alternet.request.ConnectRequest;
+import com.eaglesakura.alternet.request.SimpleHttpRequest;
 import com.eaglesakura.lambda.CancelCallback;
 
 import android.content.Context;
@@ -93,7 +93,7 @@ public class CachedImageLoader {
     /**
      * ネットワークダウンローダーを生成する
      */
-    public Builder newImage(NetworkConnector connector, String url, boolean onMemoryCache) {
+    public Builder newImage(Alternet connector, String url, boolean onMemoryCache) {
         SimpleHttpRequest request = new SimpleHttpRequest(ConnectRequest.Method.GET);
         request.setUrl(url, null);
         return newImage(connector, request, onMemoryCache);
@@ -102,7 +102,7 @@ public class CachedImageLoader {
     /**
      * ネットワークダウンローダーを生成する
      */
-    public Builder newImage(NetworkConnector connector, ConnectRequest request, boolean onMemoryCache) {
+    public Builder newImage(Alternet connector, ConnectRequest request, boolean onMemoryCache) {
         NetworkImageLoader loader = new NetworkImageLoader(mContext, mImageCache, connector, request);
         if (onMemoryCache) {
             loader.cache();

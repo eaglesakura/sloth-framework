@@ -1,7 +1,7 @@
 package com.eaglesakura.android.framework.ui.progress;
 
-import com.eaglesakura.android.rx.CallbackTime;
-import com.eaglesakura.android.rx.PendingCallbackQueue;
+import com.eaglesakura.cerberus.CallbackTime;
+import com.eaglesakura.cerberus.PendingCallbackQueue;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

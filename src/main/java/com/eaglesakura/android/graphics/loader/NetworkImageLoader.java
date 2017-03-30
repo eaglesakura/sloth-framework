@@ -1,10 +1,10 @@
 package com.eaglesakura.android.graphics.loader;
 
 import com.eaglesakura.android.graphics.ImageCacheManager;
-import com.eaglesakura.android.net.NetworkConnector;
-import com.eaglesakura.android.net.Result;
-import com.eaglesakura.android.net.parser.BitmapParser;
-import com.eaglesakura.android.net.request.ConnectRequest;
+import com.eaglesakura.alternet.Alternet;
+import com.eaglesakura.alternet.Result;
+import com.eaglesakura.alternet.parser.BitmapParser;
+import com.eaglesakura.alternet.request.ConnectRequest;
 import com.eaglesakura.lambda.CallbackUtils;
 
 import android.content.Context;
@@ -14,12 +14,12 @@ import android.support.annotation.NonNull;
 
 public class NetworkImageLoader extends ImageLoader<NetworkImageLoader> {
     @NonNull
-    final NetworkConnector mNetworkConnector;
+    final Alternet mNetworkConnector;
 
     @NonNull
     final ConnectRequest mRequest;
 
-    public NetworkImageLoader(@NonNull Context context, @NonNull ImageCacheManager imageManager, @NonNull NetworkConnector networkConnector, @NonNull ConnectRequest request) {
+    public NetworkImageLoader(@NonNull Context context, @NonNull ImageCacheManager imageManager, @NonNull Alternet networkConnector, @NonNull ConnectRequest request) {
         super(context, imageManager);
         mNetworkConnector = networkConnector;
         mRequest = request;
@@ -34,7 +34,7 @@ public class NetworkImageLoader extends ImageLoader<NetworkImageLoader> {
     @NonNull
     @Override
     protected Object onLoad() throws Throwable {
-        Result<Bitmap> result = mNetworkConnector.connect(mRequest, new BitmapParser(), (it) -> CallbackUtils.isCanceled(mCancelCallback));
+        Result<Bitmap> result = mNetworkConnector.fetch(mRequest, new BitmapParser(), (it) -> CallbackUtils.isCanceled(mCancelCallback));
         return new BitmapDrawable(mNetworkConnector.getContext().getResources(), result.getResult());
     }
 }

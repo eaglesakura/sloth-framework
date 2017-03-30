@@ -1,7 +1,7 @@
 package com.eaglesakura.android.framework.delegate.task;
 
 import com.eaglesakura.android.framework.delegate.lifecycle.LifecycleDelegate;
-import com.eaglesakura.android.rx.LifecycleState;
+import com.eaglesakura.cerberus.LifecycleState;
 import com.squareup.otto.Bus;
 
 import rx.Subscription;

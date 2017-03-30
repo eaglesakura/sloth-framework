@@ -1,9 +1,9 @@
 package com.eaglesakura.material.widget.support;
 
-import com.eaglesakura.android.net.NetworkConnector;
-import com.eaglesakura.android.net.Result;
-import com.eaglesakura.android.rx.BackgroundTask;
-import com.eaglesakura.android.rx.PendingCallbackQueue;
+import com.eaglesakura.alternet.Alternet;
+import com.eaglesakura.alternet.Result;
+import com.eaglesakura.cerberus.BackgroundTask;
+import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.lambda.CallbackUtils;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.material.widget.adapter.CardAdapter;
@@ -158,7 +158,7 @@ public class SupportCancelCallbackBuilder {
             CancelCallback,
             BackgroundTask.Signal,
             PendingCallbackQueue.CancelCallback,
-            NetworkConnector.CancelCallback {
+            Alternet.CancelCallback {
 
         CancelCallback mCancelCallback;
 

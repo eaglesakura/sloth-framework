@@ -5,8 +5,8 @@ import com.eaglesakura.android.framework.delegate.lifecycle.ActivityLifecycleDel
 import com.eaglesakura.android.framework.util.AppSupportUtil;
 import com.eaglesakura.android.framework.util.FragmentUtil;
 import com.eaglesakura.android.oari.ActivityResult;
-import com.eaglesakura.android.rx.event.OnRestoreEvent;
-import com.eaglesakura.android.rx.event.OnSaveEvent;
+import com.eaglesakura.cerberus.event.OnRestoreEvent;
+import com.eaglesakura.cerberus.event.OnSaveEvent;
 import com.eaglesakura.android.saver.LightSaver;
 import com.eaglesakura.util.ReflectionUtil;
 

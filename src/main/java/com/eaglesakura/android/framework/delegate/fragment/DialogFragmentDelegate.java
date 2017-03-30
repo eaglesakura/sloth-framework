@@ -3,7 +3,7 @@ package com.eaglesakura.android.framework.delegate.fragment;
 import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.delegate.lifecycle.FragmentLifecycleDelegate;
 import com.eaglesakura.android.framework.delegate.lifecycle.UiLifecycleDelegate;
-import com.eaglesakura.android.rx.event.OnCreateEvent;
+import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.util.StringUtil;
 
 import android.app.Dialog;

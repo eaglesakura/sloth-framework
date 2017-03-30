@@ -1,12 +1,12 @@
 package com.eaglesakura.android.framework.delegate.task;
 
 import com.eaglesakura.android.framework.delegate.lifecycle.LifecycleDelegate;
-import com.eaglesakura.android.rx.BackgroundTask;
-import com.eaglesakura.android.rx.BackgroundTaskBuilder;
-import com.eaglesakura.android.rx.CallbackTime;
-import com.eaglesakura.android.rx.ExecuteTarget;
-import com.eaglesakura.android.rx.LifecycleState;
-import com.eaglesakura.android.rx.PendingCallbackQueue;
+import com.eaglesakura.cerberus.BackgroundTask;
+import com.eaglesakura.cerberus.BackgroundTaskBuilder;
+import com.eaglesakura.cerberus.CallbackTime;
+import com.eaglesakura.cerberus.ExecuteTarget;
+import com.eaglesakura.cerberus.LifecycleState;
+import com.eaglesakura.cerberus.PendingCallbackQueue;
 
 /**
  * ライフサイクルとリンクしたタスクを扱う

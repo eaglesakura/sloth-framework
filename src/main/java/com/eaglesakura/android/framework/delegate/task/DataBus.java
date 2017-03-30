@@ -2,11 +2,11 @@ package com.eaglesakura.android.framework.delegate.task;
 
 import com.eaglesakura.android.framework.delegate.lifecycle.LifecycleDelegate;
 import com.eaglesakura.android.framework.util.AppSupportUtil;
-import com.eaglesakura.android.rx.BackgroundTask;
-import com.eaglesakura.android.rx.BackgroundTaskBuilder;
-import com.eaglesakura.android.rx.CallbackTime;
-import com.eaglesakura.android.rx.ExecuteTarget;
-import com.eaglesakura.android.rx.error.TaskCanceledException;
+import com.eaglesakura.cerberus.BackgroundTask;
+import com.eaglesakura.cerberus.BackgroundTaskBuilder;
+import com.eaglesakura.cerberus.CallbackTime;
+import com.eaglesakura.cerberus.ExecuteTarget;
+import com.eaglesakura.cerberus.error.TaskCanceledException;
 import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.lambda.Action1;

@@ -3,12 +3,12 @@ package com.eaglesakura.android.framework.ui.support;
 import com.eaglesakura.android.framework.delegate.fragment.SupportFragmentDelegate;
 import com.eaglesakura.android.framework.delegate.lifecycle.FragmentLifecycleDelegate;
 import com.eaglesakura.android.garnet.Garnet;
-import com.eaglesakura.android.rx.BackgroundTask;
-import com.eaglesakura.android.rx.BackgroundTaskBuilder;
-import com.eaglesakura.android.rx.CallbackTime;
-import com.eaglesakura.android.rx.ExecuteTarget;
-import com.eaglesakura.android.rx.LifecycleState;
-import com.eaglesakura.android.rx.PendingCallbackQueue;
+import com.eaglesakura.cerberus.BackgroundTask;
+import com.eaglesakura.cerberus.BackgroundTaskBuilder;
+import com.eaglesakura.cerberus.CallbackTime;
+import com.eaglesakura.cerberus.ExecuteTarget;
+import com.eaglesakura.cerberus.LifecycleState;
+import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.android.saver.LightSaver;
 import com.eaglesakura.android.util.PermissionUtil;
 

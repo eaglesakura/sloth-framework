@@ -1,10 +1,10 @@
 package com.eaglesakura.android.framework.delegate.lifecycle;
 
-import com.eaglesakura.android.rx.LifecycleState;
-import com.eaglesakura.android.rx.event.LifecycleEventImpl;
-import com.eaglesakura.android.rx.event.OnCreateEvent;
-import com.eaglesakura.android.rx.event.OnRestoreEvent;
-import com.eaglesakura.android.rx.event.OnSaveEvent;
+import com.eaglesakura.cerberus.LifecycleState;
+import com.eaglesakura.cerberus.event.LifecycleEventImpl;
+import com.eaglesakura.cerberus.event.OnCreateEvent;
+import com.eaglesakura.cerberus.event.OnRestoreEvent;
+import com.eaglesakura.cerberus.event.OnSaveEvent;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;

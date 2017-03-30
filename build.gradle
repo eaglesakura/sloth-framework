@@ -1,25 +1,7 @@
 /**
- * 1.0.0     : release
- * 1.0.1     : maven依存のtypo修正
- * 1.0.x     : Circle CIに移行
- * 1.1.x     : RxAndroid / ラムダを導入
- * 1.2.x     : コールバック用インターフェースを拡張
- * 1.3.x     : ContentHolder内部で不要だったクラスを保持しないように修正
- * 2.23.0.x  : バージョン規則を修正, 構成を大幅変更
- * 2.23.1.x  : ToolbarのID命名規則を変更
- * 2.24.0.x  : Android N対応
- * 2.24.1.x  : PlayService依存を削除
- * 2.24.3.x  : RxAndroid-Supportの依存バージョンを変更
- * 2.24.4.x  : Text-KeyValueStoreの依存バージョンを変更
- * 2.24.5.x  : support library 24.1.+に対応
- * 2.25.0.x  : API Level 25(Android 7.1)対応
- * 2.25.1.x  : Event Bus導入
- * 2.25.2.x  : SupportFragment構造変更
- * 2.25.3.x  : Deprecatedされたメソッドを整理
- * 2.25.4.x  : 文字列リソース名を変更, AS2.2.3対応
- * 2.25.6.x  : bintrayに移行
+ * 3.25.0.x  : フレームワーク全体を再構成
  */
-def ARTIFACT_VERSION = "2.25.6"
+def ARTIFACT_VERSION = "3.25.0"
 def REPOSITORY_NAME = "maven"
 def BINTRAY_LICENSES = ["MIT"]
 def BINTRAY_LABELS = ["android"]
@@ -37,6 +19,8 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.3.0'
         classpath "com.eaglesakura:plugin-android-dbgenerator:2.1.162"
         classpath 'me.tatarka:gradle-retrolambda:3.5.0' // support Lambda
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
 }
 
@@ -110,10 +94,10 @@ dependencies {
     if (EGLIBRARY_COMPILE_LOCAL) {
         compile project(':eglibrary:android-command-service')
         compile project(':eglibrary:android-text-kvs')
-        compile project(':eglibrary:android-net')
+        compile project(':eglibrary:alternet')
         compile project(':eglibrary:onactivityresult-invoke')
         compile project(':eglibrary:small-aquery')
-        compile project(':eglibrary:rxandroid-support')
+        compile project(':eglibrary:cerberus')
         compile project(':eglibrary:margarineknife')
         compile project(':eglibrary:garnet')
         compile project(':eglibrary:light-saver')
@@ -122,17 +106,17 @@ dependencies {
         testCompile project(":eglibrary:android-unittest-support")
     } else {
         compile "com.eaglesakura:android-command-service:1.2.458"
-        compile "com.eaglesakura:android-text-kvs:2.1.447"
+        compile "com.eaglesakura:android-text-kvs:2.2.450"
         compile "com.eaglesakura:android-net:1.2.489"
         compile "com.eaglesakura:onactivityresult-invoke:1.1.460"
         compile "com.eaglesakura:small-aquery:1.0.59"
-        compile "com.eaglesakura:rxandroid-support:2.2.279"
+        compile "com.eaglesakura:cerberus:2.2.450"
         compile "com.eaglesakura:margarineknife:1.3.246"
         compile "com.eaglesakura:garnet:1.0.195"
         compile "com.eaglesakura:light-saver:1.1.107"
 
-        androidTestCompile "com.eaglesakura:android-devicetest-support:2.1.270"
-        testCompile "com.eaglesakura:android-unittest-support:1.4.206"
+        androidTestCompile "com.eaglesakura:android-devicetest-support:2.1.272"
+        testCompile "com.eaglesakura:android-unittest-support:1.4.207"
     }
 
     /**

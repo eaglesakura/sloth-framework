@@ -1,10 +1,10 @@
 package com.eaglesakura.android.task;
 
 import com.eaglesakura.android.framework.delegate.lifecycle.ServiceLifecycleDelegate;
-import com.eaglesakura.android.rx.BackgroundTask;
-import com.eaglesakura.android.rx.CallbackTime;
-import com.eaglesakura.android.rx.ExecuteTarget;
-import com.eaglesakura.android.rx.ParallelTaskGroup;
+import com.eaglesakura.cerberus.BackgroundTask;
+import com.eaglesakura.cerberus.CallbackTime;
+import com.eaglesakura.cerberus.ExecuteTarget;
+import com.eaglesakura.cerberus.ParallelTaskGroup;
 import com.eaglesakura.lambda.CallbackUtils;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.lambda.ResultAction1;

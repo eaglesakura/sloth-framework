@@ -3,7 +3,7 @@ package com.eaglesakura.android.framework.delegate.fragment;
 import com.eaglesakura.android.framework.FrameworkCentral;
 import com.eaglesakura.android.framework.FwLog;
 import com.eaglesakura.android.framework.ui.support.SupportFragment;
-import com.eaglesakura.android.rx.LifecycleState;
+import com.eaglesakura.cerberus.LifecycleState;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.IntRange;

@@ -4,8 +4,8 @@ import com.eaglesakura.android.framework.R;
 import com.eaglesakura.android.framework.delegate.lifecycle.ActivityLifecycleDelegate;
 import com.eaglesakura.android.framework.ui.FragmentHolder;
 import com.eaglesakura.android.framework.ui.support.SupportFragment;
-import com.eaglesakura.android.rx.LifecycleState;
-import com.eaglesakura.android.rx.event.OnCreateEvent;
+import com.eaglesakura.cerberus.LifecycleState;
+import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.util.StringUtil;
 
 import android.app.Activity;
