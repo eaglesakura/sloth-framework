@@ -1,6 +1,6 @@
 package com.eaglesakura.material.widget;
 
-import com.eaglesakura.android.framework.R;
+import com.eaglesakura.sloth.R;
 
 import android.content.Context;
 import android.util.AttributeSet;

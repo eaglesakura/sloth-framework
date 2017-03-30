@@ -1,6 +1,6 @@
 package com.eaglesakura.android.graphics.loader;
 
-import com.eaglesakura.android.framework.FwLog;
+import com.eaglesakura.sloth.FwLog;
 import com.eaglesakura.android.graphics.ImageCacheManager;
 import com.eaglesakura.android.util.ImageUtil;
 import com.eaglesakura.lambda.CancelCallback;

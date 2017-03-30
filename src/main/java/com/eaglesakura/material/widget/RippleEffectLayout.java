@@ -1,6 +1,6 @@
 package com.eaglesakura.material.widget;
 
-import com.eaglesakura.android.framework.R;
+import com.eaglesakura.sloth.R;
 import com.eaglesakura.android.thread.HandlerLoopController;
 import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.android.util.ContextUtil;

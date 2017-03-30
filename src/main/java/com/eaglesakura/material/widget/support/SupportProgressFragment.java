@@ -1,10 +1,10 @@
 package com.eaglesakura.material.widget.support;
 
-import com.eaglesakura.android.framework.delegate.fragment.SupportFragmentDelegate;
-import com.eaglesakura.android.framework.ui.progress.ProgressStackManager;
-import com.eaglesakura.android.framework.ui.progress.ProgressToken;
-import com.eaglesakura.android.framework.ui.support.SupportFragment;
-import com.eaglesakura.android.framework.ui.support.annotation.FragmentLayout;
+import com.eaglesakura.sloth.delegate.fragment.SupportFragmentDelegate;
+import com.eaglesakura.sloth.ui.progress.ProgressStackManager;
+import com.eaglesakura.sloth.ui.progress.ProgressToken;
+import com.eaglesakura.sloth.ui.support.SupportFragment;
+import com.eaglesakura.sloth.ui.support.annotation.FragmentLayout;
 import com.eaglesakura.android.margarine.Bind;
 import com.eaglesakura.material.widget.MaterialProgressView;
 

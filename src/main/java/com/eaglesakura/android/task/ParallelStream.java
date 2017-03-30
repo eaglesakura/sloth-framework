@@ -1,6 +1,6 @@
 package com.eaglesakura.android.task;
 
-import com.eaglesakura.android.framework.delegate.lifecycle.ServiceLifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.ServiceLifecycleDelegate;
 import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.ExecuteTarget;

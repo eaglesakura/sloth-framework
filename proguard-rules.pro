@@ -13,7 +13,7 @@
 
 ## Annotation付きメソッドの保護
 -keepclassmembers class * {
-    @com.eaglesakura.android.framework.ui.support.annotation.BindInterface *;
+    @com.eaglesakura.sloth.ui.support.annotation.BindInterface *;
     @com.squareup.otto.Subscribe *;
     @com.squareup.otto.Produce *;
 }

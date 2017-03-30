@@ -1,4 +1,4 @@
-package com.eaglesakura.android.framework;
+package com.eaglesakura.sloth;
 
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 package com.eaglesakura.material.widget.support;
 
-import com.eaglesakura.android.framework.UnitTestCase;
+import com.eaglesakura.sloth.UnitTestCase;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.util.Util;
 

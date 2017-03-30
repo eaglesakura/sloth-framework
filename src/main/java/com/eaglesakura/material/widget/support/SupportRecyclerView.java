@@ -1,7 +1,7 @@
 package com.eaglesakura.material.widget.support;
 
-import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.framework.util.AppSupportUtil;
+import com.eaglesakura.sloth.R;
+import com.eaglesakura.sloth.util.AppSupportUtil;
 import com.eaglesakura.util.StringUtil;
 
 import android.annotation.TargetApi;

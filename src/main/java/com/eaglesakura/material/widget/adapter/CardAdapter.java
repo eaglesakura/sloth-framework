@@ -1,7 +1,7 @@
 package com.eaglesakura.material.widget.adapter;
 
-import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.framework.ui.support.SupportAQuery;
+import com.eaglesakura.sloth.R;
+import com.eaglesakura.sloth.ui.support.SupportAQuery;
 import com.eaglesakura.android.util.ViewUtil;
 import com.eaglesakura.material.widget.support.SupportRecyclerView;
 import com.eaglesakura.util.Util;

@@ -1,6 +1,6 @@
 package com.eaglesakura.android.device.event;
 
-import com.eaglesakura.android.framework.delegate.lifecycle.LifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.LifecycleDelegate;
 
 import android.content.Context;
 import android.os.PowerManager;

@@ -1,10 +1,10 @@
 package com.eaglesakura.material.widget;
 
 import com.eaglesakura.android.aquery.AQuery;
-import com.eaglesakura.android.framework.FwLog;
-import com.eaglesakura.android.framework.R;
-import com.eaglesakura.android.framework.delegate.lifecycle.UiLifecycleDelegate;
-import com.eaglesakura.android.framework.ui.progress.DialogToken;
+import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.R;
+import com.eaglesakura.sloth.delegate.lifecycle.UiLifecycleDelegate;
+import com.eaglesakura.sloth.ui.progress.DialogToken;
 import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.lambda.Action0;

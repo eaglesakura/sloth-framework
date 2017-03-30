@@ -2,7 +2,7 @@ package com.eaglesakura.android.device;
 
 import com.eaglesakura.android.device.display.DisplayInfo;
 import com.eaglesakura.android.devicetest.DeviceTestCase;
-import com.eaglesakura.android.framework.FwLog;
+import com.eaglesakura.sloth.FwLog;
 import com.eaglesakura.util.LogUtil;
 
 import org.junit.Test;

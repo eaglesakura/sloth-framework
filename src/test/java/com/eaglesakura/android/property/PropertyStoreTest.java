@@ -1,6 +1,6 @@
 package com.eaglesakura.android.property;
 
-import com.eaglesakura.android.framework.UnitTestCase;
+import com.eaglesakura.sloth.UnitTestCase;
 import com.eaglesakura.android.property.model.PropertySource;
 import com.eaglesakura.json.JSON;
 import com.eaglesakura.util.CollectionUtil;

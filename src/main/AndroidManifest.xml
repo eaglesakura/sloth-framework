@@ -1,13 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.eaglesakura.android.framework">
+          package="com.eaglesakura.sloth">
 
     <application>
         <!-- ライセンス表示 -->
         <activity
                 android:theme="@style/EsMaterial.Theme.License"
-                android:name="com.eaglesakura.android.framework.ui.license.LicenseViewActivity"/>
+                android:name="com.eaglesakura.sloth.ui.license.LicenseViewActivity"/>
         <activity
                 android:theme="@style/EsMaterial.Theme.License"
-                android:name="com.eaglesakura.android.framework.ui.license.LicenseDetailActivity"/>
+                android:name="com.eaglesakura.sloth.ui.license.LicenseDetailActivity"/>
     </application>
 </manifest>

@@ -1,6 +1,6 @@
 package com.eaglesakura.android.util;
 
-import com.eaglesakura.android.framework.R;
+import com.eaglesakura.sloth.R;
 
 import android.databinding.ViewDataBinding;
 import android.view.View;

@@ -1,9 +1,9 @@
 package com.eaglesakura.material.widget.support.web;
 
-import com.eaglesakura.android.framework.FwLog;
-import com.eaglesakura.android.framework.delegate.lifecycle.LifecycleDelegate;
-import com.eaglesakura.android.framework.ui.support.SupportFragment;
-import com.eaglesakura.android.framework.util.FragmentUtil;
+import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.delegate.lifecycle.LifecycleDelegate;
+import com.eaglesakura.sloth.ui.support.SupportFragment;
+import com.eaglesakura.sloth.util.FragmentUtil;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.material.widget.SupportWebView;
 import com.eaglesakura.util.Util;

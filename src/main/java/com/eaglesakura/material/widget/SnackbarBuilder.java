@@ -1,6 +1,6 @@
 package com.eaglesakura.material.widget;
 
-import com.eaglesakura.android.framework.R;
+import com.eaglesakura.sloth.R;
 import com.eaglesakura.android.util.ResourceUtil;
 
 import android.annotation.SuppressLint;

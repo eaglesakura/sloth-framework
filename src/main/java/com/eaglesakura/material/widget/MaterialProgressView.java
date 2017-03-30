@@ -1,7 +1,7 @@
 package com.eaglesakura.material.widget;
 
 import com.eaglesakura.android.aquery.AQuery;
-import com.eaglesakura.android.framework.R;
+import com.eaglesakura.sloth.R;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;

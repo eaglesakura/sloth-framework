@@ -1,0 +1,202 @@
+package com.eaglesakura.sloth;
+
+import com.eaglesakura.android.device.display.DisplayInfo;
+import com.eaglesakura.android.property.PropertyStore;
+import com.eaglesakura.android.property.TextDatabasePropertyStore;
+import com.eaglesakura.android.property.model.PropertySource;
+import com.eaglesakura.android.util.ContextUtil;
+import com.eaglesakura.cerberus.PendingCallbackQueue;
+import com.eaglesakura.json.JSON;
+import com.eaglesakura.sloth.context.VersionContext;
+import com.eaglesakura.sloth.delegate.lifecycle.ServiceLifecycleDelegate;
+import com.eaglesakura.sloth.gen.prop.SystemSettings;
+import com.eaglesakura.sloth.ui.message.LocalMessageReceiver;
+import com.eaglesakura.util.RandomUtil;
+import com.eaglesakura.util.StringUtil;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * ライブラリの内部実装管理
+ */
+@SuppressLint("NewApi")
+class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
+    @NonNull
+    final Application mApplication;
+
+    @NonNull
+    SystemSettings mSettings;
+
+    /**
+     * 現在のバージョン情報
+     */
+    @NonNull
+    VersionContext mVersionContext;
+
+    /**
+     * 初回起動時に確定するID
+     */
+    @NonNull
+    String mInstallUniqueId;
+
+    @NonNull
+    ServiceLifecycleDelegate mLifecycleDelegate = new ServiceLifecycleDelegate();
+
+    @NonNull
+    PendingCallbackQueue mCallbackQueue = new PendingCallbackQueue();
+
+    @NonNull
+    Set<Sloth.ApplicationStateListener> mStateListeners = new HashSet<>();
+
+    int mForegroundActivities;
+
+    @NonNull
+    LocalMessageReceiver mLocalMessageReceiver;
+
+    public SlothApplicationImpl(@NonNull Application application) {
+        mApplication = application;
+        mApplication.registerActivityLifecycleCallbacks(this);
+        loadSettings();
+
+        mLifecycleDelegate.onCreate();
+        mLocalMessageReceiver = new BroadcastReceiverImpl(application);
+        mLocalMessageReceiver.connect();
+
+        printDeviceInfo();
+    }
+
+    /**
+     * デバイス情報を出力する
+     */
+    private void printDeviceInfo() {
+        if (!ContextUtil.isDebug(mApplication)) {
+            return;
+        }
+
+        FwLog.system("========= Runtime Information =========");
+        FwLog.system("== Device %s", Build.MODEL);
+        {
+            DisplayInfo displayInfo = new DisplayInfo(mApplication);
+            FwLog.system("== Display %d.%d inch = %s",
+                    displayInfo.getDiagonalInchRound().major, displayInfo.getDiagonalInchRound().minor,
+                    displayInfo.getDeviceType().name()
+            );
+            FwLog.system("==   Display [%d x %d] pix", displayInfo.getWidthPixel(), displayInfo.getHeightPixel());
+            FwLog.system("==   Display [%.1f x %.1f] dp", displayInfo.getWidthDp(), displayInfo.getHeightDp());
+            FwLog.system("==   res/values-%s", displayInfo.getDpi().name());
+            FwLog.system("==   res/values-sw%ddp", displayInfo.getSmallestWidthDp());
+        }
+        FwLog.system("========= Runtime Information =========");
+    }
+
+    private void loadSettings() {
+        try (InputStream is = mApplication.getResources().openRawResource(R.raw.esm_system_properties)) {
+            PropertyStore store = new TextDatabasePropertyStore(mApplication, "sloth.db")
+                    .loadProperties(JSON.decode(is, PropertySource.class));
+
+            mSettings = new SystemSettings(store);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+
+        // 設定を読み出す
+        final String oldVersionName = mSettings.getLastBootedAppVersionName();
+        final String versionName = ContextUtil.getVersionName(mApplication);
+        mInstallUniqueId = mSettings.getInstallUniqueId();
+        if (StringUtil.isEmpty(mInstallUniqueId)) {
+            mInstallUniqueId = RandomUtil.randString();
+            mSettings.setInstallUniqueId(mInstallUniqueId);
+        }
+
+        final int oldVersionCode = mSettings.getLastBootedAppVersionCode();
+        final int versionCode = ContextUtil.getVersionCode(mApplication);
+
+        FwLog.system("Install Unique ID [%s]", mInstallUniqueId);
+        FwLog.system("VersionCode       [%d] -> [%d]", oldVersionCode, versionCode);
+        FwLog.system("VersionName       [%s] -> [%s]", oldVersionName, versionName);
+
+        mSettings.setLastBootedAppVersionCode(versionCode);
+        mSettings.setLastBootedAppVersionName(versionName);
+        mSettings.commit();
+
+        // バージョンコードかバージョン名が変わったら通知を行う
+        mVersionContext = new VersionContext(oldVersionName, oldVersionCode, versionName, versionCode);
+    }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+        ++mForegroundActivities;
+        if (mForegroundActivities == 1) {
+            // フォアグラウンドに移動した
+            synchronized (mStateListeners) {
+                for (Sloth.ApplicationStateListener listener : mStateListeners) {
+                    listener.onApplicationForeground(activity);
+                }
+            }
+        }
+        FwLog.system("onActivityResumed num[%d] (%s)", mForegroundActivities, activity.toString());
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+        --mForegroundActivities;
+        // バックグラウンドに移動した
+        if (mForegroundActivities == 0) {
+            synchronized (mStateListeners) {
+                for (Sloth.ApplicationStateListener listener : mStateListeners) {
+                    listener.onApplicationBackground();
+                }
+            }
+        }
+        FwLog.system("onActivityPaused num[%d] (%s)", mForegroundActivities, activity.toString());
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+    }
+
+
+    class BroadcastReceiverImpl extends LocalMessageReceiver {
+        public BroadcastReceiverImpl(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onRuntimePermissionUpdated(String[] granted, String[] denied) {
+            synchronized (mStateListeners) {
+                for (Sloth.ApplicationStateListener listener : mStateListeners) {
+                    listener.onRuntimePermissionUpdated(granted, denied);
+                }
+            }
+        }
+    }
+}
