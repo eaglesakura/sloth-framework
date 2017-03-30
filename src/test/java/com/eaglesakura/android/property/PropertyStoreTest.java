@@ -1,11 +1,17 @@
 package com.eaglesakura.android.property;
 
-import com.eaglesakura.android.db.UnitTestCase;
+import com.eaglesakura.android.framework.UnitTestCase;
+import com.eaglesakura.android.property.model.PropertySource;
+import com.eaglesakura.json.JSON;
 import com.eaglesakura.util.CollectionUtil;
 
 import org.junit.Test;
 
+import android.annotation.SuppressLint;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 public class PropertyStoreTest extends UnitTestCase {
 
@@ -87,14 +93,28 @@ public class PropertyStoreTest extends UnitTestCase {
         }
     }
 
-    protected File getPropertyJson() {
+    @Test
+    public void プロパティシートをパースできる() throws Throwable {
+        PropertySource src;
+        try (InputStream is = new FileInputStream(getPropertyJson())) {
+            src = JSON.decode(is, PropertySource.class);
+        }
+
+        assertFalse(CollectionUtil.isEmpty(src.groups));
+        assertFalse(CollectionUtil.isEmpty(src.groups.get(0).properties));
+        assertFalse(CollectionUtil.isEmpty(src.groups.get(1).properties));
+    }
+
+
+    private File getPropertyJson() {
         return getTestAsset("properties.json");
     }
 
     @SuppressLint("NewApi")
-    protected PropertySource loadProperties() throws Throwable {
+    private PropertySource loadProperties() throws Throwable {
         try (InputStream is = new FileInputStream(getPropertyJson())) {
             return JSON.decode(is, PropertySource.class);
         }
     }
+
 }

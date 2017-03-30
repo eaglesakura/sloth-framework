@@ -72,7 +72,7 @@ android {
     }
 
     lintOptions {
-//        disable "NewApi"
+        disable "NewApi"    // try-with-resource等
     }
 }
 
@@ -92,6 +92,7 @@ configurations {
 
 dependencies {
     if (EGLIBRARY_COMPILE_LOCAL) {
+        compile project(':eglibrary:simple-logger')
         compile project(':eglibrary:android-command-service')
         compile project(':eglibrary:android-text-kvs')
         compile project(':eglibrary:alternet')
@@ -105,6 +106,7 @@ dependencies {
         androidTestCompile project(":eglibrary:android-devicetest-support")
         testCompile project(":eglibrary:android-unittest-support")
     } else {
+        compile "com.eaglesakura:simple-logger:2.0.463"
         compile "com.eaglesakura:android-command-service:1.2.458"
         compile "com.eaglesakura:android-text-kvs:2.2.450"
         compile "com.eaglesakura:android-net:1.2.489"
