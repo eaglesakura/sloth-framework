@@ -1,5 +1,12 @@
 package com.eaglesakura.sloth.ui.license;
 
+import com.eaglesakura.android.margarine.Bind;
+import com.eaglesakura.cerberus.BackgroundTask;
+import com.eaglesakura.cerberus.error.TaskCanceledException;
+import com.eaglesakura.collection.DataCollection;
+import com.eaglesakura.lambda.CancelCallback;
+import com.eaglesakura.material.widget.adapter.CardAdapter;
+import com.eaglesakura.material.widget.support.SupportCancelCallbackBuilder;
 import com.eaglesakura.sloth.FwLog;
 import com.eaglesakura.sloth.R;
 import com.eaglesakura.sloth.delegate.fragment.SupportFragmentDelegate;
@@ -7,12 +14,6 @@ import com.eaglesakura.sloth.ui.support.SupportFragment;
 import com.eaglesakura.sloth.ui.support.annotation.BindInterface;
 import com.eaglesakura.sloth.ui.support.annotation.FragmentLayout;
 import com.eaglesakura.sloth.util.AppSupportUtil;
-import com.eaglesakura.android.margarine.Bind;
-import com.eaglesakura.cerberus.BackgroundTask;
-import com.eaglesakura.cerberus.error.TaskCanceledException;
-import com.eaglesakura.collection.DataCollection;
-import com.eaglesakura.lambda.CancelCallback;
-import com.eaglesakura.material.widget.adapter.CardAdapter;
 import com.eaglesakura.util.CollectionUtil;
 
 import android.annotation.SuppressLint;
@@ -80,7 +81,7 @@ public class LicenseListFragment extends SupportFragment {
     @UiThread
     void loadLicenses() {
         asyncUI((BackgroundTask<DataCollection<LicenseItem>> task) -> {
-            return listLicenses(AppSupportUtil.asCancelCallback(task));
+            return listLicenses(SupportCancelCallbackBuilder.from(task).build());
         }).completed((result, task) -> {
             FwLog.system("Loaded %d items", result.size());
             mAdapter.getCollection().addAllAnimated(result.list());

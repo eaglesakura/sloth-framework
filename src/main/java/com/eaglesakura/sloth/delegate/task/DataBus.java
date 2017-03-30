@@ -1,16 +1,16 @@
 package com.eaglesakura.sloth.delegate.task;
 
-import com.eaglesakura.sloth.delegate.lifecycle.LifecycleDelegate;
-import com.eaglesakura.sloth.util.AppSupportUtil;
+import com.eaglesakura.android.thread.UIHandler;
+import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.BackgroundTaskBuilder;
 import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.ExecuteTarget;
 import com.eaglesakura.cerberus.error.TaskCanceledException;
-import com.eaglesakura.android.thread.UIHandler;
-import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.lambda.CancelCallback;
+import com.eaglesakura.material.widget.support.SupportCancelCallbackBuilder;
+import com.eaglesakura.sloth.delegate.lifecycle.LifecycleDelegate;
 import com.eaglesakura.util.Util;
 import com.squareup.otto.AnnotatedHandlerFinder2;
 import com.squareup.otto.Bus;
@@ -172,7 +172,7 @@ public abstract class DataBus<DataType> {
             for (DataBus it : bus) {
                 list.add(it);
             }
-            await(AppSupportUtil.asCancelCallback(task), list);
+            await(SupportCancelCallbackBuilder.from(task).build(), list);
             return list;
         });
     }

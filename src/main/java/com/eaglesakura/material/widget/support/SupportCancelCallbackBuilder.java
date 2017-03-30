@@ -26,7 +26,6 @@ public class SupportCancelCallbackBuilder {
         mCancelCallback = cancelCallback;
     }
 
-
     /**
      * タイムアウト時間を設定する
      *
