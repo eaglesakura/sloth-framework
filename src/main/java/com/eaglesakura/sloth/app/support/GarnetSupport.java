@@ -7,7 +7,7 @@ import com.eaglesakura.cerberus.event.OnAttachEvent;
 import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycle;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 
 import rx.functions.Action1;
 
@@ -53,7 +53,7 @@ public class GarnetSupport {
         /**
          * 依存注入用のBuilderを開始する
          */
-        @Nullable
+        @NonNull
         Garnet.Builder newInjectionBuilder(Context context);
     }
 }

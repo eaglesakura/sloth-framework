@@ -43,11 +43,20 @@ public abstract class SlothFragment extends Fragment {
             synchronized (this) {
                 if (mLifecycle == null) {
                     mLifecycle = new FragmentLifecycle();
+                    onCreateLifecycle(mLifecycle);
                 }
             }
         }
         return mLifecycle;
     }
+
+    /**
+     * ライフサイクルが初期化された
+     */
+    protected void onCreateLifecycle(FragmentLifecycle newLifecycle) {
+
+    }
+
 
     /**
      * ライフサイクル状態を取得する

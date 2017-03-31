@@ -11,6 +11,7 @@ import com.eaglesakura.sloth.ui.support.annotation.FragmentLayout;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -88,7 +89,7 @@ public class SupportProgressFragment extends SupportFragment {
     /**
      * 非同期処理のProgressを表示する
      */
-    public static ProgressToken pushProgress(SupportFragment sender, String message) {
+    public static ProgressToken pushProgress(Fragment sender, String message) {
         ProgressStackManager progressStackManager = FragmentUtil.listInterfaces(sender.getFragmentManager(), SupportProgressFragment.class).get(0).getProgressStackManager();
         ProgressToken token = ProgressToken.fromMessage(progressStackManager, message);
         progressStackManager.push(token);
