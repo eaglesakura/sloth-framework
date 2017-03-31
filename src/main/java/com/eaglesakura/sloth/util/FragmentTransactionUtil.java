@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 /**
  *
  */
-public class AnimationUtil {
+public class FragmentTransactionUtil {
 
     /**
      * Fragmentが上から表示される

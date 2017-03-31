@@ -8,6 +8,7 @@ import com.eaglesakura.cerberus.LifecycleEvent;
 import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.cerberus.event.LifecycleEventImpl;
+import com.eaglesakura.sloth.annotation.Experimental;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.UiThread;
@@ -30,6 +31,7 @@ public abstract class Lifecycle {
     /**
      * 削除時に実行されるアクション一覧
      */
+    @Experimental
     protected List<Action1<Lifecycle>> mDestroyActions = new ArrayList<>();
 
     public Lifecycle() {
@@ -67,6 +69,7 @@ public abstract class Lifecycle {
      * @param onNext  実際に受け取るコールバック
      * @return ラップされたSubscription
      */
+    @Experimental
     public Subscription interrupt(CallbackTime time, Subject subject, Action1 onNext) {
         if (getLifecycleState() == LifecycleState.OnDestroy) {
             return null;

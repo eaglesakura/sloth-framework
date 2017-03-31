@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- *
+ * ライフサイクル系のサポートを行うActivity
  */
 public abstract class SlothActivity extends AppCompatActivity {
     private ActivityLifecycle mLifecycle;

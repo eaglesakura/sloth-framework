@@ -1,9 +1,10 @@
 package com.eaglesakura.sloth.app.delegate;
 
+import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
 import com.eaglesakura.sloth.app.lifecycle.UiLifecycle;
-import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.util.StringUtil;
 
 import android.app.Dialog;
@@ -16,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 /**
  * DialogFragment風の管理を行う場合に使用する
  */
+@Experimental
 public class DialogFragmentDelegate {
     private Dialog mDialog;
 
