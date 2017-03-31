@@ -25,6 +25,5 @@ public class InternalSupportFragmentUtil {
      * これは一時的な処理であるため、将来的に内部処理は削除されるのが望ましい。
      */
     public static void onDetach(@NonNull Fragment fragment) {
-        fragment.mChildFragmentManager = null;
     }
 }

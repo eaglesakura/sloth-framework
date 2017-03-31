@@ -14,13 +14,13 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
 
-public abstract class LifecycleDelegate {
+public abstract class Lifecycle {
 
     protected final BehaviorSubject<LifecycleEvent> mLifecycleSubject = BehaviorSubject.create(new LifecycleEventImpl(LifecycleState.NewObject));
 
     protected final PendingCallbackQueue mCallbackQueue = new PendingCallbackQueue();
 
-    public LifecycleDelegate() {
+    public Lifecycle() {
         mCallbackQueue.bind(mLifecycleSubject);
     }
 
@@ -48,7 +48,7 @@ public abstract class LifecycleDelegate {
      *
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
-    public <T> BackgroundTaskBuilder<T> asyncUI(BackgroundTask.Async<T> background) {
+    public <T> BackgroundTaskBuilder<T> asyncQueue(BackgroundTask.Async<T> background) {
         return async(ExecuteTarget.LocalQueue, CallbackTime.Foreground, background);
     }
 

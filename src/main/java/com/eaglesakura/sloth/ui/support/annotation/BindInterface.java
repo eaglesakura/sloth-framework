@@ -15,16 +15,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface BindInterface {
     /**
-     * 親インターフェースのみを探す
-     */
-    boolean parentOnly() default false;
-
-    /**
-     * 子供のみを探す
-     */
-    boolean childrenOnly() default false;
-
-    /**
      * 見つからないことを許容する
      */
     boolean nullable() default false;

@@ -1,7 +1,7 @@
 package com.eaglesakura.sloth.delegate.activity;
 
 import com.eaglesakura.sloth.R;
-import com.eaglesakura.sloth.delegate.lifecycle.ActivityLifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.ActivityLifecycle;
 import com.eaglesakura.sloth.ui.FragmentHolder;
 import com.eaglesakura.sloth.ui.support.SupportFragment;
 import com.eaglesakura.cerberus.LifecycleState;
@@ -58,7 +58,7 @@ public class ContentHolderActivityDelegate {
         FragmentManager getFragmentManager(@NonNull ContentHolderActivityDelegate self);
     }
 
-    public ContentHolderActivityDelegate(@NonNull ContentHolderActivityCompat compat, @NonNull ActivityLifecycleDelegate lifecycle) {
+    public ContentHolderActivityDelegate(@NonNull ContentHolderActivityCompat compat, @NonNull ActivityLifecycle lifecycle) {
         mHolderCompat = compat;
 
         mFragmentMain = new FragmentHolder<Fragment>(compat.getActivity(this), R.id.Content_Holder_Root, TAG_CONTENT_FRAGMENT_MAIN) {
@@ -90,10 +90,10 @@ public class ContentHolderActivityDelegate {
         lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
             LifecycleState state = it.getState();
             switch (state) {
-                case OnCreated:
+                case OnCreate:
                     onCreate((OnCreateEvent) it);
                     break;
-                case OnResumed:
+                case OnResume:
                     mFragmentMain.onResume();
                     break;
             }

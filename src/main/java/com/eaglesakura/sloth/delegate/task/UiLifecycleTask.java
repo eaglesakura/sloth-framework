@@ -1,6 +1,6 @@
 package com.eaglesakura.sloth.delegate.task;
 
-import com.eaglesakura.sloth.delegate.lifecycle.UiLifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.UiLifecycle;
 
 import android.app.Dialog;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.widget.PopupWindow;
 /**
  * UI系のタスクを分離する
  */
-public class UiLifecycleTask<DelegateType extends UiLifecycleDelegate> extends LifecycleTask<DelegateType> {
+public class UiLifecycleTask<DelegateType extends UiLifecycle> extends LifecycleTask<DelegateType> {
     public UiLifecycleTask(DelegateType delegate) {
         super(delegate);
     }

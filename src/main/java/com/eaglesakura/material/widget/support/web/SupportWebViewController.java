@@ -1,11 +1,11 @@
 package com.eaglesakura.material.widget.support.web;
 
-import com.eaglesakura.sloth.FwLog;
-import com.eaglesakura.sloth.delegate.lifecycle.LifecycleDelegate;
-import com.eaglesakura.sloth.ui.support.SupportFragment;
-import com.eaglesakura.sloth.util.FragmentUtil;
 import com.eaglesakura.android.util.ContextUtil;
+import com.eaglesakura.android.util.FragmentUtil;
 import com.eaglesakura.material.widget.SupportWebView;
+import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.delegate.lifecycle.Lifecycle;
+import com.eaglesakura.sloth.ui.support.SupportFragment;
 import com.eaglesakura.util.Util;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -62,11 +62,11 @@ public class SupportWebViewController {
      */
     int mOldScrollFlag;
 
-    public SupportWebViewController(Callback callback, LifecycleDelegate delegate) {
+    public SupportWebViewController(Callback callback, Lifecycle delegate) {
         mCallback = callback;
         delegate.getCallbackQueue().subscribe(event -> {
             switch (event.getState()) {
-                case OnResumed:
+                case OnResume:
                     Util.ifPresent(getView(), view -> view.setScrollViewCallbacks(mScrollCallback));
                     break;
             }

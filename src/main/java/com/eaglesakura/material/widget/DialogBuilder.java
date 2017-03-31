@@ -3,7 +3,7 @@ package com.eaglesakura.material.widget;
 import com.eaglesakura.android.aquery.AQuery;
 import com.eaglesakura.sloth.FwLog;
 import com.eaglesakura.sloth.R;
-import com.eaglesakura.sloth.delegate.lifecycle.UiLifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.UiLifecycle;
 import com.eaglesakura.sloth.ui.progress.DialogToken;
 import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.android.util.ContextUtil;
@@ -81,7 +81,7 @@ public class DialogBuilder<T> {
     /**
      * ダイアログの表示を開始する
      */
-    public Dialog show(@Nullable UiLifecycleDelegate delegate) {
+    public Dialog show(@Nullable UiLifecycle delegate) {
         AlertDialog dialog = mBuilder.show();
 
         if (delegate != null) {
@@ -110,7 +110,7 @@ public class DialogBuilder<T> {
     /**
      * ダイアログの表示を開始する
      */
-    public Dialog show(@Nullable UiLifecycleDelegate delegate, Object tag) {
+    public Dialog show(@Nullable UiLifecycle delegate, Object tag) {
         AlertDialog dialog = mBuilder.show();
 
         if (delegate != null) {
@@ -127,7 +127,7 @@ public class DialogBuilder<T> {
      * 同一タグのダイアログが存在しないならば、ダイアログを表示する
      */
     @Nullable
-    public Dialog showOnce(@NonNull UiLifecycleDelegate delegate, @NonNull Object tag) {
+    public Dialog showOnce(@NonNull UiLifecycle delegate, @NonNull Object tag) {
 
         if (delegate.hasAutoDismissObject(tag)) {
             FwLog.system("cancel dialog boot[%s]", tag.toString());
@@ -328,7 +328,7 @@ public class DialogBuilder<T> {
             return mDialog != null && !mDialog.isShowing();
         }
 
-        Dialog show(UiLifecycleDelegate delegate) {
+        Dialog show(UiLifecycle delegate) {
             mDialog = UIHandler.await(() -> mBuilder.show(delegate));
             return mDialog;
         }
@@ -360,7 +360,7 @@ public class DialogBuilder<T> {
     /**
      * try-with-resourceで使用するダイアログとして表示を行う
      */
-    public static DialogToken showAsToken(DialogBuilder builder, UiLifecycleDelegate delegate) {
+    public static DialogToken showAsToken(DialogBuilder builder, UiLifecycle delegate) {
         DialogTokenImpl impl = new DialogTokenImpl(builder);
         impl.show(delegate);
         return impl;

@@ -1,7 +1,7 @@
 package com.eaglesakura.sloth.ui.support;
 
 import com.eaglesakura.sloth.delegate.activity.SupportActivityDelegate;
-import com.eaglesakura.sloth.delegate.lifecycle.ActivityLifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.ActivityLifecycle;
 import com.eaglesakura.android.margarine.MargarineKnife;
 import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.BackgroundTaskBuilder;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 public abstract class SupportActivity extends AppCompatActivity implements SupportActivityDelegate.SupportActivityCompat {
 
-    protected final ActivityLifecycleDelegate mLifecycleDelegate = new ActivityLifecycleDelegate();
+    protected final ActivityLifecycle mLifecycleDelegate = new ActivityLifecycle();
 
     protected final SupportActivityDelegate mActivityDelegate = new SupportActivityDelegate(this, mLifecycleDelegate);
 
@@ -160,7 +160,7 @@ public abstract class SupportActivity extends AppCompatActivity implements Suppo
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
     public <T> BackgroundTaskBuilder<T> asyncUI(BackgroundTask.Async<T> background) {
-        return mLifecycleDelegate.asyncUI(background);
+        return mLifecycleDelegate.asyncQueue(background);
     }
 
     /**

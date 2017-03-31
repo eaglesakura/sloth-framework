@@ -1,16 +1,16 @@
 package com.eaglesakura.sloth.ui.support;
 
-import com.eaglesakura.sloth.delegate.fragment.SupportFragmentDelegate;
-import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycleDelegate;
 import com.eaglesakura.android.garnet.Garnet;
+import com.eaglesakura.android.saver.LightSaver;
+import com.eaglesakura.android.util.PermissionUtil;
 import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.BackgroundTaskBuilder;
 import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.ExecuteTarget;
 import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
-import com.eaglesakura.android.saver.LightSaver;
-import com.eaglesakura.android.util.PermissionUtil;
+import com.eaglesakura.sloth.delegate.fragment.SupportFragmentDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycle;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.Size;
 import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.InternalSupportFragmentUtil;
@@ -44,7 +43,7 @@ import java.util.List;
  */
 public abstract class SupportFragment extends Fragment implements SupportFragmentDelegate.SupportFragmentCompat {
 
-    protected final FragmentLifecycleDelegate mLifecycleDelegate = new FragmentLifecycleDelegate();
+    protected final FragmentLifecycle mLifecycleDelegate = new FragmentLifecycle();
 
     protected final SupportFragmentDelegate mFragmentDelegate = new SupportFragmentDelegate(this, mLifecycleDelegate);
 
@@ -77,41 +76,6 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
 
     public <T extends View> T findViewByIdFromActivity(@NonNull Class<T> clazz, @IdRes int id) {
         return mFragmentDelegate.findViewByIdFromActivity(clazz, id);
-    }
-
-    /**
-     * 親クラスを特定のインターフェースに変換する
-     *
-     * 変換できない場合、このメソッドはnullを返却する
-     */
-    @Nullable
-    public <T> T getParent(@NonNull Class<T> clazz) {
-        return mFragmentDelegate.getParent(clazz);
-    }
-
-    /**
-     * 親クラスを特定のインターフェースに変換する
-     *
-     * 変換できない場合、このメソッドはnullを返却する
-     */
-    @NonNull
-    public <T> T getParentOrThrow(@NonNull Class<T> clazz) {
-        return mFragmentDelegate.getParentOrThrow(clazz);
-    }
-
-    @NonNull
-    public <T> List<T> listInterfaces(@NonNull Class<T> clazz) {
-        return mFragmentDelegate.listInterfaces(clazz);
-    }
-
-    public <T> T findInterfaceOrThrow(@NonNull Class<T> clazz) {
-        return mFragmentDelegate.findInterfaceOrThrow(clazz);
-    }
-
-    @NonNull
-    @Size(min = 1)
-    public <T> List<T> listInterfacesOrThrow(@NonNull Class<T> clazz) {
-        return mFragmentDelegate.listInterfacesOrThrow(clazz);
     }
 
     /**
@@ -258,7 +222,7 @@ public abstract class SupportFragment extends Fragment implements SupportFragmen
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
     public <T> BackgroundTaskBuilder<T> asyncUI(BackgroundTask.Async<T> background) {
-        return mLifecycleDelegate.asyncUI(background)
+        return mLifecycleDelegate.asyncQueue(background)
                 .cancelSignal((Fragment) this);
     }
 

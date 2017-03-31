@@ -1,13 +1,13 @@
 package com.eaglesakura.sloth.delegate.activity;
 
-import com.eaglesakura.sloth.R;
-import com.eaglesakura.sloth.delegate.lifecycle.ActivityLifecycleDelegate;
-import com.eaglesakura.sloth.util.AppSupportUtil;
-import com.eaglesakura.sloth.util.FragmentUtil;
 import com.eaglesakura.android.oari.ActivityResult;
-import com.eaglesakura.cerberus.event.OnRestoreEvent;
-import com.eaglesakura.cerberus.event.OnSaveEvent;
 import com.eaglesakura.android.saver.LightSaver;
+import com.eaglesakura.android.util.FragmentUtil;
+import com.eaglesakura.cerberus.event.OnRestoreEvent;
+import com.eaglesakura.cerberus.event.OnSaveInstanceStateEvent;
+import com.eaglesakura.sloth.R;
+import com.eaglesakura.sloth.delegate.lifecycle.ActivityLifecycle;
+import com.eaglesakura.sloth.util.AppSupportUtil;
 import com.eaglesakura.util.ReflectionUtil;
 
 import android.app.Activity;
@@ -42,15 +42,15 @@ public class SupportActivityDelegate {
         Activity getActivity(SupportActivityDelegate self);
     }
 
-    public SupportActivityDelegate(@NonNull SupportActivityCompat compat, @NonNull ActivityLifecycleDelegate lifecycle) {
+    public SupportActivityDelegate(@NonNull SupportActivityCompat compat, @NonNull ActivityLifecycle lifecycle) {
         mCompat = compat;
         lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
-                case OnCreated:
+                case OnCreate:
                     onCreate();
                     break;
                 case OnSaveInstanceState:
-                    onSaveInstanceState((OnSaveEvent) it);
+                    onSaveInstanceState((OnSaveInstanceStateEvent) it);
                     break;
                 case OnRestoreInstanceState:
                     onRestoreInstanceState((OnRestoreEvent) it);
@@ -80,7 +80,7 @@ public class SupportActivityDelegate {
 
     @CallSuper
     @UiThread
-    protected void onSaveInstanceState(OnSaveEvent event) {
+    protected void onSaveInstanceState(OnSaveInstanceStateEvent event) {
         LightSaver.create(event.getBundle())
                 .target(getActivity()).save()
                 .target(this).save();

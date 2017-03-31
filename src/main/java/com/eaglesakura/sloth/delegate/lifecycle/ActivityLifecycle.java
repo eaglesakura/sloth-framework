@@ -2,66 +2,64 @@ package com.eaglesakura.sloth.delegate.lifecycle;
 
 import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.event.LifecycleEventImpl;
+import com.eaglesakura.cerberus.event.OnActivityResultEvent;
 import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.cerberus.event.OnRestoreEvent;
-import com.eaglesakura.cerberus.event.OnSaveEvent;
+import com.eaglesakura.cerberus.event.OnSaveInstanceStateEvent;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.support.annotation.UiThread;
 
-public class ActivityLifecycleDelegate extends UiLifecycleDelegate {
-    @CallSuper
+public class ActivityLifecycle extends UiLifecycle {
     @UiThread
     public void onCreate(Bundle savedInstanceState) {
         mLifecycleSubject.onNext(new OnCreateEvent(savedInstanceState));
     }
 
-    @CallSuper
     @UiThread
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         mLifecycleSubject.onNext(new OnRestoreEvent(savedInstanceState));
     }
 
-    @CallSuper
     @UiThread
     public void onSaveInstanceState(Bundle outState) {
-        mLifecycleSubject.onNext(new OnSaveEvent(outState));
+        mLifecycleSubject.onNext(new OnSaveInstanceStateEvent(outState));
     }
 
-    @CallSuper
     @UiThread
     public void onStart() {
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStarted));
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStart));
     }
 
-    @CallSuper
     @UiThread
     @Override
     public void onResume() {
         super.onResume();
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnResumed));
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnResume));
     }
 
-    @CallSuper
     @UiThread
     @Override
     public void onPause() {
         super.onPause();
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnPaused));
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnPause));
     }
 
-    @CallSuper
     @UiThread
     public void onStop() {
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStopped));
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStop));
     }
 
-    @CallSuper
     @UiThread
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnDestroyed));
+        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnDestroy));
+    }
+
+    @UiThread
+    public void onActivityResult(int requestCode, int result, Intent data) {
+        mLifecycleSubject.onNext(new OnActivityResultEvent(requestCode, result, data));
     }
 }

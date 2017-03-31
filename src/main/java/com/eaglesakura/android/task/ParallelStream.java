@@ -1,6 +1,6 @@
 package com.eaglesakura.android.task;
 
-import com.eaglesakura.sloth.delegate.lifecycle.ServiceLifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.ServiceLifecycle;
 import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.ExecuteTarget;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Deprecated
 class ParallelStream<Src> {
-    final ServiceLifecycleDelegate mDelegate = new ServiceLifecycleDelegate();
+    final ServiceLifecycle mDelegate = new ServiceLifecycle();
 
     final List<Src> mSource;
 

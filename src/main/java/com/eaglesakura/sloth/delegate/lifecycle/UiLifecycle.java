@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class UiLifecycleDelegate extends LifecycleDelegate {
+public abstract class UiLifecycle extends Lifecycle {
     /**
      * 監視対象とするDialog
      */

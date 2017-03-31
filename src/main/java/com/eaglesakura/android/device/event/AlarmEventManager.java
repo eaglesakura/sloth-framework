@@ -1,6 +1,6 @@
 package com.eaglesakura.android.device.event;
 
-import com.eaglesakura.sloth.delegate.lifecycle.LifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.Lifecycle;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -64,15 +64,15 @@ public class AlarmEventManager {
         void onAlarmReceived(AlarmEventManager self, int requestCode, Bundle requestArgments, long delayedTimeMs);
     }
 
-    public AlarmEventManager(Service context, LifecycleDelegate lifecycleDelegate, Callback callback) {
+    public AlarmEventManager(Service context, Lifecycle lifecycleDelegate, Callback callback) {
         this(context, lifecycleDelegate, (AlarmManager) context.getSystemService(Context.ALARM_SERVICE), callback);
     }
 
-    public AlarmEventManager(Activity context, LifecycleDelegate lifecycleDelegate, Callback callback) {
+    public AlarmEventManager(Activity context, Lifecycle lifecycleDelegate, Callback callback) {
         this(context, lifecycleDelegate, (AlarmManager) context.getSystemService(Context.ALARM_SERVICE), callback);
     }
 
-    private AlarmEventManager(Context context, LifecycleDelegate lifecycleDelegate, AlarmManager alarmManager, Callback callback) {
+    private AlarmEventManager(Context context, Lifecycle lifecycleDelegate, AlarmManager alarmManager, Callback callback) {
         mContext = context.getApplicationContext();
         mAlarmManager = alarmManager;
         mCallback = callback;
@@ -80,10 +80,10 @@ public class AlarmEventManager {
         ACTION_SELF_WAKEUP_BROADCAST = context.getPackageName() + "/" + getClass().getName() + ".ACTION_SELF_WAKEUP_BROADCAST" + "/" + hashCode();
         lifecycleDelegate.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
-                case OnCreated:
+                case OnCreate:
                     onCreate();
                     break;
-                case OnDestroyed:
+                case OnDestroy:
                     onDestroy();
                     break;
             }

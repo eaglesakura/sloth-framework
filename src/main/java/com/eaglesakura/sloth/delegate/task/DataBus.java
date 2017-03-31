@@ -10,7 +10,7 @@ import com.eaglesakura.cerberus.error.TaskCanceledException;
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.material.widget.support.SupportCancelCallbackBuilder;
-import com.eaglesakura.sloth.delegate.lifecycle.LifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.Lifecycle;
 import com.eaglesakura.util.Util;
 import com.squareup.otto.AnnotatedHandlerFinder2;
 import com.squareup.otto.Bus;
@@ -146,7 +146,7 @@ public abstract class DataBus<DataType> {
         }
     }
 
-    public <T extends DataBus> T bind(@NonNull LifecycleDelegate delegate, @NonNull Object receiver) {
+    public <T extends DataBus> T bind(@NonNull Lifecycle delegate, @NonNull Object receiver) {
         LifecycleLinkBus.register(delegate, getBus(), receiver);
         return (T) this;
     }
@@ -166,7 +166,7 @@ public abstract class DataBus<DataType> {
     /**
      * データの受取待ちを行うタスクを生成する
      */
-    public static BackgroundTaskBuilder<List<DataBus>> awaitTask(LifecycleDelegate delegate, ExecuteTarget executeTarget, CallbackTime callbackTime, DataBus... bus) {
+    public static BackgroundTaskBuilder<List<DataBus>> awaitTask(Lifecycle delegate, ExecuteTarget executeTarget, CallbackTime callbackTime, DataBus... bus) {
         return delegate.async(executeTarget, callbackTime, (BackgroundTask<List<DataBus>> task) -> {
             List<DataBus> list = new ArrayList<>();
             for (DataBus it : bus) {

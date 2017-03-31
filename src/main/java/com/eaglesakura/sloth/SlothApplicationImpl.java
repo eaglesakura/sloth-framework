@@ -8,7 +8,7 @@ import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.json.JSON;
 import com.eaglesakura.sloth.context.VersionContext;
-import com.eaglesakura.sloth.delegate.lifecycle.ServiceLifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.ServiceLifecycle;
 import com.eaglesakura.sloth.gen.prop.SystemSettings;
 import com.eaglesakura.sloth.ui.message.LocalMessageReceiver;
 import com.eaglesakura.util.RandomUtil;
@@ -51,7 +51,7 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
     String mInstallUniqueId;
 
     @NonNull
-    ServiceLifecycleDelegate mLifecycleDelegate = new ServiceLifecycleDelegate();
+    ServiceLifecycle mLifecycleDelegate = new ServiceLifecycle();
 
     @NonNull
     PendingCallbackQueue mCallbackQueue = new PendingCallbackQueue();

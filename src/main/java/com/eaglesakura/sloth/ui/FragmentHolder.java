@@ -1,6 +1,6 @@
 package com.eaglesakura.sloth.ui;
 
-import com.eaglesakura.sloth.delegate.lifecycle.LifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.Lifecycle;
 import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.util.ReflectionUtil;
@@ -144,13 +144,13 @@ public abstract class FragmentHolder<T extends Fragment> {
         mFragment = null;
     }
 
-    public FragmentHolder<T> bind(LifecycleDelegate delegate) {
+    public FragmentHolder<T> bind(Lifecycle delegate) {
         delegate.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
-                case OnCreated:
+                case OnCreate:
                     onCreate(((OnCreateEvent) it).getBundle());
                     return;
-                case OnResumed:
+                case OnResume:
                     onResume();
                     return;
             }

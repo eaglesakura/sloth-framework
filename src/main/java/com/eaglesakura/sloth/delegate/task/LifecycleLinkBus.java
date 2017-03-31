@@ -1,6 +1,6 @@
 package com.eaglesakura.sloth.delegate.task;
 
-import com.eaglesakura.sloth.delegate.lifecycle.LifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.Lifecycle;
 import com.eaglesakura.cerberus.LifecycleState;
 import com.squareup.otto.Bus;
 
@@ -13,16 +13,16 @@ public class LifecycleLinkBus {
 
     protected final Bus mBus;
 
-    protected final LifecycleDelegate mLifecycleDelegate;
+    protected final Lifecycle mLifecycleDelegate;
 
     private Subscription mSubscribe;
 
-    protected LifecycleLinkBus(LifecycleDelegate lifecycleDelegate, Bus bus, Object receiver) {
+    protected LifecycleLinkBus(Lifecycle lifecycleDelegate, Bus bus, Object receiver) {
         mLifecycleDelegate = lifecycleDelegate;
         mBus = bus;
         mBus.register(receiver);
         mSubscribe = mLifecycleDelegate.getCallbackQueue().getObservable().subscribe(event -> {
-            if (event.getState() == LifecycleState.OnDestroyed) {
+            if (event.getState() == LifecycleState.OnDestroy) {
                 mBus.unregister(receiver);
                 mSubscribe.unsubscribe();
             }
@@ -38,7 +38,7 @@ public class LifecycleLinkBus {
      * @param bus               対象Bus
      * @param receiver          対象Receiver
      */
-    public static void register(LifecycleDelegate lifecycleDelegate, Bus bus, Object receiver) {
+    public static void register(Lifecycle lifecycleDelegate, Bus bus, Object receiver) {
         new LifecycleLinkBus(lifecycleDelegate, bus, receiver);
     }
 }

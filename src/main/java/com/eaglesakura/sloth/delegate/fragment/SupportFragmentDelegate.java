@@ -1,25 +1,25 @@
 package com.eaglesakura.sloth.delegate.fragment;
 
-import com.eaglesakura.sloth.Sloth;
-import com.eaglesakura.sloth.delegate.activity.SupportActivityDelegate;
-import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycleDelegate;
-import com.eaglesakura.sloth.ui.support.annotation.BindInterface;
-import com.eaglesakura.sloth.ui.support.annotation.FragmentLayout;
-import com.eaglesakura.sloth.ui.support.annotation.FragmentMenu;
-import com.eaglesakura.sloth.util.AppSupportUtil;
-import com.eaglesakura.sloth.util.FragmentUtil;
 import com.eaglesakura.android.garnet.Garnet;
 import com.eaglesakura.android.margarine.MargarineKnife;
 import com.eaglesakura.android.oari.ActivityResult;
-import com.eaglesakura.cerberus.event.OnAttachEvent;
-import com.eaglesakura.cerberus.event.OnCreateEvent;
-import com.eaglesakura.cerberus.event.OnSaveEvent;
-import com.eaglesakura.cerberus.event.OnViewCreateEvent;
 import com.eaglesakura.android.saver.BundleState;
 import com.eaglesakura.android.saver.LightSaver;
 import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.android.util.ContextUtil;
+import com.eaglesakura.android.util.FragmentUtil;
 import com.eaglesakura.android.util.PermissionUtil;
+import com.eaglesakura.cerberus.event.OnAttachEvent;
+import com.eaglesakura.cerberus.event.OnCreateEvent;
+import com.eaglesakura.cerberus.event.OnSaveInstanceStateEvent;
+import com.eaglesakura.cerberus.event.OnCreateViewEvent;
+import com.eaglesakura.sloth.Sloth;
+import com.eaglesakura.sloth.delegate.activity.SupportActivityDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycle;
+import com.eaglesakura.sloth.ui.support.annotation.BindInterface;
+import com.eaglesakura.sloth.ui.support.annotation.FragmentLayout;
+import com.eaglesakura.sloth.ui.support.annotation.FragmentMenu;
+import com.eaglesakura.sloth.util.AppSupportUtil;
 import com.eaglesakura.util.CollectionUtil;
 import com.eaglesakura.util.ReflectionUtil;
 import com.eaglesakura.util.StringUtil;
@@ -33,7 +33,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.Size;
 import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -45,8 +44,6 @@ import android.view.MenuInflater;
 import android.view.View;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -127,24 +124,24 @@ public class SupportFragmentDelegate {
      */
     private View mView;
 
-    public SupportFragmentDelegate(@NonNull SupportFragmentCompat compat, @NonNull FragmentLifecycleDelegate lifecycle) {
+    public SupportFragmentDelegate(@NonNull SupportFragmentCompat compat, @NonNull FragmentLifecycle lifecycle) {
         mCompat = compat;
 
         lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
-                case OnCreated:
+                case OnCreate:
                     onCreate((OnCreateEvent) it);
                     break;
                 case OnAttach:
                     onAttach((OnAttachEvent) it);
                     break;
-                case OnViewCreated:
-                    onCreateView((OnViewCreateEvent) it);
+                case OnCreateView:
+                    onCreateView((OnCreateViewEvent) it);
                     break;
                 case OnSaveInstanceState:
-                    onSaveInstanceState((OnSaveEvent) it);
+                    onSaveInstanceState((OnSaveInstanceStateEvent) it);
                     break;
-                case OnViewDestroyed:
+                case OnDestroyView:
                     onDestroyedView();
                     break;
             }
@@ -204,7 +201,7 @@ public class SupportFragmentDelegate {
     }
 
     @CallSuper
-    protected void onCreateView(OnViewCreateEvent event) {
+    protected void onCreateView(OnCreateViewEvent event) {
         if (mView != null) {
             return;
         }
@@ -288,101 +285,6 @@ public class SupportFragmentDelegate {
     }
 
     /**
-     * 親クラスを特定のインターフェースに変換する
-     *
-     * 変換できない場合、このメソッドはnullを返却する
-     */
-    @SuppressWarnings("unchecked")
-    @Nullable
-    public <T> T getParent(@NonNull Class<T> clazz) {
-        Fragment fragment = getParentFragment();
-        Activity activity = getActivity();
-        if (ReflectionUtil.instanceOf(fragment, clazz)) {
-            return (T) fragment;
-        }
-
-        if (ReflectionUtil.instanceOf(activity, clazz)) {
-            return (T) activity;
-        }
-
-        return null;
-    }
-
-    /**
-     * 指定したインターフェースを実装しているクラス全てをeachで実行する
-     *
-     * 自分自身もインターフェースを実装している場合もコールバックを行う
-     *
-     * @param clazz 検索するインターフェース
-     */
-    @SuppressWarnings("unchecked")
-    @NonNull
-    public <T> List<T> listInterfaces(@NonNull Class<T> clazz) {
-        List<T> result = new ArrayList<>();
-        for (Fragment frag : FragmentUtil.listFragments(getActivity(AppCompatActivity.class).getSupportFragmentManager(), fragment -> ReflectionUtil.instanceOf(fragment, clazz))) {
-            result.add((T) ((Object) frag));
-        }
-
-        if (ReflectionUtil.instanceOf(getActivity(), clazz)) {
-            result.add((T) ((Object) getActivity()));
-        }
-
-        return result;
-    }
-
-    /**
-     * 指定されたインターフェースを列挙する。
-     *
-     * インターフェースが見つからない場合、例外を投げる。
-     */
-    @NonNull
-    @Size(min = 1)
-    public <T> List<T> listInterfacesOrThrow(@NonNull Class<T> clazz) {
-        List<T> result = listInterfaces(clazz);
-        if (result.isEmpty()) {
-            throw new IllegalStateException(clazz.getName());
-        }
-
-        return result;
-    }
-
-    /**
-     * 指定されたインターフェースを検索し、最初に見つかったものを返す。
-     * インターフェースが見つからない場合、例外を投げる。
-     *
-     * @param clazz 検索対象
-     */
-    public <T> T findInterfaceOrThrow(@NonNull Class<T> clazz) {
-        return listInterfacesOrThrow(clazz).get(0);
-    }
-
-    /**
-     * 親クラスを特定のインターフェースに変換する
-     *
-     * 変換できない場合、このメソッドはnullを返却する。
-     * 親Fragmentを辿り、対応しているFragmentを検索する。
-     */
-    @NonNull
-    public <T> T getParentOrThrow(@NonNull Class<T> clazz) {
-        Fragment fragment = getParentFragment();
-        Activity activity = getActivity();
-
-        while (fragment != null) {
-            if (ReflectionUtil.instanceOf(fragment, clazz)) {
-                return (T) fragment;
-            }
-
-            fragment = fragment.getParentFragment();
-        }
-
-        if (ReflectionUtil.instanceOf(activity, clazz)) {
-            return (T) activity;
-        }
-
-        throw new IllegalStateException(clazz.getName());
-    }
-
-    /**
      * ActionBarを取得する
      */
     @SuppressWarnings("unused")
@@ -411,32 +313,22 @@ public class SupportFragmentDelegate {
     /**
      * インターフェースのバインディングを行なう
      */
-    private void bindInterface(Field field) {
+    private void bindInterface(Context context, Field field) {
         BindInterface annotation = field.getAnnotation(BindInterface.class);
         try {
             Object value;
             if (ReflectionUtil.isListInterface(field)) {
                 // リストオブジェクト
                 // 通常Object
-                if (annotation.parentOnly()) {
-                    //noinspection ArraysAsListWithZeroOrOneArgument
-                    value = Arrays.asList(getParent(field.getType()));
-                } else if (annotation.childrenOnly()) {
-                    value = FragmentUtil.listFragments(getChildFragmentManager(), it -> ReflectionUtil.instanceOf(it, field.getType()));
-                } else {
-                    value = FragmentUtil.listFragments(getActivity(AppCompatActivity.class).getSupportFragmentManager(), it -> ReflectionUtil.instanceOf(it, field.getType()));
+                List<Fragment> fragments = FragmentUtil.listFragments(getActivity(AppCompatActivity.class).getSupportFragmentManager(), it -> ReflectionUtil.instanceOf(it, field.getType()));
+                if (fragments.isEmpty()) {
+                    throw new IllegalStateException();
                 }
+                value = fragments;
             } else {
                 // 通常Object
-                if (annotation.parentOnly()) {
-                    value = getParent(field.getType());
-                } else if (annotation.childrenOnly()) {
-                    List<Fragment> fragments = FragmentUtil.listFragments(getChildFragmentManager(), it -> ReflectionUtil.instanceOf(it, field.getType()));
-                    value = fragments.get(0);
-                } else {
-                    List objects = listInterfacesOrThrow(field.getType());
-                    value = objects.get(0);
-                }
+                List objects = FragmentUtil.listInterfaces(((AppCompatActivity) getActivity()), field.getType());
+                value = objects.get(0);
             }
             field.setAccessible(true);
             field.set(mCompat, value);
@@ -451,6 +343,7 @@ public class SupportFragmentDelegate {
     @CallSuper
     @UiThread
     protected void onAttach(OnAttachEvent event) {
+
         if (!mInjectedInstance) {
             Garnet.Builder builder = mCompat.newInjectionBuilder(this, event.getContext());
             if (builder == null) {
@@ -461,7 +354,7 @@ public class SupportFragmentDelegate {
 
             // バインド対象のインターフェースを検索する
             for (Field field : ReflectionUtil.listAnnotationFields(mCompat.getClass(), BindInterface.class)) {
-                bindInterface(field);
+                bindInterface(event.getContext(), field);
             }
 
             mInjectedInstance = true;
@@ -478,7 +371,7 @@ public class SupportFragmentDelegate {
 
     @CallSuper
     @UiThread
-    protected void onSaveInstanceState(OnSaveEvent event) {
+    protected void onSaveInstanceState(OnSaveInstanceStateEvent event) {
 
         LightSaver.Builder builder = mCompat.newBundleBuilder(this, event.getBundle(), getFragment().getContext());
         if (builder == null) {

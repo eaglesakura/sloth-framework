@@ -1,8 +1,8 @@
 package com.eaglesakura.sloth.delegate.fragment;
 
 import com.eaglesakura.sloth.FwLog;
-import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycleDelegate;
-import com.eaglesakura.sloth.delegate.lifecycle.UiLifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycle;
+import com.eaglesakura.sloth.delegate.lifecycle.UiLifecycle;
 import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.util.StringUtil;
 
@@ -23,17 +23,17 @@ public class DialogFragmentDelegate {
     private final SupportDialogFragmentCompat mCompat;
 
     @NonNull
-    private final UiLifecycleDelegate mLifecycleDelegate;
+    private final UiLifecycle mLifecycleDelegate;
 
-    public DialogFragmentDelegate(@NonNull SupportDialogFragmentCompat compat, @NonNull FragmentLifecycleDelegate lifecycle) {
+    public DialogFragmentDelegate(@NonNull SupportDialogFragmentCompat compat, @NonNull FragmentLifecycle lifecycle) {
         mCompat = compat;
         mLifecycleDelegate = lifecycle;
         lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
-                case OnCreated:
+                case OnCreate:
                     onCreate((OnCreateEvent) it);
                     break;
-                case OnDestroyed:
+                case OnDestroy:
                     onDestroy();
                     break;
             }

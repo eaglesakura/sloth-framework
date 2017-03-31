@@ -1,12 +1,13 @@
 package com.eaglesakura.material.widget.support;
 
+import com.eaglesakura.android.margarine.Bind;
+import com.eaglesakura.android.util.FragmentUtil;
+import com.eaglesakura.material.widget.MaterialProgressView;
 import com.eaglesakura.sloth.delegate.fragment.SupportFragmentDelegate;
 import com.eaglesakura.sloth.ui.progress.ProgressStackManager;
 import com.eaglesakura.sloth.ui.progress.ProgressToken;
 import com.eaglesakura.sloth.ui.support.SupportFragment;
 import com.eaglesakura.sloth.ui.support.annotation.FragmentLayout;
-import com.eaglesakura.android.margarine.Bind;
-import com.eaglesakura.material.widget.MaterialProgressView;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -88,7 +89,7 @@ public class SupportProgressFragment extends SupportFragment {
      * 非同期処理のProgressを表示する
      */
     public static ProgressToken pushProgress(SupportFragment sender, String message) {
-        ProgressStackManager progressStackManager = sender.findInterfaceOrThrow(SupportProgressFragment.class).getProgressStackManager();
+        ProgressStackManager progressStackManager = FragmentUtil.listInterfaces(sender.getFragmentManager(), SupportProgressFragment.class).get(0).getProgressStackManager();
         ProgressToken token = ProgressToken.fromMessage(progressStackManager, message);
         progressStackManager.push(token);
 

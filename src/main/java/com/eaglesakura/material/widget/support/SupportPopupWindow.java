@@ -2,7 +2,7 @@ package com.eaglesakura.material.widget.support;
 
 import com.eaglesakura.android.device.display.DisplayInfo;
 import com.eaglesakura.sloth.FwLog;
-import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycle;
 import com.eaglesakura.android.util.ViewUtil;
 import com.eaglesakura.lambda.Action1;
 
@@ -63,7 +63,7 @@ public class SupportPopupWindow {
     /**
      * ライフサイクルに合わせて自動的に閉じる
      */
-    public SupportPopupWindow autoDismiss(FragmentLifecycleDelegate lifecycleDelegate) {
+    public SupportPopupWindow autoDismiss(FragmentLifecycle lifecycleDelegate) {
         lifecycleDelegate.addAutoDismiss(mWindow);
         return this;
     }

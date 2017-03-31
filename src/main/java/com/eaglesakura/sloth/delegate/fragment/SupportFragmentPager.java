@@ -114,7 +114,7 @@ public class SupportFragmentPager {
                 SupportFragment cacheFragment = (SupportFragment) holder.mCacheFragment;
                 LifecycleState lifecycleState = cacheFragment.getLifecycleState();
 
-                if (lifecycleState.ordinal() >= LifecycleState.OnDestroyed.ordinal()) {
+                if (lifecycleState.ordinal() >= LifecycleState.OnDestroy.ordinal()) {
                     // 廃棄済みのため、キャッシュを削除すべき
                     FwLog.system("ViewPager FragmentCacheClean[%s] lifecycle[%s]", cacheFragment.toString(), lifecycleState.toString());
                     holder.mCacheFragment = null;

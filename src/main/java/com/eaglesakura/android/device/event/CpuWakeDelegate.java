@@ -1,6 +1,6 @@
 package com.eaglesakura.android.device.event;
 
-import com.eaglesakura.sloth.delegate.lifecycle.LifecycleDelegate;
+import com.eaglesakura.sloth.delegate.lifecycle.Lifecycle;
 
 import android.content.Context;
 import android.os.PowerManager;
@@ -24,13 +24,13 @@ public class CpuWakeDelegate {
     @NonNull
     private PowerManager.WakeLock wakeLock;
 
-    public CpuWakeDelegate(@NonNull Context context, @NonNull LifecycleDelegate lifecycle) {
+    public CpuWakeDelegate(@NonNull Context context, @NonNull Lifecycle lifecycle) {
 
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
         lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
             switch (it.getState()) {
-                case OnDestroyed:
+                case OnDestroy:
                     onDestroyed();
                     break;
             }
