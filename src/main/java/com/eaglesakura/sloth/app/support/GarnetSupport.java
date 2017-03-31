@@ -4,7 +4,7 @@ import com.eaglesakura.android.garnet.Garnet;
 import com.eaglesakura.cerberus.LifecycleEvent;
 import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.event.OnAttachEvent;
-import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycle;
+import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

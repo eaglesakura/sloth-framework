@@ -4,8 +4,8 @@ import com.eaglesakura.android.saver.LightSaver;
 import com.eaglesakura.cerberus.LifecycleEvent;
 import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.cerberus.event.OnSaveInstanceStateEvent;
-import com.eaglesakura.sloth.delegate.lifecycle.ActivityLifecycle;
-import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycle;
+import com.eaglesakura.sloth.app.lifecycle.ActivityLifecycle;
+import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;

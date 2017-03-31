@@ -6,9 +6,9 @@ import com.eaglesakura.cerberus.LifecycleEvent;
 import com.eaglesakura.cerberus.event.OnCreateOptionsMenuEvent;
 import com.eaglesakura.cerberus.event.OnCreateViewEvent;
 import com.eaglesakura.sloth.Sloth;
-import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycle;
-import com.eaglesakura.sloth.ui.support.annotation.FragmentLayout;
-import com.eaglesakura.sloth.ui.support.annotation.FragmentMenu;
+import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
+import com.eaglesakura.sloth.annotation.FragmentLayout;
+import com.eaglesakura.sloth.annotation.FragmentMenu;
 import com.eaglesakura.util.StringUtil;
 
 import android.content.Context;

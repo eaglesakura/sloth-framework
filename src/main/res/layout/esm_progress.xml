@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.eaglesakura.material.widget.MaterialProgressView
+    <com.eaglesakura.sloth.view.SupportProgressView
             android:id="@+id/Item.Progress"
             android:visibility="gone"
             android:layout_width="match_parent"

@@ -1,41 +1,45 @@
 package com.eaglesakura.sloth.ui.license;
 
-import com.eaglesakura.sloth.delegate.fragment.SupportFragmentDelegate;
-import com.eaglesakura.sloth.ui.support.SupportFragment;
-import com.eaglesakura.sloth.ui.support.annotation.FragmentLayout;
 import com.eaglesakura.android.margarine.Bind;
 import com.eaglesakura.android.saver.BundleState;
+import com.eaglesakura.sloth.annotation.FragmentLayout;
+import com.eaglesakura.sloth.app.SlothFragment;
+import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
+import com.eaglesakura.sloth.app.support.ViewBindingSupport;
 
 import android.content.Context;
 import android.view.Menu;
+import android.view.View;
 import android.widget.TextView;
 
 /**
  * ライセンス詳細テキストを表示するFragment
  */
 @FragmentLayout(resName = "esm_license_detail")
-public class LicenseDetailFragment extends SupportFragment {
+public class LicenseDetailFragment extends SlothFragment {
 
     @Bind(resName = "eglibrary.Item.Value")
     TextView mDetailView;
 
     @BundleState
     String mDetail;
+
     private String mTitle;
 
     @Override
-    public void onAfterViews(SupportFragmentDelegate self, int flags) {
-        mDetailView.setText(mDetail);
-    }
+    protected void onCreateLifecycle(FragmentLifecycle newLifecycle) {
+        super.onCreateLifecycle(newLifecycle);
+        ViewBindingSupport.bind(newLifecycle, this, new ViewBindingSupport.Callback() {
+            @Override
+            public void onAfterViews(View rootView) {
+                mDetailView.setText(mDetail);
+            }
 
-    @Override
-    public void onAfterBindMenu(SupportFragmentDelegate self, Menu menu) {
+            @Override
+            public void onAfterBindMenu(Menu menu) {
 
-    }
-
-    @Override
-    public void onAfterInjection(SupportFragmentDelegate self) {
-
+            }
+        });
     }
 
     @Override

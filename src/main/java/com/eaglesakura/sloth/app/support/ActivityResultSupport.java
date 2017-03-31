@@ -4,8 +4,8 @@ import com.eaglesakura.android.oari.ActivityResult;
 import com.eaglesakura.cerberus.LifecycleEvent;
 import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.event.OnActivityResultEvent;
-import com.eaglesakura.sloth.delegate.lifecycle.ActivityLifecycle;
-import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycle;
+import com.eaglesakura.sloth.app.lifecycle.ActivityLifecycle;
+import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;

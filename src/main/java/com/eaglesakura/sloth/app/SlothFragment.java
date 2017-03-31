@@ -1,11 +1,13 @@
 package com.eaglesakura.sloth.app;
 
+import com.eaglesakura.android.util.FragmentUtil;
 import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.BackgroundTaskBuilder;
-import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
-import com.eaglesakura.sloth.delegate.lifecycle.FragmentLifecycle;
+import com.eaglesakura.sloth.annotation.BindInterface;
+import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
+import com.eaglesakura.util.ReflectionUtil;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +24,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * startActivityForResultを行う場合、ParentFragmentが存在していたらそちらのstartActivityForResultを呼び出す。
@@ -94,7 +99,40 @@ public abstract class SlothFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        // インターフェースを検索し直す
+        // バインド対象のインターフェースを検索する
+        for (Field field : ReflectionUtil.listAnnotationFields(getClass(), BindInterface.class)) {
+            bindInterface(field);
+        }
+
         getLifecycle().onAttach(context);
+    }
+
+    /**
+     * インターフェースのバインディングを行なう
+     */
+    private void bindInterface(Field field) {
+        BindInterface annotation = field.getAnnotation(BindInterface.class);
+        try {
+            Object value;
+            if (ReflectionUtil.isListInterface(field)) {
+                // リストオブジェクト
+                // 通常Object
+                value = FragmentUtil.listInterfaces(((AppCompatActivity) getActivity()), field.getType());
+            } else {
+                // 通常Object
+                List objects = FragmentUtil.listInterfaces(((AppCompatActivity) getActivity()), field.getType());
+                value = objects.get(0);
+            }
+            field.setAccessible(true);
+            field.set(this, value);
+        } catch (Exception e) {
+            // null許容しないなら、例外を投げて終了する
+            if (!annotation.nullable()) {
+                throw new Error("bind failed :: " + field.getType() + " " + field.getName(), e);
+            }
+        }
     }
 
     @Override
@@ -150,16 +188,6 @@ public abstract class SlothFragment extends Fragment {
      */
     public PendingCallbackQueue getCallbackQueue() {
         return getLifecycle().getCallbackQueue();
-    }
-
-    /**
-     * 特定タイミングのUIスレッドで処理させる
-     *
-     * @param time   処理タイミング
-     * @param action アクション
-     */
-    public void runOnUi(CallbackTime time, Runnable action) {
-        getCallbackQueue().run(time, action);
     }
 
     /**

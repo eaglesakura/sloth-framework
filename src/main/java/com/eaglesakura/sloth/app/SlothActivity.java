@@ -2,7 +2,7 @@ package com.eaglesakura.sloth.app;
 
 import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
-import com.eaglesakura.sloth.delegate.lifecycle.ActivityLifecycle;
+import com.eaglesakura.sloth.app.lifecycle.ActivityLifecycle;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
  *
  */
 public abstract class SlothActivity extends AppCompatActivity {
-
     private ActivityLifecycle mLifecycle;
 
     public ActivityLifecycle getLifecycle() {

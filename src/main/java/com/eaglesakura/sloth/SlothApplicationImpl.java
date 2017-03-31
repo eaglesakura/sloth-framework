@@ -1,16 +1,15 @@
 package com.eaglesakura.sloth;
 
 import com.eaglesakura.android.device.display.DisplayInfo;
-import com.eaglesakura.android.property.PropertyStore;
-import com.eaglesakura.android.property.TextDatabasePropertyStore;
-import com.eaglesakura.android.property.model.PropertySource;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.json.JSON;
-import com.eaglesakura.sloth.context.VersionContext;
-import com.eaglesakura.sloth.delegate.lifecycle.ServiceLifecycle;
+import com.eaglesakura.sloth.app.VersionContext;
+import com.eaglesakura.sloth.app.lifecycle.ServiceLifecycle;
+import com.eaglesakura.sloth.database.property.PropertyStore;
+import com.eaglesakura.sloth.database.property.TextDatabasePropertyStore;
+import com.eaglesakura.sloth.database.property.model.PropertySource;
 import com.eaglesakura.sloth.gen.prop.SystemSettings;
-import com.eaglesakura.sloth.ui.message.LocalMessageReceiver;
 import com.eaglesakura.util.RandomUtil;
 import com.eaglesakura.util.StringUtil;
 

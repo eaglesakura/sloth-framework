@@ -1,7 +1,7 @@
 package com.eaglesakura.sloth.ui.license;
 
 import com.eaglesakura.sloth.R;
-import com.eaglesakura.sloth.ui.support.SupportActivity;
+import com.eaglesakura.sloth.app.SlothActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import android.support.v7.widget.Toolbar;
 /**
  * ライセンスの詳細表記用Activity
  */
-public class LicenseDetailActivity extends SupportActivity {
+public class LicenseDetailActivity extends SlothActivity {
     static final String TAG_LICENSE_CONTENT = "TAG_LICENSE_CONTENT";
 
     static final String EXTRA_LICENSE_TITLE = "EXTRA_LICENSE_TITLE";

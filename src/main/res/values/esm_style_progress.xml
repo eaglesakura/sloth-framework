@@ -13,7 +13,7 @@
         <item name="spb_colors">@array/EsMaterial_Widget_Progress_ColorTable</item>
         <item name="spb_interpolator">spb_interpolator_decelerate</item>
     </style>
-    <declare-styleable name="MaterialProgressView">
+    <declare-styleable name="SupportProgressView">
         <attr name="esmText" format="string"/>
     </declare-styleable>
 
