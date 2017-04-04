@@ -111,7 +111,7 @@ dependencies {
         compile "com.eaglesakura:android-net:1.2.489"
         compile "com.eaglesakura:onactivityresult-invoke:1.1.460"
         compile "com.eaglesakura:small-aquery:1.1.63"
-        compile "com.eaglesakura:cerberus:2.2.450"
+        compile "com.eaglesakura:cerberus:2.3.5"
         compile "com.eaglesakura:margarineknife:1.3.246"
         compile "com.eaglesakura:garnet:1.0.195"
         compile "com.eaglesakura:light-saver:1.1.107"
