@@ -1,6 +1,6 @@
-package com.eaglesakura.sloth.database.property;
+package com.eaglesakura.sloth.db.property;
 
-import com.eaglesakura.sloth.database.ApplicationDataProvider;
+import com.eaglesakura.sloth.db.ApplicationDataProvider;
 
 import android.content.ContentValues;
 import android.content.Context;

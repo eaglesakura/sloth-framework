@@ -1,7 +1,7 @@
 package com.eaglesakura.sloth.ui.pager;
 
 import com.eaglesakura.cerberus.LifecycleState;
-import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.Sloth;
 import com.eaglesakura.sloth.app.SlothFragment;
 
@@ -119,7 +119,7 @@ public class SupportFragmentPager {
 
                 if (lifecycleState.ordinal() >= LifecycleState.OnDestroy.ordinal()) {
                     // 廃棄済みのため、キャッシュを削除すべき
-                    FwLog.system("ViewPager FragmentCacheClean[%s] lifecycle[%s]", cacheFragment.toString(), lifecycleState.toString());
+                    SlothLog.system("ViewPager FragmentCacheClean[%s] lifecycle[%s]", cacheFragment.toString(), lifecycleState.toString());
                     holder.mCacheFragment = null;
                 }
             }
@@ -161,7 +161,7 @@ public class SupportFragmentPager {
                 if (mCacheFragment == null) {
                     throw new IllegalStateException();
                 }
-                FwLog.system("ViewPager Create TabFragment[%s]", mCacheFragment.toString());
+                SlothLog.system("ViewPager Create TabFragment[%s]", mCacheFragment.toString());
             }
             return mCacheFragment;
         }

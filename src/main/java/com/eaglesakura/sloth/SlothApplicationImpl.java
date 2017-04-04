@@ -6,9 +6,9 @@ import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.json.JSON;
 import com.eaglesakura.sloth.app.VersionContext;
 import com.eaglesakura.sloth.app.lifecycle.ServiceLifecycle;
-import com.eaglesakura.sloth.database.property.PropertyStore;
-import com.eaglesakura.sloth.database.property.TextDatabasePropertyStore;
-import com.eaglesakura.sloth.database.property.model.PropertySource;
+import com.eaglesakura.sloth.db.property.PropertyStore;
+import com.eaglesakura.sloth.db.property.TextDatabasePropertyStore;
+import com.eaglesakura.sloth.db.property.model.PropertySource;
 import com.eaglesakura.sloth.gen.prop.SystemSettings;
 import com.eaglesakura.util.RandomUtil;
 import com.eaglesakura.util.StringUtil;
@@ -83,20 +83,20 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
             return;
         }
 
-        FwLog.system("========= Runtime Information =========");
-        FwLog.system("== Device %s", Build.MODEL);
+        SlothLog.system("========= Runtime Information =========");
+        SlothLog.system("== Device %s", Build.MODEL);
         {
             DisplayInfo displayInfo = new DisplayInfo(mApplication);
-            FwLog.system("== Display %d.%d inch = %s",
+            SlothLog.system("== Display %d.%d inch = %s",
                     displayInfo.getDiagonalInchRound().major, displayInfo.getDiagonalInchRound().minor,
                     displayInfo.getDeviceType().name()
             );
-            FwLog.system("==   Display [%d x %d] pix", displayInfo.getWidthPixel(), displayInfo.getHeightPixel());
-            FwLog.system("==   Display [%.1f x %.1f] dp", displayInfo.getWidthDp(), displayInfo.getHeightDp());
-            FwLog.system("==   res/values-%s", displayInfo.getDpi().name());
-            FwLog.system("==   res/values-sw%ddp", displayInfo.getSmallestWidthDp());
+            SlothLog.system("==   Display [%d x %d] pix", displayInfo.getWidthPixel(), displayInfo.getHeightPixel());
+            SlothLog.system("==   Display [%.1f x %.1f] dp", displayInfo.getWidthDp(), displayInfo.getHeightDp());
+            SlothLog.system("==   res/values-%s", displayInfo.getDpi().name());
+            SlothLog.system("==   res/values-sw%ddp", displayInfo.getSmallestWidthDp());
         }
-        FwLog.system("========= Runtime Information =========");
+        SlothLog.system("========= Runtime Information =========");
     }
 
     private void loadSettings() {
@@ -121,9 +121,9 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
         final int oldVersionCode = mSettings.getLastBootedAppVersionCode();
         final int versionCode = ContextUtil.getVersionCode(mApplication);
 
-        FwLog.system("Install Unique ID [%s]", mInstallUniqueId);
-        FwLog.system("VersionCode       [%d] -> [%d]", oldVersionCode, versionCode);
-        FwLog.system("VersionName       [%s] -> [%s]", oldVersionName, versionName);
+        SlothLog.system("Install Unique ID [%s]", mInstallUniqueId);
+        SlothLog.system("VersionCode       [%d] -> [%d]", oldVersionCode, versionCode);
+        SlothLog.system("VersionName       [%s] -> [%s]", oldVersionName, versionName);
 
         mSettings.setLastBootedAppVersionCode(versionCode);
         mSettings.setLastBootedAppVersionName(versionName);
@@ -152,7 +152,7 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
                 }
             }
         }
-        FwLog.system("onActivityResumed num[%d] (%s)", mForegroundActivities, activity.toString());
+        SlothLog.system("onActivityResumed num[%d] (%s)", mForegroundActivities, activity.toString());
     }
 
     @Override
@@ -166,7 +166,7 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
                 }
             }
         }
-        FwLog.system("onActivityPaused num[%d] (%s)", mForegroundActivities, activity.toString());
+        SlothLog.system("onActivityPaused num[%d] (%s)", mForegroundActivities, activity.toString());
     }
 
     @Override

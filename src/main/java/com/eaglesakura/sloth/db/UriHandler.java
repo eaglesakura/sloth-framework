@@ -1,4 +1,4 @@
-package com.eaglesakura.sloth.database;
+package com.eaglesakura.sloth.db;
 
 import android.content.ContentValues;
 import android.net.Uri;

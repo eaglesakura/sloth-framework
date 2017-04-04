@@ -4,7 +4,7 @@ import com.eaglesakura.cerberus.error.TaskCanceledException;
 import com.eaglesakura.json.JSON;
 import com.eaglesakura.lambda.CallbackUtils;
 import com.eaglesakura.lambda.CancelCallback;
-import com.eaglesakura.sloth.database.property.model.PropertySource;
+import com.eaglesakura.sloth.db.property.model.PropertySource;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

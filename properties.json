@@ -1,7 +1,6 @@
 {
   "classesOutputPath": "src/main/gen/java",
   "configOutputPath": "src/main/res/raw",
-  "packageName": "com.eaglesakura.sloth.gen.props",
   "configName": "esm_system_properties.json",
   "groups": [
     {

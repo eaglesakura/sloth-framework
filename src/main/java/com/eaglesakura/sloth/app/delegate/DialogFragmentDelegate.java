@@ -1,7 +1,7 @@
 package com.eaglesakura.sloth.app.delegate;
 
 import com.eaglesakura.cerberus.event.OnCreateEvent;
-import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
 import com.eaglesakura.sloth.app.lifecycle.UiLifecycle;
@@ -48,26 +48,26 @@ public class DialogFragmentDelegate {
     }
 
     void onCreate(OnCreateEvent event) {
-        FwLog.widget("show dialog");
+        SlothLog.widget("show dialog");
         mDialog = mLifecycleDelegate.addAutoDismiss(mCompat.onCreateDialog(this, event.getBundle()));
         mDialog.setOnDismissListener(it -> {
             if (mDialog == null) {
                 return;
             }
-            FwLog.widget("Detach DialogFragment");
+            SlothLog.widget("Detach DialogFragment");
             mCompat.onDismiss(this);
         });
         mDialog.show();
     }
 
     private void onDestroy() {
-        FwLog.widget("suspend dialog");
+        SlothLog.widget("suspend dialog");
         if (mDialog != null && mDialog.isShowing()) {
             Dialog dialog = mDialog;
             mDialog = null;
             dialog.dismiss();
         }
-        FwLog.widget("remove dialog");
+        SlothLog.widget("remove dialog");
     }
 
     /**

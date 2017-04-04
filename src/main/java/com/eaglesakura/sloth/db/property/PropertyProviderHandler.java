@@ -1,6 +1,6 @@
-package com.eaglesakura.sloth.database.property;
+package com.eaglesakura.sloth.db.property;
 
-import com.eaglesakura.sloth.database.UriHandler;
+import com.eaglesakura.sloth.db.UriHandler;
 import com.eaglesakura.util.StringUtil;
 
 import android.content.ContentValues;

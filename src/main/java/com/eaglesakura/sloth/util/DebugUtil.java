@@ -1,6 +1,6 @@
 package com.eaglesakura.sloth.util;
 
-import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.SlothLog;
 
 import android.app.Application;
 import android.content.Context;
@@ -43,10 +43,10 @@ public class DebugUtil {
             Method installMethod = DeployGate.getMethod("install", Application.class, DeployGateCallback, boolean.class);
 
             installMethod.invoke(DeployGate, context, null, forceApply);
-            FwLog.system("install success Deploygate");
+            SlothLog.system("install success Deploygate");
             return true;
         } catch (Exception e) {
-            FwLog.system("not dependencies Deploygate");
+            SlothLog.system("not dependencies Deploygate");
             return false;
         }
     }

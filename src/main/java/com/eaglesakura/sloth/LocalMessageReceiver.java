@@ -1,6 +1,5 @@
 package com.eaglesakura.sloth;
 
-import com.eaglesakura.sloth.FwLog;
 import com.eaglesakura.util.StringUtil;
 
 import android.content.BroadcastReceiver;
@@ -43,11 +42,11 @@ class LocalMessageReceiver extends BroadcastReceiver {
             }
 
             for (String g : granted) {
-                FwLog.system("RuntimePermission Granted / " + g);
+                SlothLog.system("RuntimePermission Granted / " + g);
             }
 
             for (String d : denied) {
-                FwLog.system("RuntimePermission Denied / " + d);
+                SlothLog.system("RuntimePermission Denied / " + d);
             }
 
             onRuntimePermissionUpdated(granted, denied);

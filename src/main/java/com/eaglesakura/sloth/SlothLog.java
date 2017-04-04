@@ -6,7 +6,7 @@ import com.eaglesakura.util.StringUtil;
 
 import android.util.Log;
 
-public class FwLog {
+public class SlothLog {
     private static final Logger.Impl sAppLogger;
 
     static {

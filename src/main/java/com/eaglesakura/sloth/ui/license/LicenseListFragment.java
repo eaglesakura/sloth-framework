@@ -5,7 +5,7 @@ import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.error.TaskCanceledException;
 import com.eaglesakura.collection.DataCollection;
 import com.eaglesakura.lambda.CancelCallback;
-import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.R;
 import com.eaglesakura.sloth.annotation.BindInterface;
 import com.eaglesakura.sloth.annotation.FragmentLayout;
@@ -85,7 +85,7 @@ public class LicenseListFragment extends SlothFragment {
         asyncQueue((BackgroundTask<DataCollection<LicenseItem>> task) -> {
             return listLicenses(SupportCancelCallbackBuilder.from(task).build());
         }).completed((result, task) -> {
-            FwLog.system("Loaded %d items", result.size());
+            SlothLog.system("Loaded %d items", result.size());
             mAdapter.getCollection().addAllAnimated(result.list());
         }).failed((error, task) -> {
             error.printStackTrace();
@@ -104,13 +104,13 @@ public class LicenseListFragment extends SlothFragment {
 
             // 拡張子が一致して、かつignoreリストに含まれていなければ登録する
             if (file.endsWith(".license") && !ignoreFiles.contains(file)) {
-                FwLog.widget("load license(%s)", file);
+                SlothLog.widget("load license(%s)", file);
                 // １行目にOSSの表示名が格納されている
                 String path = LICENSE_PATH + "/" + file;
                 try (InputStream is = getContext().getAssets().open(path)) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                     String title = reader.readLine();
-                    FwLog.widget("OSS(%s)", title);
+                    SlothLog.widget("OSS(%s)", title);
 
                     StringBuilder lineBuffer = new StringBuilder();
                     String line;

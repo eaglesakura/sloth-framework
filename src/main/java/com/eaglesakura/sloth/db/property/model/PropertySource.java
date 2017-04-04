@@ -1,4 +1,4 @@
-package com.eaglesakura.sloth.database.property.model;
+package com.eaglesakura.sloth.db.property.model;
 
 import android.support.annotation.Keep;
 

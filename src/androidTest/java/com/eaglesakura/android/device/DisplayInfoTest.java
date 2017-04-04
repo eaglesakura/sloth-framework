@@ -2,8 +2,7 @@ package com.eaglesakura.android.device;
 
 import com.eaglesakura.android.device.display.DisplayInfo;
 import com.eaglesakura.android.devicetest.DeviceTestCase;
-import com.eaglesakura.sloth.FwLog;
-import com.eaglesakura.util.LogUtil;
+import com.eaglesakura.sloth.SlothLog;
 
 import org.junit.Test;
 
@@ -16,14 +15,14 @@ public class DisplayInfoTest extends DeviceTestCase {
         DisplayInfo info = new DisplayInfo(getContext());
         assertNotNull(info.getDeviceType());
 
-        FwLog.debug("Pixel[%d x %d]", info.getWidthPixel(), info.getHeightPixel());
-        FwLog.debug("DP [%.1f x %.1f]", info.getWidthDp(), info.getHeightDp());
-        FwLog.debug("Inch [%.1f x %.1f] = %.3f inch -> %s inch",
+        SlothLog.debug("Pixel[%d x %d]", info.getWidthPixel(), info.getHeightPixel());
+        SlothLog.debug("DP [%.1f x %.1f]", info.getWidthDp(), info.getHeightDp());
+        SlothLog.debug("Inch [%.1f x %.1f] = %.3f inch -> %s inch",
                 info.getWidthInch(),
                 info.getHeightInch(),
                 info.getDiagonalInch(),
                 info.getDiagonalInchRound().toString()
         );
-        FwLog.debug("Type [%s]", info.getDeviceType().name());
+        SlothLog.debug("Type [%s]", info.getDeviceType().name());
     }
 }

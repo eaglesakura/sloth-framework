@@ -1,4 +1,4 @@
-package com.eaglesakura.sloth.database;
+package com.eaglesakura.sloth.db;
 
 import android.annotation.SuppressLint;
 import android.content.ContentProvider;

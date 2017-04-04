@@ -1,8 +1,8 @@
-package com.eaglesakura.sloth.database.property;
+package com.eaglesakura.sloth.db.property;
 
 import com.eaglesakura.android.db.DBOpenType;
 import com.eaglesakura.android.db.TextKeyValueStore;
-import com.eaglesakura.sloth.database.property.model.PropertySource;
+import com.eaglesakura.sloth.db.property.model.PropertySource;
 
 import android.content.Context;
 

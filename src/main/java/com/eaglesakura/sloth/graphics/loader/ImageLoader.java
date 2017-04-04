@@ -1,6 +1,6 @@
 package com.eaglesakura.sloth.graphics.loader;
 
-import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.graphics.ImageCache;
 import com.eaglesakura.android.util.ImageUtil;
 import com.eaglesakura.lambda.CancelCallback;
@@ -96,7 +96,7 @@ public abstract class ImageLoader<T extends ImageLoader> {
             String cacheId = getCacheId();
             Drawable cache = mImageManager.getCache(cacheId);
             if (cache != null) {
-                FwLog.image("Cache Image id[%s]", cacheId);
+                SlothLog.image("Cache Image id[%s]", cacheId);
                 return cache;
             }
 

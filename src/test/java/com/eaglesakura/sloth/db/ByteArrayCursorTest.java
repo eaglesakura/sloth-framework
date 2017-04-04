@@ -1,4 +1,4 @@
-package com.eaglesakura.sloth.database;
+package com.eaglesakura.sloth.db;
 
 import com.eaglesakura.sloth.UnitTestCase;
 import com.eaglesakura.util.EncodeUtil;

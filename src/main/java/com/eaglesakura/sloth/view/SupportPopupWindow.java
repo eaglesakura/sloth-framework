@@ -1,7 +1,7 @@
 package com.eaglesakura.sloth.view;
 
 import com.eaglesakura.android.device.display.DisplayInfo;
-import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
 import com.eaglesakura.android.util.ViewUtil;
 import com.eaglesakura.lambda.Action1;
@@ -54,7 +54,7 @@ public class SupportPopupWindow {
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         mContentWidth = view.getMeasuredWidth();
         mContentHeight = view.getMeasuredHeight();
-        FwLog.widget("Window size[%dx%d]", mContentWidth, mContentHeight);
+        SlothLog.widget("Window size[%dx%d]", mContentWidth, mContentHeight);
         mWindow.setWidth((int) (mContentWidth * 1.05));
         mWindow.setHeight((int) (mContentHeight * 1.05));
         return this;
@@ -98,7 +98,7 @@ public class SupportPopupWindow {
 
         if ((area.bottom + mContentHeight) > display.getHeightPixel()) {
             // ウィンドウがはみ出す場合はViewの上に乗せる
-            FwLog.widget("Window Popup => Top");
+            SlothLog.widget("Window Popup => Top");
             yOffset = -(area.height() + mWindow.getHeight());
         }
 

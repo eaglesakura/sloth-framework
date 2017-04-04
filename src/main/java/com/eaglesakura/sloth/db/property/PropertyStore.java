@@ -1,4 +1,4 @@
-package com.eaglesakura.sloth.database.property;
+package com.eaglesakura.sloth.db.property;
 
 /**
  * Textで管理されたプロパティを扱う

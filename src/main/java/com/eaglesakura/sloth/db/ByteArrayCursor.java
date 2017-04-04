@@ -1,6 +1,6 @@
-package com.eaglesakura.sloth.database;
+package com.eaglesakura.sloth.db;
 
-import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.util.StringUtil;
 
 import android.database.AbstractCursor;
@@ -25,7 +25,7 @@ public class ByteArrayCursor extends AbstractCursor {
     public static final String COLUMN_NAME_VALUE_FRAGMENT = "values";
 
     public ByteArrayCursor(byte[] buffer) {
-        FwLog.cursor("ByteArrayCursor[%d bytes]", buffer.length);
+        SlothLog.cursor("ByteArrayCursor[%d bytes]", buffer.length);
 
         if (buffer.length == 0) {
             // 空配列を挿入する
@@ -46,7 +46,7 @@ public class ByteArrayCursor extends AbstractCursor {
 
     @Override
     public int getCount() {
-        FwLog.cursor("ByteArrayCursor.getCount[%d]", mSerializedData.size());
+        SlothLog.cursor("ByteArrayCursor.getCount[%d]", mSerializedData.size());
         return mSerializedData.size();
     }
 
@@ -59,14 +59,14 @@ public class ByteArrayCursor extends AbstractCursor {
 
     @Override
     public boolean onMove(int oldPosition, int newPosition) {
-        FwLog.cursor("ByteArrayCursor.onMove old[%d] new[%d]", oldPosition, newPosition);
+        SlothLog.cursor("ByteArrayCursor.onMove old[%d] new[%d]", oldPosition, newPosition);
         mCursorIndex = newPosition;
         return super.onMove(oldPosition, newPosition);
     }
 
     @Override
     public byte[] getBlob(int column) {
-        FwLog.cursor("ByteArrayCursor.getString column[%d], %d bytes", column, mSerializedData.get(mCursorIndex).length);
+        SlothLog.cursor("ByteArrayCursor.getString column[%d], %d bytes", column, mSerializedData.get(mCursorIndex).length);
         return null;
     }
 

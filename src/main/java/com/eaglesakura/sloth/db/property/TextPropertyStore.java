@@ -1,6 +1,6 @@
-package com.eaglesakura.sloth.database.property;
+package com.eaglesakura.sloth.db.property;
 
-import com.eaglesakura.sloth.database.property.model.PropertySource;
+import com.eaglesakura.sloth.db.property.model.PropertySource;
 import com.eaglesakura.util.SerializeUtil;
 import com.eaglesakura.util.StringUtil;
 

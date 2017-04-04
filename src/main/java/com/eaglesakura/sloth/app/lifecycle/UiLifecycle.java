@@ -1,7 +1,7 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
 import com.eaglesakura.android.util.DialogUtil;
-import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.SlothLog;
 
 import android.app.Dialog;
 import android.support.annotation.CallSuper;
@@ -176,7 +176,7 @@ public abstract class UiLifecycle extends Lifecycle {
         while (iterator.hasNext()) {
             AutoDismissObject obj = iterator.next();
             if (obj != null) {
-                FwLog.widget("AutoDismiss :: %s", obj.getClass());
+                SlothLog.widget("AutoDismiss :: %s", obj.getClass());
                 obj.dismiss();
             }
         }

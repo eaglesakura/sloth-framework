@@ -13,11 +13,10 @@ buildscript {
         jcenter()
         mavenCentral()
         maven { url "https://dl.bintray.com/eaglesakura/maven/" }
-        maven { url "http://eaglesakura.github.io/maven/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.0'
-        classpath "com.eaglesakura:plugin-android-dbgenerator:2.1.162"
+        classpath 'com.eaglesakura:sloth-plugin:1.0.6'
         classpath 'me.tatarka:gradle-retrolambda:3.5.0' // support Lambda
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
@@ -28,18 +27,18 @@ repositories {
     jcenter()
     mavenCentral()
     maven { url "https://dl.bintray.com/eaglesakura/maven/" }
-    maven { url "http://eaglesakura.github.io/maven/" }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda' /* Android Lambda Support */
-apply plugin: 'com.eaglesakura.android-props'
+apply plugin: 'com.eaglesakura.sloth.prop' /* Generate App Properties */
 group = "com.eaglesakura"
 version = ARTIFACT_VERSION + getArtifactVersionSuffix()
 
 
 props {
-    property file("properties.json")
+    output file("src/main/gen/props")
+    property file("properties.json"), "com.eaglesakura.sloth.gen"
 }
 
 android {
@@ -128,7 +127,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:25.3.1"
     compile "com.android.support:cardview-v7:25.3.1"
     compile "com.android.support:recyclerview-v7:25.3.1"
-    compile "com.android.support:palette-v7:25.3.1"
+//    compile "com.android.support:palette-v7:25.3.1"
     compile "com.android.support:design:25.3.1"
 
     compile "com.android.support:support-annotations:25.3.1"

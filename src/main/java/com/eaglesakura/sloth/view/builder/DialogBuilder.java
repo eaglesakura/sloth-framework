@@ -1,7 +1,7 @@
 package com.eaglesakura.sloth.view.builder;
 
 import com.eaglesakura.android.aquery.AQuery;
-import com.eaglesakura.sloth.FwLog;
+import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.R;
 import com.eaglesakura.sloth.app.lifecycle.UiLifecycle;
 import com.eaglesakura.sloth.ui.progress.DialogToken;
@@ -130,7 +130,7 @@ public class DialogBuilder<T> {
     public Dialog showOnce(@NonNull UiLifecycle delegate, @NonNull Object tag) {
 
         if (delegate.hasAutoDismissObject(tag)) {
-            FwLog.system("cancel dialog boot[%s]", tag.toString());
+            SlothLog.system("cancel dialog boot[%s]", tag.toString());
             return null;
         }
 
