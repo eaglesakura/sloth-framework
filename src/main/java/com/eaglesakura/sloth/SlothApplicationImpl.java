@@ -9,7 +9,7 @@ import com.eaglesakura.sloth.app.lifecycle.ServiceLifecycle;
 import com.eaglesakura.sloth.db.property.PropertyStore;
 import com.eaglesakura.sloth.db.property.TextDatabasePropertyStore;
 import com.eaglesakura.sloth.db.property.model.PropertySource;
-import com.eaglesakura.sloth.gen.prop.SystemSettings;
+import com.eaglesakura.sloth.gen.SystemSettings;
 import com.eaglesakura.util.RandomUtil;
 import com.eaglesakura.util.StringUtil;
 
@@ -104,7 +104,8 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
             PropertyStore store = new TextDatabasePropertyStore(mApplication, "sloth.db")
                     .loadProperties(JSON.decode(is, PropertySource.class));
 
-            mSettings = new SystemSettings(store);
+            mSettings = new SystemSettings();
+            mSettings.setPropertyStore(store);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
