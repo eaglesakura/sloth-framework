@@ -2,7 +2,6 @@ package com.eaglesakura.sloth.view.adapter;
 
 import com.eaglesakura.android.aquery.AQuery;
 import com.eaglesakura.android.util.ViewUtil;
-import com.eaglesakura.material.widget.support.SupportRecyclerView;
 import com.eaglesakura.sloth.R;
 import com.eaglesakura.util.Util;
 
@@ -22,8 +21,6 @@ public abstract class CardAdapter<T> extends RecyclerView.Adapter<CardAdapter.Ca
 
     @NonNull
     private AdapterCollection<T> mCollection;
-
-    SupportRecyclerView mSupportRecyclerView;
 
     public CardAdapter(@NonNull AdapterCollection<T> collection) {
         mCollection = collection;
@@ -55,10 +52,10 @@ public abstract class CardAdapter<T> extends RecyclerView.Adapter<CardAdapter.Ca
         mCollection.setCallback(newAdapterCallback());
         mCollection.setComparator(newAdapterComparator());
 
-        Object tag = recyclerView.getTag(R.id.SupportRecyclerView_RecyclerView);
-        if (tag instanceof SupportRecyclerView) {
-            mSupportRecyclerView = (SupportRecyclerView) tag;
-        }
+//        Object tag = recyclerView.getTag(R.id.SupportRecyclerView_RecyclerView);
+//        if (tag instanceof SupportRecyclerView) {
+//            mSupportRecyclerView = (SupportRecyclerView) tag;
+//        }
     }
 
     @Override
@@ -146,9 +143,9 @@ public abstract class CardAdapter<T> extends RecyclerView.Adapter<CardAdapter.Ca
         return new AdapterCollection.Callback<T>() {
             @Override
             public void onItemInserted(int index, @Nullable T item) {
-                if (mSupportRecyclerView != null) {
-                    mSupportRecyclerView.setProgressVisibly(false, mCollection.size());
-                }
+//                if (mSupportRecyclerView != null) {
+//                    mSupportRecyclerView.setProgressVisibly(false, mCollection.size());
+//                }
                 notifyItemInserted(index);
             }
 
@@ -160,17 +157,17 @@ public abstract class CardAdapter<T> extends RecyclerView.Adapter<CardAdapter.Ca
             @Override
             public void onItemRemoved(int index) {
                 notifyItemRemoved(index);
-                if (mSupportRecyclerView != null && mCollection.isEmpty()) {
-                    mSupportRecyclerView.setProgressVisibly(false, 0);
-                }
+//                if (mSupportRecyclerView != null && mCollection.isEmpty()) {
+//                    mSupportRecyclerView.setProgressVisibly(false, 0);
+//                }
             }
 
             @Override
             public void onItemReloaded() {
                 notifyDataSetChanged();
-                if (mSupportRecyclerView != null) {
-                    mSupportRecyclerView.setProgressVisibly(false, mCollection.size());
-                }
+//                if (mSupportRecyclerView != null) {
+//                    mSupportRecyclerView.setProgressVisibly(false, mCollection.size());
+//                }
             }
         };
     }
