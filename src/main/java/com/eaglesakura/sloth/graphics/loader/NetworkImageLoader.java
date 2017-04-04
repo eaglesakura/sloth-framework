@@ -1,11 +1,11 @@
 package com.eaglesakura.sloth.graphics.loader;
 
-import com.eaglesakura.sloth.graphics.ImageCache;
 import com.eaglesakura.alternet.Alternet;
 import com.eaglesakura.alternet.Result;
 import com.eaglesakura.alternet.parser.BitmapParser;
 import com.eaglesakura.alternet.request.ConnectRequest;
 import com.eaglesakura.lambda.CallbackUtils;
+import com.eaglesakura.sloth.graphics.ImageCache;
 
 import android.content.Context;
 import android.graphics.Bitmap;
