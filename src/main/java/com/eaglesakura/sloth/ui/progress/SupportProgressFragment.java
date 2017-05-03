@@ -2,6 +2,7 @@ package com.eaglesakura.sloth.ui.progress;
 
 import com.eaglesakura.android.margarine.Bind;
 import com.eaglesakura.android.util.FragmentUtil;
+import com.eaglesakura.sloth.app.support.ViewBindingSupport;
 import com.eaglesakura.sloth.view.SupportProgressView;
 import com.eaglesakura.sloth.app.SlothFragment;
 import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
@@ -12,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.View;
 
 /**
@@ -21,11 +23,7 @@ import android.view.View;
 public class SupportProgressFragment extends SlothFragment {
 
     @Bind(resName = "Item.Progress")
-    SupportProgressView mProgress;
-
-    public SupportProgressFragment() {
-        mProgressStackManager.setListener(mStackManagerListener);
-    }
+    private SupportProgressView mProgress;
 
     private ProgressStackManager mProgressStackManager;
 
@@ -33,6 +31,19 @@ public class SupportProgressFragment extends SlothFragment {
     protected void onCreateLifecycle(FragmentLifecycle newLifecycle) {
         super.onCreateLifecycle(newLifecycle);
         mProgressStackManager = new ProgressStackManager(newLifecycle.getCallbackQueue());
+        mProgressStackManager.setListener(mStackManagerListener);
+
+        ViewBindingSupport.bind(newLifecycle, this, new ViewBindingSupport.Callback() {
+            @Override
+            public void onAfterViews(View rootView) {
+
+            }
+
+            @Override
+            public void onAfterBindMenu(Menu menu) {
+
+            }
+        });
     }
 
     public ProgressStackManager getProgressStackManager() {

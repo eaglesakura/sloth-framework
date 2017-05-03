@@ -16,7 +16,7 @@
                 android:layout_width="match_parent"
                 android:background="?attr/colorPrimary"/>
 
-        <com.eaglesakura.material.widget.support.SupportRecyclerView
+        <android.support.v7.widget.RecyclerView
                 android:id="@+id/eglibrary.License.List"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

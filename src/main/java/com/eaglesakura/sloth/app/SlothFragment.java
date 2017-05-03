@@ -1,12 +1,14 @@
 package com.eaglesakura.sloth.app;
 
 import com.eaglesakura.android.util.FragmentUtil;
+import com.eaglesakura.android.util.PermissionUtil;
 import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.BackgroundTaskBuilder;
 import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.sloth.annotation.BindInterface;
 import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
+import com.eaglesakura.util.CollectionUtil;
 import com.eaglesakura.util.ReflectionUtil;
 
 import android.app.Activity;
@@ -26,7 +28,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * startActivityForResultを行う場合、ParentFragmentが存在していたらそちらのstartActivityForResultを呼び出す。
@@ -216,5 +220,10 @@ public abstract class SlothFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         getLifecycle().onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void requestPermissions(@NonNull Collection<PermissionUtil.PermissionType> permissions, int requestCode) {
+        Set<String> rawPermissions = PermissionUtil.listPermissions(permissions);
+        requestPermissions(CollectionUtil.asArray(rawPermissions, new String[rawPermissions.size()]), requestCode);
     }
 }
