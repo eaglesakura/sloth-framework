@@ -20,6 +20,8 @@ buildscript {
         classpath 'me.tatarka:gradle-retrolambda:3.5.0' // support Lambda
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+
+        classpath "com.eaglesakura:sloth-plugin:1.0.12"
     }
 }
 
@@ -38,6 +40,7 @@ version = ARTIFACT_VERSION + getArtifactVersionSuffix()
 
 props {
     output file("src/main/gen/java")
+    configOutput file("src/main/res/raw")
     property file("properties.json"), "com.eaglesakura.sloth.gen"
 }
 
