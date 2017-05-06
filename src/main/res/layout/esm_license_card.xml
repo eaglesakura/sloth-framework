@@ -2,25 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               tools:context=".ui.license.LicenseViewActivity"
+              android:id="@+id/eglibrary.Button.Item"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:minHeight="@dimen/EsMaterial.Button.MinHeight"
+              android:clickable="true"
               android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-            android:layout_marginBottom="@dimen/EsMaterial.Widget.Margin"
-            android:id="@+id/eglibrary.Button.Item"
-            style="@style/EsMaterial.Widget.CardView.Light"
+    <android.support.v7.widget.AppCompatTextView
+            android:layout_margin="@dimen/EsMaterial.Widget.Margin"
+            android:id="@+id/eglibrary.Item.Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true">
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"/>
 
-        <android.support.v7.widget.AppCompatTextView
-                android:layout_margin="@dimen/EsMaterial.Widget.Margin"
-                android:id="@+id/eglibrary.Item.Name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"/>
-
-    </android.support.v7.widget.CardView>
+    <include layout="@layout/esm_material_separator"/>
 </LinearLayout>

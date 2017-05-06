@@ -20,6 +20,7 @@ import com.eaglesakura.util.CollectionUtil;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,6 +50,8 @@ public class LicenseListFragment extends SlothFragment {
     @BindInterface
     Callback mCallback;
 
+    private View mRootView;
+
     @Override
     protected void onCreateLifecycle(FragmentLifecycle newLifecycle) {
         super.onCreateLifecycle(newLifecycle);
@@ -59,6 +62,8 @@ public class LicenseListFragment extends SlothFragment {
                 mCardList.setItemAnimator(new DefaultItemAnimator());
                 mCardList.setHasFixedSize(false);
                 mCardList.setAdapter(mAdapter);
+
+                mRootView = rootView;
             }
 
             @Override
@@ -80,13 +85,21 @@ public class LicenseListFragment extends SlothFragment {
         getActionBar().setTitle(R.string.EsMaterial_Widget_License_Title);
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        return mRootView;
+    }
+
     @UiThread
     void loadLicenses() {
         asyncQueue((BackgroundTask<DataCollection<LicenseItem>> task) -> {
             return listLicenses(SupportCancelCallbackBuilder.from(task).build());
         }).completed((result, task) -> {
             SlothLog.system("Loaded %d items", result.size());
-            mAdapter.getCollection().addAllAnimated(result.list());
+            mAdapter.getCollection().addAll(result.list());
+            mCardList.setAdapter(mAdapter);
         }).failed((error, task) -> {
             error.printStackTrace();
         }).start();
