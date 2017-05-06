@@ -2,6 +2,7 @@ package com.eaglesakura.sloth.ui.progress;
 
 import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
+import com.eaglesakura.sloth.annotation.Experimental;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Experimental
 public class ProgressStackManager {
     List<ProgressToken> mTokens = new ArrayList<>();
 

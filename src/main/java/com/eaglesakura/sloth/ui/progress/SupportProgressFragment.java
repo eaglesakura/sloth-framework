@@ -2,6 +2,7 @@ package com.eaglesakura.sloth.ui.progress;
 
 import com.eaglesakura.android.margarine.Bind;
 import com.eaglesakura.android.util.FragmentUtil;
+import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.support.ViewBindingSupport;
 import com.eaglesakura.sloth.view.SupportProgressView;
 import com.eaglesakura.sloth.app.SlothFragment;
@@ -19,6 +20,7 @@ import android.view.View;
 /**
  * 処理中のTapGuardViewを表示する
  */
+@Experimental
 @FragmentLayout(resName = "esm_progress")
 public class SupportProgressFragment extends SlothFragment {
 

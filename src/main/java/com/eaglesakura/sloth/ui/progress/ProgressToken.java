@@ -1,5 +1,6 @@
 package com.eaglesakura.sloth.ui.progress;
 
+import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.util.RandomUtil;
 
 import android.content.Context;
@@ -13,6 +14,7 @@ import java.io.IOException;
  * 複数処理を並列で行い、かつProgress表記を行う場合に参照カウンタを利用して処理を表記する。
  * 参照カウンタが0になった時点でロックを解除する。
  */
+@Experimental
 public abstract class ProgressToken implements Closeable {
     /**
      * 処理タグ

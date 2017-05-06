@@ -7,6 +7,7 @@ import com.eaglesakura.cerberus.event.OnActivityResultEvent;
 import com.eaglesakura.sloth.app.lifecycle.ActivityLifecycle;
 import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
@@ -14,7 +15,11 @@ import rx.functions.Action1;
 
 /**
  * {@link com.eaglesakura.android.oari.OnActivityResult} のハンドリングを自動で行う
+ *
+ * 自動的なActivityResult呼び出しのバインディングを想定していたが、実利用としてはonActivityResult()をoverrideして {@link ActivityResult#invokeRecursive(Fragment, int, int, Intent)} をコールするほうが柔軟性が高い。
+ * そのため、自動的なバインドは非推奨とする。
  */
+@Deprecated
 public class ActivityResultSupport {
     public static void bind(FragmentLifecycle lifecycle, Fragment receiver) {
         lifecycle.subscribe(new Action1<LifecycleEvent>() {

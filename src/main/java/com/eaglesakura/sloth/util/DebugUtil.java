@@ -7,10 +7,6 @@ import android.content.Context;
 
 import java.lang.reflect.Method;
 
-/**
- * Created by eaglesakura on 2017/03/30.
- */
-
 public class DebugUtil {
 
     /**

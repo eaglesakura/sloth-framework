@@ -12,6 +12,7 @@ public class ServiceLifecycle extends Lifecycle {
     }
 
     public void onDestroy() {
+        super.onDestroy();
         mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnPause));
         mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStop));
         mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnDestroy));
