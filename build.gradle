@@ -15,7 +15,7 @@ buildscript {
         maven { url "https://dl.bintray.com/eaglesakura/maven/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.android.tools.build:gradle:2.3.2'
         classpath "com.eaglesakura:plugin-ci-support:1.2.200"
         classpath 'me.tatarka:gradle-retrolambda:3.5.0' // support Lambda
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'

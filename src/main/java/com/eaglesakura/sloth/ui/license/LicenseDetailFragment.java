@@ -8,8 +8,12 @@ import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
 import com.eaglesakura.sloth.app.support.ViewBindingSupport;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
@@ -26,6 +30,8 @@ public class LicenseDetailFragment extends SlothFragment {
 
     private String mTitle;
 
+    private View mRootView;
+
     @Override
     protected void onCreateLifecycle(FragmentLifecycle newLifecycle) {
         super.onCreateLifecycle(newLifecycle);
@@ -33,6 +39,7 @@ public class LicenseDetailFragment extends SlothFragment {
             @Override
             public void onAfterViews(View rootView) {
                 mDetailView.setText(mDetail);
+                mRootView = rootView;
             }
 
             @Override
@@ -40,6 +47,13 @@ public class LicenseDetailFragment extends SlothFragment {
 
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        return mRootView;
     }
 
     @Override
