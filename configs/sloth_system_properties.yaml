@@ -1,0 +1,16 @@
+groups:
+  - name: "SystemSettings"
+    properties:
+      # 最後に起動されたバージョンコード
+      - name: "lastBootedAppVersionCode"
+        type: "int"
+        value: 0
+      # 最後に起動されたアプリバージョン
+      - name: "lastBootedAppVersionName"
+        type: "String"
+        value: ""
+      # 初回起動時に確定するランダム識別子
+      # データリセットすると変更される
+      - name: "installUniqueId"
+        type: "String"
+        value: ""

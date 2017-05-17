@@ -100,7 +100,7 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
     }
 
     private void loadSettings() {
-        try (InputStream is = mApplication.getResources().openRawResource(R.raw.esm_system_properties)) {
+        try (InputStream is = mApplication.getResources().openRawResource(R.raw.sloth_system_properties)) {
             PropertyStore store = new TextDatabasePropertyStore(mApplication, "sloth.db")
                     .loadProperties(JSON.decode(is, PropertySource.class));
 
