@@ -1,7 +1,8 @@
 /**
  * 3.25.0.x  : フレームワーク全体を再構成
+ * 3.25.1.x  : AS3.0対応
  */
-def ARTIFACT_VERSION = "3.25.0"
+def ARTIFACT_VERSION = "3.25.1"
 def REPOSITORY_NAME = "maven"
 def BINTRAY_LICENSES = ["MIT"]
 def BINTRAY_LABELS = ["android"]
@@ -11,13 +12,12 @@ def BINTRAY_GPG_PASS = System.env.BINTRAY_GPG_PASS
 buildscript {
     repositories {
         jcenter()
-        mavenCentral()
+        maven { url "https://maven.google.com" }
         maven { url "https://dl.bintray.com/eaglesakura/maven/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha1'
         classpath "com.eaglesakura:plugin-ci-support:1.2.200"
-        classpath 'me.tatarka:gradle-retrolambda:3.5.0' // support Lambda
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
 
@@ -27,12 +27,11 @@ buildscript {
 
 repositories {
     jcenter()
-    mavenCentral()
+    maven { url "https://maven.google.com" }
     maven { url "https://dl.bintray.com/eaglesakura/maven/" }
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda' /* Android Lambda Support */
 apply plugin: 'com.eaglesakura.sloth.prop' /* Generate App Properties */
 group = "com.eaglesakura"
 version = ARTIFACT_VERSION + getArtifactVersionSuffix()
@@ -50,19 +49,19 @@ android {
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    dataBinding {
+        enabled = true
+    }
+    
     defaultConfig {
         minSdkVersion 15      // 現実的な対応ラインとしてAndroid 4.0.4とする
         targetSdkVersion 25
         consumerProguardFiles 'proguard-rules.pro'
         // Device Test
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"    // JUnit4
-    }
-
-    dataBinding {
-        enabled = true
     }
 
     sourceSets {
@@ -94,89 +93,72 @@ configurations {
 
 dependencies {
     if (EGLIBRARY_COMPILE_LOCAL) {
-        compile project(':eglibrary:simple-logger')
-        compile project(':eglibrary:android-command-service')
-        compile project(':eglibrary:android-text-kvs')
-        compile project(':eglibrary:alternet')
-        compile project(':eglibrary:onactivityresult-invoke')
-        compile project(':eglibrary:small-aquery')
-        compile project(':eglibrary:cerberus')
-        compile project(':eglibrary:margarineknife')
-        compile project(':eglibrary:garnet')
-        compile project(':eglibrary:light-saver')
+        implementation project(':eglibrary:simple-logger')
+        implementation project(':eglibrary:android-command-service')
+        implementation project(':eglibrary:android-text-kvs')
+        implementation project(':eglibrary:alternet')
+        implementation project(':eglibrary:onactivityresult-invoke')
+        implementation project(':eglibrary:small-aquery')
+        implementation project(':eglibrary:cerberus')
+        implementation project(':eglibrary:margarineknife')
+        implementation project(':eglibrary:garnet')
+        implementation project(':eglibrary:light-saver')
 
-        androidTestCompile project(":eglibrary:android-devicetest-support")
-        testCompile project(":eglibrary:android-unittest-support")
+        androidTestImplementation project(":eglibrary:android-devicetest-support")
+        testImplementation project(":eglibrary:android-unittest-support")
     } else {
-        compile "com.eaglesakura:simple-logger:2.0.463"
-        compile "com.eaglesakura:android-commons:2.1.5"
-        compile "com.eaglesakura:android-command-service:1.3.462"
-        compile "com.eaglesakura:android-text-kvs:2.2.450"
-        compile "com.eaglesakura:alternet:2.1.8"
-        compile "com.eaglesakura:onactivityresult-invoke:1.1.460"
-        compile "com.eaglesakura:small-aquery:1.1.63"
-        compile "com.eaglesakura:cerberus:2.3.5"
-        compile "com.eaglesakura:margarineknife:1.3.246"
-        compile "com.eaglesakura:garnet:1.0.195"
-        compile "com.eaglesakura:light-saver:1.1.107"
+        implementation "com.eaglesakura:simple-logger:2.0.463"
+        implementation "com.eaglesakura:android-commons:2.1.5"
+        implementation "com.eaglesakura:android-command-service:1.3.462"
+        implementation "com.eaglesakura:android-text-kvs:2.2.450"
+        implementation "com.eaglesakura:alternet:2.1.8"
+        implementation "com.eaglesakura:onactivityresult-invoke:1.1.460"
+        implementation "com.eaglesakura:small-aquery:1.1.63"
+        implementation "com.eaglesakura:cerberus:2.3.5"
+        implementation "com.eaglesakura:margarineknife:1.3.246"
+        implementation "com.eaglesakura:garnet:1.0.195"
+        implementation "com.eaglesakura:light-saver:1.1.107"
 
-        androidTestCompile "com.eaglesakura:android-devicetest-support:2.1.272"
-        testCompile "com.eaglesakura:android-unittest-support:1.4.207"
+        androidTestImplementation "com.eaglesakura:android-devicetest-support:2.1.272"
+        testImplementation "com.eaglesakura:android-unittest-support:1.4.207"
     }
 
     /**
      * support libs
      */
-    compile "com.android.support:support-v4:25.3.1"
-    compile "com.android.support:appcompat-v7:25.3.1"
-    compile "com.android.support:cardview-v7:25.3.1"
-    compile "com.android.support:recyclerview-v7:25.3.1"
-//    compile "com.android.support:palette-v7:25.3.1"
-    compile "com.android.support:design:25.3.1"
+    implementation "com.android.support:support-v4:25.3.1"
+    implementation "com.android.support:appcompat-v7:25.3.1"
+    implementation "com.android.support:cardview-v7:25.3.1"
+    implementation "com.android.support:recyclerview-v7:25.3.1"
+//    implementation "com.android.support:palette-v7:25.3.1"
+    implementation "com.android.support:design:25.3.1"
 
-    compile "com.android.support:support-annotations:25.3.1"
+    implementation "com.android.support:support-annotations:25.3.1"
 
     /**
      * Smooth ProgressBar / 160 Method
      * https://github.com/castorflex/SmoothProgressBar
      */
-    compile 'com.github.castorflex.smoothprogressbar:library:1.1.0'
+    implementation 'com.github.castorflex.smoothprogressbar:library:1.1.0'
 
     /**
      * RecyclerView / 65 Method
      * https://github.com/timehop/sticky-headers-recyclerview
      */
-    compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
+    implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
 
     /**
      * Runtime Event Bus/ 75 Method
      * Optional / 23 Method
      */
-    compile 'com.squareup:otto:1.3.8'
-    compile 'com.eccyan:rxjava-optional:1.1.2'
+    implementation 'com.squareup:otto:1.3.8'
+    implementation 'com.eccyan:rxjava-optional:1.1.2'
 
     /**
      * Scroll Event Handle / 275
      * https://github.com/ksoichiro/Android-ObservableScrollView
      */
-    compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
-
-}
-
-/**
- * UnitTest & retro lambda
- */
-tasks.withType(Test) {
-    project.tasks
-            .findAll {
-        task -> (task.name ==~ /compile.*?TestJava.*?/)
-    }
-    .each { task ->
-        task.doFirst {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
-        }
-    }
+    implementation 'com.github.ksoichiro:android-observablescrollview:1.6.0'
 }
 
 task sourcesJar(type: Jar) {
