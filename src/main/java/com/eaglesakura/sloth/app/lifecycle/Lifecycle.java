@@ -7,7 +7,6 @@ import com.eaglesakura.cerberus.ExecuteTarget;
 import com.eaglesakura.cerberus.LifecycleEvent;
 import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
-import com.eaglesakura.cerberus.event.LifecycleEventImpl;
 import com.eaglesakura.sloth.annotation.Experimental;
 
 import android.support.annotation.CallSuper;
@@ -24,7 +23,7 @@ import rx.subjects.Subject;
 
 public abstract class Lifecycle {
 
-    protected final BehaviorSubject<LifecycleEvent> mLifecycleSubject = BehaviorSubject.create(new LifecycleEventImpl(LifecycleState.NewObject));
+    protected final BehaviorSubject<LifecycleEvent> mLifecycleSubject = BehaviorSubject.create(LifecycleEvent.wrap(LifecycleState.NewObject));
 
     protected final PendingCallbackQueue mCallbackQueue = new PendingCallbackQueue();
 

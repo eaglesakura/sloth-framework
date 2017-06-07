@@ -1,20 +1,20 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
+import com.eaglesakura.cerberus.LifecycleEvent;
 import com.eaglesakura.cerberus.LifecycleState;
-import com.eaglesakura.cerberus.event.LifecycleEventImpl;
 
 public class ServiceLifecycle extends Lifecycle {
 
     public void onCreate() {
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnCreate));
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStart));
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnResume));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnCreate));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnStart));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnResume));
     }
 
     public void onDestroy() {
         super.onDestroy();
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnPause));
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStop));
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnDestroy));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnPause));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnStop));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnDestroy));
     }
 }

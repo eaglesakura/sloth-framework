@@ -1,7 +1,7 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
+import com.eaglesakura.cerberus.LifecycleEvent;
 import com.eaglesakura.cerberus.LifecycleState;
-import com.eaglesakura.cerberus.event.LifecycleEventImpl;
 import com.eaglesakura.cerberus.event.OnActivityResultEvent;
 import com.eaglesakura.cerberus.event.OnAttachEvent;
 import com.eaglesakura.cerberus.event.OnCreateEvent;
@@ -39,14 +39,14 @@ public class FragmentLifecycle extends UiLifecycle {
 
     @UiThread
     public void onStart() {
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStart));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnStart));
     }
 
     @UiThread
     @Override
     public void onResume() {
         super.onResume();
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnResume));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnResume));
     }
 
     @UiThread
@@ -63,24 +63,24 @@ public class FragmentLifecycle extends UiLifecycle {
     @Override
     public void onPause() {
         super.onPause();
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnPause));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnPause));
     }
 
     @UiThread
     public void onStop() {
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnStop));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnStop));
     }
 
     @UiThread
     public void onDestroyView() {
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnDestroyView));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnDestroyView));
     }
 
     @UiThread
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mLifecycleSubject.onNext(new LifecycleEventImpl(LifecycleState.OnDestroy));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnDestroy));
     }
 
     @UiThread

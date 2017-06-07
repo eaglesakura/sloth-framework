@@ -126,6 +126,18 @@ public class Sloth {
     }
 
     /**
+     * アプリが所属するProcessがForegroundであるかを確認する
+     * 複数Processを構築している場合、このメソッドは別プロセスを正常にハンドリングできない。
+     *
+     * @return プロセスがForegroundである場合true
+     */
+    @UiThread
+    public static boolean isApplicationForeground() {
+        SlothApplicationImpl impl = getImpl();
+        return impl.mForegroundActivities > 0;
+    }
+
+    /**
      * アプリの状態が更新された
      */
     public interface ApplicationStateListener {
