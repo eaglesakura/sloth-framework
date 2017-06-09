@@ -9,8 +9,11 @@ import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
 import com.eaglesakura.sloth.app.lifecycle.event.State;
 
+import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
+import android.util.EventLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,13 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 
+/**
+ * 詳細なライフサイクル管理を行う
+ *
+ * 内部では {@link LifecycleRegistryOwner} を保持し、このオブジェクトのライフサイクル変動に合わせて {@link
+ * android.arch.lifecycle.LifecycleRegistry#handleLifecycleEvent(android.arch.lifecycle.Lifecycle.Event)}
+ * が自動的に呼ばれる。
+ */
 public abstract class Lifecycle {
 
     protected final BehaviorSubject<LifecycleEvent> mLifecycleSubject = BehaviorSubject.createDefault(LifecycleEvent.wrap(State.NewObject));
@@ -32,8 +42,49 @@ public abstract class Lifecycle {
     @Experimental
     protected List<Consumer<Lifecycle>> mDestroyActions = new ArrayList<>();
 
+    /**
+     * ライフサイクル管理オブジェクト
+     */
+    @NonNull
+    private LifecycleRegistryOwner mLifecycleRegistryOwner;
+
     public Lifecycle() {
-//        mCallbackQueue.bind(mLifecycleSubject);
+        this(new SlothLifecycleRegistory());
+    }
+
+    public Lifecycle(@NonNull LifecycleRegistryOwner lifecycleRegistryOwner) {
+        mLifecycleRegistryOwner = lifecycleRegistryOwner;
+        mCallbackQueue.bind(lifecycleRegistryOwner);
+        subscribe(it -> {
+            android.arch.lifecycle.Lifecycle.Event event;
+            switch (it.getState()) {
+                case OnCreate:
+                    event = android.arch.lifecycle.Lifecycle.Event.ON_CREATE;
+                    break;
+                case OnStart:
+                    event = android.arch.lifecycle.Lifecycle.Event.ON_START;
+                    break;
+                case OnResume:
+                    event = android.arch.lifecycle.Lifecycle.Event.ON_RESUME;
+                    break;
+                case OnStop:
+                    event = android.arch.lifecycle.Lifecycle.Event.ON_STOP;
+                    break;
+                case OnDestroy:
+                    event = android.arch.lifecycle.Lifecycle.Event.ON_DESTROY;
+                    break;
+                default:
+                    return;
+            }
+            getLifecycleRegistry().getLifecycle().handleLifecycleEvent(event);
+        });
+    }
+
+    /**
+     * Android Architecture Components互換オブジェクトを生成する
+     */
+    public LifecycleRegistryOwner getLifecycleRegistry() {
+        return mLifecycleRegistryOwner;
     }
 
     /**
