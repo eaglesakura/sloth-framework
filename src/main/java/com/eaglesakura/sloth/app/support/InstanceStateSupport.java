@@ -1,16 +1,16 @@
 package com.eaglesakura.sloth.app.support;
 
 import com.eaglesakura.android.saver.LightSaver;
-import com.eaglesakura.cerberus.LifecycleEvent;
-import com.eaglesakura.cerberus.event.OnCreateEvent;
-import com.eaglesakura.cerberus.event.OnSaveInstanceStateEvent;
 import com.eaglesakura.sloth.app.lifecycle.ActivityLifecycle;
 import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
+import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.OnCreateEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.OnSaveInstanceStateEvent;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
 
 /**
  * LightSaverによるステート保持を行う
@@ -19,9 +19,10 @@ import rx.functions.Action1;
  */
 public class InstanceStateSupport {
     public static void bind(FragmentLifecycle lifecycle, Fragment fragment) {
-        lifecycle.subscribe(new Action1<LifecycleEvent>() {
+        lifecycle.subscribe(new Consumer<LifecycleEvent>() {
+
             @Override
-            public void call(LifecycleEvent lifecycleEvent) {
+            public void accept(LifecycleEvent lifecycleEvent) throws Exception {
                 switch (lifecycleEvent.getState()) {
                     case OnSaveInstanceState:
                         save(((OnSaveInstanceStateEvent) lifecycleEvent));
@@ -47,9 +48,9 @@ public class InstanceStateSupport {
     }
 
     public static void bind(ActivityLifecycle lifecycle, Activity activity) {
-        lifecycle.subscribe(new Action1<LifecycleEvent>() {
+        lifecycle.subscribe(new Consumer<LifecycleEvent>() {
             @Override
-            public void call(LifecycleEvent lifecycleEvent) {
+            public void accept(LifecycleEvent lifecycleEvent) throws Exception {
                 switch (lifecycleEvent.getState()) {
                     case OnSaveInstanceState:
                         save(((OnSaveInstanceStateEvent) lifecycleEvent));

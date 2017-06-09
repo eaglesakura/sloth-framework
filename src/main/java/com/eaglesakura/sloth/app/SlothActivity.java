@@ -1,6 +1,5 @@
 package com.eaglesakura.sloth.app;
 
-import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.sloth.app.lifecycle.ActivityLifecycle;
 
@@ -31,13 +30,6 @@ public abstract class SlothActivity extends AppCompatActivity {
      * ライフサイクルが新規生成された
      */
     protected void onCreateLifecycle(@NonNull ActivityLifecycle lifecycle) {
-    }
-
-    /**
-     * ライフサイクル状態を取得する
-     */
-    public LifecycleState getLifecycleState() {
-        return mLifecycle.getLifecycleState();
     }
 
     @Override

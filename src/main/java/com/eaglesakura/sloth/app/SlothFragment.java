@@ -4,7 +4,6 @@ import com.eaglesakura.android.util.FragmentUtil;
 import com.eaglesakura.android.util.PermissionUtil;
 import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.BackgroundTaskBuilder;
-import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.sloth.annotation.BindInterface;
 import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
@@ -64,14 +63,6 @@ public abstract class SlothFragment extends Fragment {
      */
     protected void onCreateLifecycle(FragmentLifecycle newLifecycle) {
 
-    }
-
-
-    /**
-     * ライフサイクル状態を取得する
-     */
-    public LifecycleState getLifecycleState() {
-        return getLifecycle().getLifecycleState();
     }
 
     @Nullable

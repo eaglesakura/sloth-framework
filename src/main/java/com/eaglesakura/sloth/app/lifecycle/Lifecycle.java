@@ -4,10 +4,10 @@ import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.BackgroundTaskBuilder;
 import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.ExecuteTarget;
-import com.eaglesakura.cerberus.LifecycleEvent;
-import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.sloth.annotation.Experimental;
+import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.State;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.UiThread;
@@ -15,15 +15,14 @@ import android.support.annotation.UiThread;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscriber;
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.subjects.BehaviorSubject;
-import rx.subjects.Subject;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.Subject;
 
 public abstract class Lifecycle {
 
-    protected final BehaviorSubject<LifecycleEvent> mLifecycleSubject = BehaviorSubject.create(LifecycleEvent.wrap(LifecycleState.NewObject));
+    protected final BehaviorSubject<LifecycleEvent> mLifecycleSubject = BehaviorSubject.createDefault(LifecycleEvent.wrap(State.NewObject));
 
     protected final PendingCallbackQueue mCallbackQueue = new PendingCallbackQueue();
 
@@ -31,16 +30,16 @@ public abstract class Lifecycle {
      * 削除時に実行されるアクション一覧
      */
     @Experimental
-    protected List<Action1<Lifecycle>> mDestroyActions = new ArrayList<>();
+    protected List<Consumer<Lifecycle>> mDestroyActions = new ArrayList<>();
 
     public Lifecycle() {
-        mCallbackQueue.bind(mLifecycleSubject);
+//        mCallbackQueue.bind(mLifecycleSubject);
     }
 
     /**
      * ライフサイクル状態を取得する
      */
-    public LifecycleState getLifecycleState() {
+    public State getLifecycleState() {
         return mLifecycleSubject.getValue().getState();
     }
 
@@ -48,12 +47,13 @@ public abstract class Lifecycle {
         return mCallbackQueue;
     }
 
-    public Subscription subscribe(Action1<? super LifecycleEvent> onNext) {
+    /**
+     * ライフサイクルイベントをハンドリングする。
+     *
+     * 理想的には {@link Disposable#dispose()} を行うべきであるが、現実的にはFragment/ActivityのDestroyと共にgcされるため必須ではない。
+     */
+    public Disposable subscribe(Consumer<? super LifecycleEvent> onNext) {
         return mLifecycleSubject.subscribe(onNext);
-    }
-
-    public Subscription unsafeSubscribe(Subscriber<? super LifecycleEvent> subscriber) {
-        return mLifecycleSubject.unsafeSubscribe(subscriber);
     }
 
     /**
@@ -69,19 +69,23 @@ public abstract class Lifecycle {
      * @return ラップされたSubscription
      */
     @Experimental
-    public Subscription interrupt(CallbackTime time, Subject subject, Action1 onNext) {
-        if (getLifecycleState() == LifecycleState.OnDestroy) {
+    public Disposable interrupt(CallbackTime time, Subject subject, Consumer onNext) {
+        if (getLifecycleState() == State.OnDestroy) {
             return null;
         }
 
-        Subscription sub = subject.subscribe(value -> {
-            getCallbackQueue().run(time, () -> onNext.call(value));
+        Disposable sub = subject.subscribe(value -> {
+            getCallbackQueue().run(time, () -> {
+                try {
+                    onNext.accept(value);
+                } catch (Exception e) {
+                }
+            });
         });
         synchronized (mDestroyActions) {
             mDestroyActions.add(it -> {
-                try {
-                    sub.unsubscribe();
-                } catch (Throwable e) {
+                if (sub.isDisposed()) {
+                    sub.dispose();
                 }
             });
         }
@@ -114,8 +118,11 @@ public abstract class Lifecycle {
     @UiThread
     protected void onDestroy() {
         synchronized (mDestroyActions) {
-            for (Action1<Lifecycle> action : mDestroyActions) {
-                action.call(this);
+            for (Consumer<Lifecycle> action : mDestroyActions) {
+                try {
+                    action.accept(this);
+                } catch (Exception e) {
+                }
             }
             mDestroyActions.clear();
         }

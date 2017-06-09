@@ -1,10 +1,10 @@
 package com.eaglesakura.sloth.app.delegate;
 
-import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
 import com.eaglesakura.sloth.app.lifecycle.UiLifecycle;
+import com.eaglesakura.sloth.app.lifecycle.event.OnCreateEvent;
 import com.eaglesakura.util.StringUtil;
 
 import android.app.Dialog;
@@ -30,7 +30,7 @@ public class DialogFragmentDelegate {
     public DialogFragmentDelegate(@NonNull Callback compat, @NonNull FragmentLifecycle lifecycle) {
         mCompat = compat;
         mLifecycleDelegate = lifecycle;
-        lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
+        lifecycle.subscribe(it -> {
             switch (it.getState()) {
                 case OnCreate:
                     onCreate((OnCreateEvent) it);

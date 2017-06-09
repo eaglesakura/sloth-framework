@@ -28,7 +28,7 @@ public class CpuWakeDelegate {
 
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
-        lifecycle.getCallbackQueue().getObservable().subscribe(it -> {
+        lifecycle.subscribe(it -> {
             switch (it.getState()) {
                 case OnDestroy:
                     onDestroyed();

@@ -2,13 +2,13 @@ package com.eaglesakura.sloth.app.support;
 
 import com.eaglesakura.android.margarine.MargarineKnife;
 import com.eaglesakura.android.util.ContextUtil;
-import com.eaglesakura.cerberus.LifecycleEvent;
-import com.eaglesakura.cerberus.event.OnCreateOptionsMenuEvent;
-import com.eaglesakura.cerberus.event.OnCreateViewEvent;
 import com.eaglesakura.sloth.Sloth;
 import com.eaglesakura.sloth.app.lifecycle.FragmentLifecycle;
 import com.eaglesakura.sloth.annotation.FragmentLayout;
 import com.eaglesakura.sloth.annotation.FragmentMenu;
+import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.OnCreateOptionsMenuEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.OnCreateViewEvent;
 import com.eaglesakura.util.StringUtil;
 
 import android.content.Context;
@@ -18,7 +18,7 @@ import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.View;
 
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
 
 /**
  * View/Menuバインディングをサポートする
@@ -28,7 +28,7 @@ public class ViewBindingSupport {
         lifecycle.subscribe(new Impl(lifecycle, target, callback));
     }
 
-    private static class Impl implements Action1<LifecycleEvent> {
+    private static class Impl implements Consumer<LifecycleEvent> {
         FragmentLifecycle mLifecycle;
 
         Fragment mTarget;
@@ -54,7 +54,7 @@ public class ViewBindingSupport {
         }
 
         @Override
-        public void call(LifecycleEvent lifecycleEvent) {
+        public void accept(LifecycleEvent lifecycleEvent) {
             switch (lifecycleEvent.getState()) {
                 case OnCreateView:
                     onCreateView(((OnCreateViewEvent) lifecycleEvent));

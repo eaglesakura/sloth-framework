@@ -1,11 +1,11 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
-import com.eaglesakura.cerberus.LifecycleEvent;
-import com.eaglesakura.cerberus.LifecycleState;
-import com.eaglesakura.cerberus.event.OnActivityResultEvent;
-import com.eaglesakura.cerberus.event.OnCreateEvent;
-import com.eaglesakura.cerberus.event.OnRestoreEvent;
-import com.eaglesakura.cerberus.event.OnSaveInstanceStateEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.OnActivityResultEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.OnCreateEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.OnRestoreEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.OnSaveInstanceStateEvent;
+import com.eaglesakura.sloth.app.lifecycle.event.State;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,33 +29,33 @@ public class ActivityLifecycle extends UiLifecycle {
 
     @UiThread
     public void onStart() {
-        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnStart));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(State.OnStart));
     }
 
     @UiThread
     @Override
     public void onResume() {
         super.onResume();
-        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnResume));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(State.OnResume));
     }
 
     @UiThread
     @Override
     public void onPause() {
         super.onPause();
-        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnPause));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(State.OnPause));
     }
 
     @UiThread
     public void onStop() {
-        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnStop));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(State.OnStop));
     }
 
     @UiThread
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mLifecycleSubject.onNext(LifecycleEvent.wrap(LifecycleState.OnDestroy));
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(State.OnDestroy));
     }
 
     @UiThread

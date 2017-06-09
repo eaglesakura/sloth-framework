@@ -1,9 +1,9 @@
 package com.eaglesakura.sloth.ui.pager;
 
-import com.eaglesakura.cerberus.LifecycleState;
 import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.Sloth;
 import com.eaglesakura.sloth.app.SlothFragment;
+import com.eaglesakura.sloth.app.lifecycle.event.State;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.IntRange;
@@ -115,9 +115,9 @@ public class SupportFragmentPager {
         for (PagerFragmentHolder holder : mFragments) {
             if (holder.mCacheFragment instanceof SlothFragment) {
                 SlothFragment cacheFragment = (SlothFragment) holder.mCacheFragment;
-                LifecycleState lifecycleState = cacheFragment.getLifecycleState();
+                State lifecycleState = cacheFragment.getLifecycle().getLifecycleState();
 
-                if (lifecycleState.ordinal() >= LifecycleState.OnDestroy.ordinal()) {
+                if (lifecycleState.ordinal() >= State.OnDestroy.ordinal()) {
                     // 廃棄済みのため、キャッシュを削除すべき
                     SlothLog.system("ViewPager FragmentCacheClean[%s] lifecycle[%s]", cacheFragment.toString(), lifecycleState.toString());
                     holder.mCacheFragment = null;

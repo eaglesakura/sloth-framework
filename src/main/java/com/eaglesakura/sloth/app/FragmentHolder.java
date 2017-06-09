@@ -1,8 +1,8 @@
 package com.eaglesakura.sloth.app;
 
-import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.sloth.app.lifecycle.Lifecycle;
+import com.eaglesakura.sloth.app.lifecycle.event.OnCreateEvent;
 import com.eaglesakura.util.ReflectionUtil;
 
 import android.app.Activity;
@@ -151,7 +151,7 @@ public abstract class FragmentHolder<T extends Fragment> {
     }
 
     public FragmentHolder<T> bind(Lifecycle delegate) {
-        delegate.getCallbackQueue().getObservable().subscribe(it -> {
+        delegate.subscribe(it ->{
             switch (it.getState()) {
                 case OnCreate:
                     onCreate(((OnCreateEvent) it).getBundle());

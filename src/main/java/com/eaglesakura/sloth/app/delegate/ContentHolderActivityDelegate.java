@@ -1,10 +1,10 @@
 package com.eaglesakura.sloth.app.delegate;
 
 import com.eaglesakura.android.margarine.MargarineKnife;
-import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.sloth.R;
-import com.eaglesakura.sloth.app.lifecycle.ActivityLifecycle;
 import com.eaglesakura.sloth.app.FragmentHolder;
+import com.eaglesakura.sloth.app.lifecycle.ActivityLifecycle;
+import com.eaglesakura.sloth.app.lifecycle.event.OnCreateEvent;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

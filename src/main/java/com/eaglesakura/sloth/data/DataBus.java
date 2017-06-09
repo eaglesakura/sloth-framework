@@ -26,6 +26,8 @@ import java.util.List;
 import static com.eaglesakura.sloth.util.AppSupportUtil.assertNotCanceled;
 
 /**
+ * MEMO: Android Architecture Components / LiveData / ViewModelへの移行を推奨
+ *
  * Nullを許容したデータバスを構築する
  *
  * データハンドリングは必ずUIスレッドで行われる。
