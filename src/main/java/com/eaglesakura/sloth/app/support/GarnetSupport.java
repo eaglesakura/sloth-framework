@@ -8,6 +8,7 @@ import com.eaglesakura.sloth.app.lifecycle.event.State;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 
 import io.reactivex.functions.Consumer;
 
