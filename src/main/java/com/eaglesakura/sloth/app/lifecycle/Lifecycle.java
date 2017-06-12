@@ -13,15 +13,14 @@ import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
-import android.util.EventLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
-import io.reactivex.subjects.Subject;
 
 /**
  * 詳細なライフサイクル管理を行う
@@ -49,7 +48,7 @@ public abstract class Lifecycle {
     private LifecycleRegistryOwner mLifecycleRegistryOwner;
 
     public Lifecycle() {
-        this(new SlothLifecycleRegistory());
+        this(new SlothLifecycleRegistry());
     }
 
     public Lifecycle(@NonNull LifecycleRegistryOwner lifecycleRegistryOwner) {
@@ -111,8 +110,8 @@ public abstract class Lifecycle {
      * 指定したタイミングまで保留対応を行うSubscribeを行う。
      *
      * onNextのコールは必ずUIスレッドで行われる。
-     * 通知を削除したい場合は戻り値Subscriptionをunsubscribeする。
-     * このライフサイクルがDestroyされたとき、自動的にSubscriptionはunsubscribeされる。
+     * 通知を削除したい場合は戻り値 {@link Disposable} を {@link Disposable#dispose()} する。
+     * このライフサイクルがDestroyされたとき、自動的にdispose()される。
      *
      * @param time    コールバックタイミング
      * @param subject 対象Subject
@@ -120,7 +119,7 @@ public abstract class Lifecycle {
      * @return ラップされたSubscription
      */
     @Experimental
-    public Disposable interrupt(CallbackTime time, Subject subject, Consumer onNext) {
+    public Disposable interrupt(CallbackTime time, Observable subject, Consumer onNext) {
         if (getLifecycleState() == State.OnDestroy) {
             return null;
         }
@@ -135,7 +134,7 @@ public abstract class Lifecycle {
         });
         synchronized (mDestroyActions) {
             mDestroyActions.add(it -> {
-                if (sub.isDisposed()) {
+                if (!sub.isDisposed()) {
                     sub.dispose();
                 }
             });

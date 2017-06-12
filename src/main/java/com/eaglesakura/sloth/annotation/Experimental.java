@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  *
  * 将来的に削除やrenameを行う可能性が高い
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.CLASS)
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})
 public @interface Experimental {
 }

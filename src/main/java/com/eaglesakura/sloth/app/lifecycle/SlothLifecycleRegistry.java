@@ -1,16 +1,19 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
+import com.eaglesakura.sloth.annotation.Experimental;
+
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 
 /**
  * Lifecycle Event互換オブジェクト
  */
-class SlothLifecycleRegistory implements LifecycleRegistryOwner {
+@Experimental
+class SlothLifecycleRegistry implements LifecycleRegistryOwner {
 
-    LifecycleRegistry mRegistry;
+    private LifecycleRegistry mRegistry;
 
-    public SlothLifecycleRegistory() {
+    public SlothLifecycleRegistry() {
         mRegistry = new LifecycleRegistry(this);
     }
 
