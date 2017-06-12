@@ -1,11 +1,16 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
+import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.lambda.Action1;
+import com.eaglesakura.lambda.CallbackUtils;
+import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.event.State;
+import com.eaglesakura.util.Util;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.support.annotation.CallSuper;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -91,6 +96,7 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
         return mLifecycle;
     }
 
+    @CallSuper
     @Override
     protected void onActive() {
         for (Action1<SlothLiveData<T>> action : mOnActiveListeners) {
@@ -111,6 +117,7 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
         super.onActive();
     }
 
+    @CallSuper
     @Override
     protected void onInactive() {
         super.onInactive();
@@ -167,5 +174,28 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
         if (lifecycle.getLifecycleState().ordinal() >= State.OnResume.ordinal()) {
             observeForever(observer);
         }
+    }
+
+    /**
+     * データの取得が完了するまで待つ。
+     * デッドロックを防ぐため、このメソッドはワーカースレッドからのみ受け付ける。
+     *
+     * @param cancelCallback キャンセルチェック
+     * @return 現在のオブジェクト
+     * @throws InterruptedException キャンセルされた場合に例外として投げられる
+     */
+    public T await(CancelCallback cancelCallback) throws InterruptedException {
+        AndroidThreadUtil.assertBackgroundThread();
+
+        while (!CallbackUtils.isCanceled(cancelCallback)) {
+            T value = getValue();
+            if (value != null) {
+                return value;
+            } else {
+                Util.sleep(1);
+            }
+        }
+
+        throw new InterruptedException("await canceled");
     }
 }
