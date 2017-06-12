@@ -83,6 +83,12 @@ public class FragmentLifecycle extends UiLifecycle {
 
     @CallSuper
     @UiThread
+    public void onDetach() {
+        mLifecycleSubject.onNext(LifecycleEvent.wrap(State.OnDetach));
+    }
+
+    @CallSuper
+    @UiThread
     public void onDestroyView() {
         mLifecycleSubject.onNext(LifecycleEvent.wrap(State.OnDestroyView));
     }

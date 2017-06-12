@@ -21,5 +21,6 @@ public enum State {
     OnPause,
     OnStop,
     OnDestroyView,
+    OnDetach,
     OnDestroy,
 }

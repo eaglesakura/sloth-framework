@@ -155,6 +155,12 @@ public abstract class SlothFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        getLifecycle().onPause();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         getLifecycle().onStop();
@@ -170,6 +176,7 @@ public abstract class SlothFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         InternalSupportFragmentUtil.onDetach(this);
+        getLifecycle().onDetach();
     }
 
     @Override
