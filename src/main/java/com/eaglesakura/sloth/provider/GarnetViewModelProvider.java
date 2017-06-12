@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Activity/FragmentとViewModelの依存解決を行うProviderを定義する
  */
-public class GarnetViewModelProvider extends ContextProvider {
+public abstract class GarnetViewModelProvider extends ContextProvider {
     private Activity mActivity;
 
     private Fragment mFragment;
