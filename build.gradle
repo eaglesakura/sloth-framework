@@ -2,10 +2,10 @@
  * 3.25.0.x  : フレームワーク全体を再構成
  * 3.25.1.x  : AS3.0対応
  * 3.25.2.x  : バージョン命名規約にTAGを加えた
- * 3.26.0.x  : Android O(API26)対応, Android Architecture Components対応
+ * 4.0.x     : Android O(API26)対応, Android Architecture Components対応, バージョン命名からAPIレベルを削除
  */
 def ARTIFACT_VERSION = System.env.CIRCLE_TAG == null ?
-        "3.26.0" : System.env.CIRCLE_TAG.substring(System.env.CIRCLE_TAG.indexOf('v') + 1)
+        "4.0" : System.env.CIRCLE_TAG.substring(System.env.CIRCLE_TAG.indexOf('v') + 1)
 def REPOSITORY_NAME = "maven"
 def BINTRAY_LICENSES = ["MIT"]
 def BINTRAY_LABELS = ["android"]
