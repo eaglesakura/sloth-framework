@@ -10,7 +10,7 @@ import android.arch.lifecycle.ViewModel;
  */
 @Experimental
 public abstract class GarnetViewModel extends ViewModel {
-    private boolean mInitialized = true;
+    private boolean mInitialized;
 
     /**
      * Garnetによって初期化されるメソッド

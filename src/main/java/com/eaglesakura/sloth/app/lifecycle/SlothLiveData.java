@@ -165,14 +165,14 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
                     removeObserver(observer);
                     break;
                 case OnResume:
-                    observeForever(observer);
+                    observe(lifecycle.getLifecycleRegistry(), observer);
                     break;
             }
         });
 
         // 既にForegroundであればObserverを登録する
         if (lifecycle.getLifecycleState().ordinal() >= State.OnResume.ordinal()) {
-            observeForever(observer);
+            observe(lifecycle.getLifecycleRegistry(), observer);
         }
     }
 
