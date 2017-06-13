@@ -7,6 +7,7 @@ import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
 import com.eaglesakura.sloth.app.lifecycle.event.State;
 import com.eaglesakura.sloth.util.LiveDataUtil;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.CallSuper;
@@ -83,6 +84,10 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
                 throw new IllegalStateException(e);
             }
         }
+    }
+
+    public void observe(@NonNull Lifecycle lifecycle, @NonNull Observer<T> observer) {
+        observe(lifecycle.getLifecycleRegistry(), observer);
     }
 
     /**
