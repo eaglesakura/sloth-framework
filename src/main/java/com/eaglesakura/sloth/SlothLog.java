@@ -14,14 +14,14 @@ public class SlothLog {
             sAppLogger = new Logger.RobolectricLogger() {
                 @Override
                 protected int getStackDepth() {
-                    return super.getStackDepth() + 1;
+                    return super.getStackDepth();
                 }
             };
         } else {
             sAppLogger = new Logger.AndroidLogger(Log.class) {
                 @Override
                 protected int getStackDepth() {
-                    return super.getStackDepth() + 1;
+                    return super.getStackDepth();
                 }
             }.setStackInfo(BuildConfig.DEBUG);
         }

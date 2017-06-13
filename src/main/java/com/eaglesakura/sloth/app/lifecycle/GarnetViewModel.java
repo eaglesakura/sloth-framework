@@ -1,9 +1,11 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
 import com.eaglesakura.android.garnet.Initializer;
+import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.sloth.annotation.Experimental;
 
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.CallSuper;
 
 /**
  * Garnetによって生成されることを前提としたViewModel
@@ -11,6 +13,8 @@ import android.arch.lifecycle.ViewModel;
 @Experimental
 public abstract class GarnetViewModel extends ViewModel {
     private boolean mInitialized;
+
+    private Lifecycle mLifecycle;
 
     /**
      * Garnetによって初期化されるメソッド
@@ -22,8 +26,18 @@ public abstract class GarnetViewModel extends ViewModel {
             return;
         }
 
+        ServiceLifecycle lifecycle = new ServiceLifecycle();
+        UIHandler.postUIorRun(lifecycle::onCreate);
+        mLifecycle = lifecycle;
         onInitialize();
         mInitialized = true;
+    }
+
+    /**
+     * ViewModelのライフサイクルを取得する
+     */
+    public Lifecycle getLifecycle() {
+        return mLifecycle;
     }
 
     /**
@@ -31,5 +45,12 @@ public abstract class GarnetViewModel extends ViewModel {
      */
     protected void onInitialize() {
 
+    }
+
+    @CallSuper
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        UIHandler.postUIorRun(mLifecycle::onDestroy);
     }
 }

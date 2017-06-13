@@ -1,13 +1,10 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
-import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.lambda.Action1;
-import com.eaglesakura.lambda.CallbackUtils;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.event.State;
 import com.eaglesakura.sloth.util.LiveDataUtil;
-import com.eaglesakura.util.Util;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
@@ -30,7 +27,7 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
     /**
      * LiveDataごとの独自のライフサイクルを指定する。
      */
-    private ServiceLifecycle mLifecycle;
+    private Lifecycle mLifecycle;
 
     /**
      * 自動的にライフサイクルが生成された場合はtrue,
@@ -78,7 +75,7 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
      * 外部から設定された場合、そのライフサイクルが優先されて使用される。
      */
     @Experimental
-    public void setLifecycle(ServiceLifecycle lifecycle) {
+    public void setLifecycle(Lifecycle lifecycle) {
         if (mLifecycle != null) {
             throw new IllegalStateException("Lifecycle injected!");
         }
@@ -109,8 +106,9 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
         }
 
         if (mLifecycle == null) {
-            mLifecycle = new ServiceLifecycle();
-            mLifecycle.onCreate();
+            ServiceLifecycle lifecycle = new ServiceLifecycle();
+            lifecycle.onCreate();
+            mLifecycle = lifecycle;
             mLifecycleCreated = true;
         } else {
             mLifecycleCreated = false;
