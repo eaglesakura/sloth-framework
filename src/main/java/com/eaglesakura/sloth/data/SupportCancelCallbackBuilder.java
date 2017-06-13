@@ -131,7 +131,7 @@ public class SupportCancelCallbackBuilder {
             Timer mTimer = new Timer();
 
             @Override
-            public boolean isCanceled() throws Throwable {
+            public boolean isCanceled() throws Exception {
                 return (mTimer.end() > timeout);
             }
         };
@@ -176,7 +176,7 @@ public class SupportCancelCallbackBuilder {
         }
 
         @Override
-        public boolean isCanceled() throws Throwable {
+        public boolean isCanceled() throws Exception {
             return CallbackUtils.isCanceled(mCancelCallback);
         }
     }

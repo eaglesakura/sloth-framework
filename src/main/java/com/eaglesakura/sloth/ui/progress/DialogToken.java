@@ -20,5 +20,5 @@ public interface DialogToken extends Closeable, CancelCallback {
      * UIスレッドでアクションをコールバックする。
      * 読み出しが完了するまでロックする
      */
-    void updateContent(Action1Throwable<View, Throwable> action);
+    void updateContent(Action1Throwable<View, Exception> action);
 }

@@ -19,43 +19,6 @@ public class LiveDataUtil {
     }
 
     /**
-     * 一度だけ受信するObserverへ変換する
-     *
-     * @param origin 元のObserver
-     * @return 一度だけ受信するObserver
-     */
-    @NonNull
-    public static <T> Observer<T> singleObserver(@NonNull Observer<T> origin) {
-        return limitedObserver(1, origin);
-    }
-
-    /**
-     * 指定回数だけ受信するObserverへ変換する
-     *
-     * @param origin もとのObserver処理
-     * @return 一度だけ受信をサポートするObserver
-     */
-    @NonNull
-    public static <T> Observer<T> limitedObserver(@IntRange(from = 1) int maxCallbacks, @NonNull Observer<T> origin) {
-        return new Observer<T>() {
-            int mChangeCount = 0;
-
-            @Override
-            public void onChanged(@Nullable T t) {
-                // コールバック回数が既定以内であれば処理する
-                if (mChangeCount < maxCallbacks) {
-                    synchronized (this) {
-                        if (mChangeCount < maxCallbacks) {
-                            origin.onChanged(t);
-                        }
-                        ++mChangeCount;
-                    }
-                }
-            }
-        };
-    }
-
-    /**
      * データの取得待ちを行う
      *
      * @param data           対象のLiveData

@@ -324,7 +324,7 @@ public class DialogBuilder<T> {
         }
 
         @Override
-        public boolean isCanceled() throws Throwable {
+        public boolean isCanceled() throws Exception {
             return mDialog != null && !mDialog.isShowing();
         }
 
@@ -334,7 +334,7 @@ public class DialogBuilder<T> {
         }
 
         @Override
-        public void updateContent(Action1Throwable<View, Throwable> action) {
+        public void updateContent(Action1Throwable<View, Exception> action) {
             try {
                 UIHandler.await(() -> {
                     action.action(mBuilder.mContent);
