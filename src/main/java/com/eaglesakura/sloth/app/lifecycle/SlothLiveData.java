@@ -6,6 +6,7 @@ import com.eaglesakura.lambda.CallbackUtils;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.event.State;
+import com.eaglesakura.sloth.util.LiveDataUtil;
 import com.eaglesakura.util.Util;
 
 import android.arch.lifecycle.LiveData;
@@ -185,17 +186,6 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
      * @throws InterruptedException キャンセルされた場合に例外として投げられる
      */
     public T await(CancelCallback cancelCallback) throws InterruptedException {
-        AndroidThreadUtil.assertBackgroundThread();
-
-        while (!CallbackUtils.isCanceled(cancelCallback)) {
-            T value = getValue();
-            if (value != null) {
-                return value;
-            } else {
-                Util.sleep(1);
-            }
-        }
-
-        throw new InterruptedException("await canceled");
+        return LiveDataUtil.await(this, cancelCallback);
     }
 }

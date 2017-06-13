@@ -3,6 +3,8 @@ package com.eaglesakura.sloth.provider;
 import com.eaglesakura.android.garnet.Depend;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
@@ -35,5 +37,12 @@ public abstract class GarnetViewModelProvider extends ContextProvider {
         return mFragment;
     }
 
+    protected <T extends ViewModel> T getViewModelFromFragment(Class<T> clazz) {
+        return ViewModelProviders.of(getFragment()).get(clazz);
+    }
+
+    protected <T extends ViewModel> T getViewModelFromActivity(Class<T> clazz) {
+        return ViewModelProviders.of(getActivity()).get(clazz);
+    }
 
 }
