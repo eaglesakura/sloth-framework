@@ -3,6 +3,7 @@ package com.eaglesakura.sloth.app.lifecycle;
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.sloth.annotation.Experimental;
+import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
 import com.eaglesakura.sloth.app.lifecycle.event.State;
 import com.eaglesakura.sloth.util.LiveDataUtil;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.annotations.Nullable;
+import io.reactivex.functions.Consumer;
 
 /**
  * {@link Lifecycle} に連携したLiveDataを構築する
@@ -23,18 +25,6 @@ import io.reactivex.annotations.Nullable;
  */
 @Experimental
 public abstract class SlothLiveData<T> extends LiveData<T> {
-
-    /**
-     * LiveDataごとの独自のライフサイクルを指定する。
-     */
-    private Lifecycle mLifecycle;
-
-    /**
-     * 自動的にライフサイクルが生成された場合はtrue,
-     * これは onInactive() で自動的に破棄する。
-     */
-    private boolean mLifecycleCreated;
-
     /**
      * データがActiveになった際のコールバックを定義する
      */
@@ -69,31 +59,6 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
         mOnInactiveListeners.remove(action);
     }
 
-    /**
-     * ライフサイクルオブジェクトを設定する
-     *
-     * 外部から設定された場合、そのライフサイクルが優先されて使用される。
-     */
-    @Experimental
-    public void setLifecycle(Lifecycle lifecycle) {
-        if (mLifecycle != null) {
-            throw new IllegalStateException("Lifecycle injected!");
-        }
-        mLifecycle = lifecycle;
-        mLifecycleCreated = false;
-    }
-
-
-    /**
-     * ライフサイクルを取得する
-     *
-     * LiveDataがInactiveの場合、このライフサイクルは基本的にnullを返却する。
-     */
-    @Nullable
-    public Lifecycle getLifecycle() {
-        return mLifecycle;
-    }
-
     @CallSuper
     @Override
     protected void onActive() {
@@ -104,15 +69,6 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
                 throw new IllegalStateException(e);
             }
         }
-
-        if (mLifecycle == null) {
-            ServiceLifecycle lifecycle = new ServiceLifecycle();
-            lifecycle.onCreate();
-            mLifecycle = lifecycle;
-            mLifecycleCreated = true;
-        } else {
-            mLifecycleCreated = false;
-        }
         super.onActive();
     }
 
@@ -120,12 +76,6 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
     @Override
     protected void onInactive() {
         super.onInactive();
-
-        if (mLifecycleCreated) {
-            mLifecycle.onDestroy();
-            mLifecycle = null;
-        }
-
         for (Action1<SlothLiveData<T>> action : mOnInactiveListeners) {
             try {
                 action.action(this);
@@ -138,34 +88,25 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
     /**
      * {@link Lifecycle} に連携したObserverを構築する
      *
-     * Observerは{@link Lifecycle#onDestroy()} タイミングで自動的にremoveObserver()される。。
+     * ObserverはonPause() タイミングで自動的にremoveObserver()される。。
      */
-    public void observeAlive(@NonNull Lifecycle lifecycle, @NonNull Observer<T> observer) {
-        lifecycle.subscribe(event -> {
-            switch (event.getState()) {
-                case OnDestroy:
-                    removeObserver(observer);
-                    break;
-            }
-        });
-        observeForever(observer);
-    }
+    public void observeCurrentForeground(@NonNull Lifecycle lifecycle, @NonNull Observer<T> observer) {
+        lifecycle.subscribe(new Consumer<LifecycleEvent>() {
+            boolean mPaused;
 
-    /**
-     * {@link Lifecycle} に連携したObserverを構築する
-     *
-     * Observerは{@link Lifecycle#onDestroy()} タイミングで自動的にremoveObserver()される。。
-     */
-    public void observeForeground(@NonNull Lifecycle lifecycle, @NonNull Observer<T> observer) {
-        lifecycle.subscribe(event -> {
-            switch (event.getState()) {
-                case OnPause:
-                case OnDestroy:
-                    removeObserver(observer);
-                    break;
-                case OnResume:
-                    observe(lifecycle.getLifecycleRegistry(), observer);
-                    break;
+            @Override
+            public void accept(LifecycleEvent event) throws Exception {
+                switch (event.getState()) {
+                    case OnPause:
+                        removeObserver(observer);
+                        mPaused = true;
+                        break;
+                    case OnResume:
+                        if (!mPaused) {
+                            observe(lifecycle.getLifecycleRegistry(), observer);
+                        }
+                        break;
+                }
             }
         });
 

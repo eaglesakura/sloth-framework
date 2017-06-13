@@ -46,13 +46,8 @@ public class LimitedSlothLiveData<T> extends SlothLiveData<T> {
     }
 
     @Override
-    public void observeAlive(Lifecycle lifecycle, Observer<T> observer) {
-        super.observeAlive(lifecycle, wrap(observer));
-    }
-
-    @Override
-    public void observeForeground(Lifecycle lifecycle, Observer<T> observer) {
-        super.observeForeground(lifecycle, wrap(observer));
+    public void observeCurrentForeground(Lifecycle lifecycle, Observer<T> observer) {
+        super.observeCurrentForeground(lifecycle, wrap(observer));
     }
 
     @Override
