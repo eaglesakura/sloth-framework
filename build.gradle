@@ -146,6 +146,9 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.0.0-alpha1"
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha1"
 
+    // Room O/R Mapper
+    implementation "android.arch.persistence.room:runtime:1.0.0-alpha1"
+
     /**
      * Smooth ProgressBar / 160 Method
      * https://github.com/castorflex/SmoothProgressBar
