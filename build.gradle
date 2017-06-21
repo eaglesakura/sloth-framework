@@ -119,7 +119,7 @@ dependencies {
         compile "com.eaglesakura:alternet:2.3.2"
         compile "com.eaglesakura:onactivityresult-invoke:1.3.0"
         compile "com.eaglesakura:small-aquery:1.3.0"
-        compile "com.eaglesakura:cerberus:3.0.0"
+        compile "com.eaglesakura:cerberus:3.0.1"
         compile "com.eaglesakura:margarineknife:1.5.0"
         compile "com.eaglesakura:garnet:1.2.0"
         compile "com.eaglesakura:light-saver:1.4.0"
