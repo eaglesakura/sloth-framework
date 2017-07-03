@@ -7,6 +7,7 @@ import com.eaglesakura.sloth.app.lifecycle.ActivityLifecycle;
 import com.eaglesakura.sloth.app.lifecycle.event.OnCreateEvent;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,6 +33,7 @@ public class ContentHolderActivityDelegate {
         /**
          * 画面表示のためのLayoutIdを取得する
          */
+        @LayoutRes
         int getContentLayout(@NonNull ContentHolderActivityDelegate self);
 
         /**
