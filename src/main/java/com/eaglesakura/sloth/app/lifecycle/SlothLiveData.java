@@ -14,6 +14,7 @@ import android.support.annotation.CallSuper;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.annotations.Nullable;
@@ -35,6 +36,11 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
      * データがInactiveになった際のコールバックを定義する
      */
     private Set<Action1<SlothLiveData<T>>> mOnInactiveListeners = new HashSet<>();
+
+    /**
+     * Activeかどうかのステータス
+     */
+    private AtomicBoolean mActive = new AtomicBoolean(false);
 
     /**
      * {@link LiveData#onActive()}のListenerを定義する。
@@ -63,6 +69,7 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
     @CallSuper
     @Override
     protected void onActive() {
+        mActive.set(true);
         for (Action1<SlothLiveData<T>> action : mOnActiveListeners) {
             try {
                 action.action(this);
@@ -76,6 +83,7 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
     @CallSuper
     @Override
     protected void onInactive() {
+        mActive.set(false);
         super.onInactive();
         for (Action1<SlothLiveData<T>> action : mOnInactiveListeners) {
             try {
@@ -84,6 +92,13 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
                 throw new IllegalStateException(e);
             }
         }
+    }
+
+    /**
+     * このLiveDataがActiveな状態であればtrue
+     */
+    public boolean isActive() {
+        return mActive.get();
     }
 
     public void observe(@NonNull Lifecycle lifecycle, @NonNull Observer<T> observer) {

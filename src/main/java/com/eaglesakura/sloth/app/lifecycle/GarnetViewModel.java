@@ -11,6 +11,7 @@ import android.support.annotation.CallSuper;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Garnetによって生成されることを前提としたViewModel
@@ -29,7 +30,7 @@ public abstract class GarnetViewModel extends ViewModel {
     /**
      * Activeなデータ数
      */
-    private int mActiveDataNum = 0;
+    private AtomicInteger mActiveDataNum = new AtomicInteger(0);
 
     /**
      * Garnetによって初期化されるメソッド
@@ -99,22 +100,24 @@ public abstract class GarnetViewModel extends ViewModel {
         mLifecycle.onInactive();
     }
 
+    public boolean isActive() {
+        return mActiveDataNum.get() > 0;
+    }
+
     /**
      * データがアクティブになった
      */
     private Action1<LiveData> mOnActiveAction = data -> {
-        if (mActiveDataNum == 0) {
+        if (mActiveDataNum.getAndIncrement() == 0) {
             onActive();
         }
-        ++mActiveDataNum;
     };
 
     /**
      * データが非活性化した
      */
     private Action1<LiveData> mOnInactiveAction = data -> {
-        --mActiveDataNum;
-        if (mActiveDataNum == 0) {
+        if (mActiveDataNum.decrementAndGet() == 0) {
             onInactive();
         }
     };
