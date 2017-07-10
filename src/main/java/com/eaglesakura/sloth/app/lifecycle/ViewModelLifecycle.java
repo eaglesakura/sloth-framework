@@ -1,6 +1,7 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
 
+import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
 import com.eaglesakura.sloth.app.lifecycle.event.State;
 
@@ -10,6 +11,7 @@ import android.support.annotation.UiThread;
 /**
  * ViewModelごとに管理されるライフサイクル
  */
+@Experimental
 public class ViewModelLifecycle extends Lifecycle {
 
     @CallSuper
