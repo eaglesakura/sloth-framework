@@ -45,4 +45,5 @@ public abstract class GarnetViewModelProvider extends ContextProvider {
         return ViewModelProviders.of(getActivity()).get(clazz);
     }
 
+
 }

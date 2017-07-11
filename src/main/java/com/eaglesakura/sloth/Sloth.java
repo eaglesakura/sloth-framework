@@ -75,7 +75,7 @@ public class Sloth {
      * MEMO : .start()は外部で呼び出す必要がある。
      */
     public static <T> BackgroundTaskBuilder<T> newGlobalTask(BackgroundTask.Async<T> callback) {
-        return new BackgroundTaskBuilder<T>(getImpl().mCallbackQueue)
+        return new BackgroundTaskBuilder<T>(getCallbackQueue())
                 .async(callback)
                 .callbackOn(CallbackTime.FireAndForget)
                 .executeOn(ExecuteTarget.LocalQueue);
@@ -85,7 +85,7 @@ public class Sloth {
      * グローバルで管理されるコールバックキューを取得する
      */
     public static PendingCallbackQueue getCallbackQueue() {
-        return getImpl().mCallbackQueue;
+        return getImpl().mLifecycleDelegate.getCallbackQueue();
     }
 
     /**
