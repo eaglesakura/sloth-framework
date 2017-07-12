@@ -30,9 +30,11 @@ public class NotificationBuilder {
 
     NotificationCompat.Builder mBuilder;
 
-    NotificationBuilder(Context context) {
+    public static final String CHANNEL_DEFAULT = "sloth_default";
+
+    NotificationBuilder(Context context, String channelId) {
         mContext = context;
-        mBuilder = new NotificationCompat.Builder(mContext, null);
+        mBuilder = new NotificationCompat.Builder(mContext, channelId);
         mBuilder.setWhen(System.currentTimeMillis());
     }
 
@@ -170,6 +172,10 @@ public class NotificationBuilder {
     }
 
     public static NotificationBuilder from(Context context) {
-        return new NotificationBuilder(context);
+        return new NotificationBuilder(context, CHANNEL_DEFAULT);
+    }
+
+    public static NotificationBuilder from(Context context, String notificationChannel) {
+        return new NotificationBuilder(context, notificationChannel);
     }
 }
