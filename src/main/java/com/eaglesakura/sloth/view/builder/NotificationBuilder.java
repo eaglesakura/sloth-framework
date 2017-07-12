@@ -2,10 +2,12 @@ package com.eaglesakura.sloth.view.builder;
 
 import com.eaglesakura.android.util.DrawableUtil;
 import com.eaglesakura.android.util.ImageUtil;
+import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.sloth.view.SupportNotification;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -30,7 +32,7 @@ public class NotificationBuilder {
 
     NotificationBuilder(Context context) {
         mContext = context;
-        mBuilder = new NotificationCompat.Builder(mContext);
+        mBuilder = new NotificationCompat.Builder(mContext, null);
         mBuilder.setWhen(System.currentTimeMillis());
     }
 
@@ -122,6 +124,18 @@ public class NotificationBuilder {
         return this;
     }
 
+    /**
+     * NotificationBuilderを直接カスタマイズする
+     */
+    public NotificationBuilder customize(Action1<NotificationCompat.Builder> action) {
+        try {
+            action.action(mBuilder);
+            return this;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @SuppressLint("NewApi")
     Notification buildNotification() {
         Notification notification = mBuilder.build();
@@ -136,9 +150,22 @@ public class NotificationBuilder {
             throw new IllegalArgumentException("Context != service :: " + mContext);
         }
 
+        mBuilder.setOngoing(true);
         Notification notification = buildNotification();
 
         ((Service) mContext).startForeground(notificationId, notification);
+//        NotificationManager notificationManager = ((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE));
+//        notificationManager.notify(notificationId, notification);
+        return new SupportNotification(mContext, notification, notificationId);
+    }
+
+    /**
+     * Notificationへの表示を行う
+     */
+    public SupportNotification show(int notificationId) {
+        Notification notification = buildNotification();
+        NotificationManager notificationManager = ((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE));
+        notificationManager.notify(notificationId, notification);
         return new SupportNotification(mContext, notification, notificationId);
     }
 
