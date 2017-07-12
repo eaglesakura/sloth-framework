@@ -37,7 +37,7 @@ public abstract class GarnetViewModel extends ViewModel {
      * このメソッドはGarnetから自動的に呼び出されるため、自発的にコールする必要はない。
      */
     @Initializer
-    public final synchronized void initializeFromGarnet() {
+    private synchronized void initializeFromGarnet() {
         if (mInitialized) {
             return;
         }
