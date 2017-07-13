@@ -56,12 +56,12 @@ public class AlarmEventManager {
          * <br>
          * このメソッドは必ずonReceiveの中で呼び出されることを保証する。
          *
-         * @param self            呼び出し元
-         * @param requestCode     呼び出しリクエスト
-         * @param requestArgments コールバックに呼び出される引数
-         * @param delayedTimeMs   設定から実際に遅延した時間
+         * @param self             呼び出し元
+         * @param requestCode      呼び出しリクエスト
+         * @param requestArguments コールバックに呼び出される引数
+         * @param delayedTimeMs    設定から実際に遅延した時間
          */
-        void onAlarmReceived(AlarmEventManager self, int requestCode, Bundle requestArgments, long delayedTimeMs);
+        void onAlarmReceived(AlarmEventManager self, int requestCode, Bundle requestArguments, long delayedTimeMs);
     }
 
     public AlarmEventManager(Service context, Lifecycle lifecycle, Callback callback) {
@@ -144,7 +144,9 @@ public class AlarmEventManager {
                 mContext, requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT
         );
 
-        if (extract && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (extract && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, current + delayTimeMs, pendingIntent);
+        } else if (extract && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mAlarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, current + delayTimeMs, pendingIntent);
         } else {
             mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, current + delayTimeMs, pendingIntent);
