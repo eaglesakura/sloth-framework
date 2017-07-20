@@ -1,6 +1,7 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
 import com.eaglesakura.lambda.Action1;
+import com.eaglesakura.lambda.Action2;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
@@ -28,14 +29,19 @@ import io.reactivex.functions.Consumer;
 @Experimental
 public abstract class SlothLiveData<T> extends LiveData<T> {
     /**
-     * データがActiveになった際のコールバックを定義する
+     * データがActiveになった際のコールバック
      */
     private Set<Action1<SlothLiveData<T>>> mOnActiveListeners = new HashSet<>();
 
     /**
-     * データがInactiveになった際のコールバックを定義する
+     * データがInactiveになった際のコールバック
      */
     private Set<Action1<SlothLiveData<T>>> mOnInactiveListeners = new HashSet<>();
+
+    /**
+     * setValueされた際のコールバック
+     */
+    private Set<Action2<SlothLiveData<T>, T>> mValueUpdateListeners = new HashSet<>();
 
     /**
      * Activeかどうかのステータス
@@ -58,12 +64,32 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
         mOnInactiveListeners.add(action);
     }
 
+    public void addOnDataSetListener(@NonNull Action2<SlothLiveData<T>, T> action) {
+        mValueUpdateListeners.add(action);
+    }
+
     public void removeOnActiveListener(@NonNull Action1<? extends SlothLiveData> action) {
         mOnActiveListeners.remove(action);
     }
 
     public void removeOnInactiveListener(@NonNull Action1<? extends SlothLiveData> action) {
         mOnInactiveListeners.remove(action);
+    }
+
+    public void removeOnDataSetListener(Action2<SlothLiveData<T>, T> action) {
+        mValueUpdateListeners.remove(action);
+    }
+
+    @Override
+    protected void setValue(T value) {
+        super.setValue(value);
+        for (Action2<SlothLiveData<T>, T> action : mValueUpdateListeners) {
+            try {
+                action.action(this, value);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @CallSuper
