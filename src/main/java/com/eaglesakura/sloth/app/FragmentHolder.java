@@ -150,8 +150,19 @@ public abstract class FragmentHolder<T extends Fragment> {
         mFragment = null;
     }
 
+    /**
+     * Android Architecture Componentsに合わせ、 {@link FragmentHolder#subscribe(Lifecycle)} を推奨
+     */
+    @Deprecated
     public FragmentHolder<T> bind(Lifecycle delegate) {
-        delegate.subscribe(it ->{
+        return subscribe(delegate);
+    }
+
+    /**
+     * ライフサイクルに同期して必要な処理を行う
+     */
+    public FragmentHolder<T> subscribe(Lifecycle delegate) {
+        delegate.subscribe(it -> {
             switch (it.getState()) {
                 case OnCreate:
                     onCreate(((OnCreateEvent) it).getBundle());
@@ -163,6 +174,7 @@ public abstract class FragmentHolder<T extends Fragment> {
         });
         return this;
     }
+
 
     public static <T extends Fragment> FragmentHolder<T> newStub(@NonNull Fragment parent, @IdRes int holderId, @NonNull String tag) {
         return new FragmentHolder<T>(parent, holderId, tag) {
