@@ -1,5 +1,6 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
+import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.lambda.Action2;
 import com.eaglesakura.lambda.CancelCallback;
@@ -78,6 +79,25 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
 
     public void removeOnDataSetListener(Action2<SlothLiveData<T>, T> action) {
         mValueUpdateListeners.remove(action);
+    }
+
+    /**
+     * 値の初期化を行う
+     *
+     * これはどのThreadからでも呼び出せるが、getValue() == nullの場合にのみ動作する。
+     * また、UIThreadでawait()を行っている場合にデッドロックする危険性がある
+     *
+     * @param value 初期化値
+     */
+    protected void initValue(T value) {
+        if (getValue() != null) {
+            throw new IllegalStateException("not initialized");
+        }
+
+        UIHandler.await(() -> {
+            setValue(value);
+            return this;
+        });
     }
 
     @Override

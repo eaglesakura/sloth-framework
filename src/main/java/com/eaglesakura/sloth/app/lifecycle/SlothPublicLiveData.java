@@ -9,6 +9,14 @@ import com.eaglesakura.sloth.annotation.Experimental;
  */
 @Experimental
 public class SlothPublicLiveData<T> extends SlothLiveData<T> {
+
+    public SlothPublicLiveData() {
+    }
+
+    public SlothPublicLiveData(T init) {
+        initValue(init);
+    }
+
     @Override
     public void postValue(T value) {
         super.postValue(value);
