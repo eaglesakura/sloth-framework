@@ -1,9 +1,11 @@
 package com.eaglesakura.sloth.app;
 
 import com.eaglesakura.lambda.Action1;
+import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.app.lifecycle.Lifecycle;
 import com.eaglesakura.sloth.app.lifecycle.event.OnCreateEvent;
 import com.eaglesakura.util.ReflectionUtil;
+import com.eaglesakura.util.StringUtil;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -74,6 +76,15 @@ public abstract class FragmentHolder<T extends Fragment> {
                     transaction.add(mHolderId, mFragment, mFragmentTag).commit();
                 }
             }
+        } else {
+            // find fragment
+            mFragment = ((T) getFragmentManager().findFragmentByTag(mFragmentTag));
+        }
+
+        if (mFragment == null) {
+            throw new IllegalStateException(StringUtil.format("Fragment create/find error tag[%s]", mFragmentTag));
+        } else {
+            SlothLog.system("onCreate[%s]", mFragment.toString());
         }
     }
 
