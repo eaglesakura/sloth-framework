@@ -32,6 +32,11 @@ public class SupportNotification {
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
+    @NonNull
+    public Notification getNotification() {
+        return mNotification;
+    }
+
     /**
      * コンテンツを更新する
      */

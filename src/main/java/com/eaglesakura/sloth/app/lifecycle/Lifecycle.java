@@ -1,5 +1,6 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
+import com.eaglesakura.android.thread.UIHandler;
 import com.eaglesakura.cerberus.BackgroundTask;
 import com.eaglesakura.cerberus.BackgroundTaskBuilder;
 import com.eaglesakura.cerberus.CallbackTime;
@@ -8,6 +9,7 @@ import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
 import com.eaglesakura.sloth.app.lifecycle.event.State;
+import com.eaglesakura.thread.Holder;
 
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.support.annotation.CallSuper;
@@ -100,10 +102,20 @@ public abstract class Lifecycle {
     /**
      * ライフサイクルイベントをハンドリングする。
      *
-     * 理想的には {@link Disposable#dispose()} を行うべきであるが、現実的にはFragment/ActivityのDestroyと共にgcされるため必須ではない。
+     * OnDestroyタイミングで自動的に {@link Disposable#dispose()} が行われる。
      */
     public Disposable subscribe(Consumer<? super LifecycleEvent> onNext) {
-        return mLifecycleSubject.subscribe(onNext);
+        Disposable sub = mLifecycleSubject.subscribe(onNext);
+        synchronized (mDestroyActions) {
+            mDestroyActions.add(it -> {
+                UIHandler.postUI(() -> {
+                    if (!sub.isDisposed()) {
+                        sub.dispose();
+                    }
+                });
+            });
+        }
+        return sub;
     }
 
     /**
@@ -134,9 +146,11 @@ public abstract class Lifecycle {
         });
         synchronized (mDestroyActions) {
             mDestroyActions.add(it -> {
-                if (!sub.isDisposed()) {
-                    sub.dispose();
-                }
+                UIHandler.postUI(() -> {
+                    if (!sub.isDisposed()) {
+                        sub.dispose();
+                    }
+                });
             });
         }
         return sub;

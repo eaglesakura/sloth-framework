@@ -1,9 +1,13 @@
 package com.eaglesakura.sloth.app;
 
 import com.eaglesakura.lambda.Action1;
+import com.eaglesakura.lambda.Action2;
+import com.eaglesakura.lambda.Action3;
+import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.app.lifecycle.Lifecycle;
 import com.eaglesakura.sloth.app.lifecycle.event.OnCreateEvent;
 import com.eaglesakura.util.ReflectionUtil;
+import com.eaglesakura.util.StringUtil;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -74,6 +78,9 @@ public abstract class FragmentHolder<T extends Fragment> {
                     transaction.add(mHolderId, mFragment, mFragmentTag).commit();
                 }
             }
+        } else {
+            // find fragment
+            mFragment = ((T) getFragmentManager().findFragmentByTag(mFragmentTag));
         }
     }
 
@@ -97,6 +104,23 @@ public abstract class FragmentHolder<T extends Fragment> {
                 .replace(mHolderId, fragment, mFragmentTag)
                 .commit();
         mFragment = fragment;
+    }
+
+    /**
+     * コンテンツを切り替える
+     *
+     * @param fragment          新たなFragment
+     * @param transactionAction (transaction, holderId, tag)を渡し、必要なトランザクション処理を行う
+     */
+    public <T2 extends T> void transaction(@NonNull T2 fragment, Action3<FragmentTransaction, Integer, String> transactionAction) {
+        try {
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transactionAction.action(transaction, mHolderId, mFragmentTag);
+            transaction.commit();
+            mFragment = fragment;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @NonNull
@@ -150,8 +174,19 @@ public abstract class FragmentHolder<T extends Fragment> {
         mFragment = null;
     }
 
+    /**
+     * Android Architecture Componentsに合わせ、 {@link FragmentHolder#subscribe(Lifecycle)} を推奨
+     */
+    @Deprecated
     public FragmentHolder<T> bind(Lifecycle delegate) {
-        delegate.subscribe(it ->{
+        return subscribe(delegate);
+    }
+
+    /**
+     * ライフサイクルに同期して必要な処理を行う
+     */
+    public FragmentHolder<T> subscribe(Lifecycle delegate) {
+        delegate.subscribe(it -> {
             switch (it.getState()) {
                 case OnCreate:
                     onCreate(((OnCreateEvent) it).getBundle());
@@ -163,6 +198,7 @@ public abstract class FragmentHolder<T extends Fragment> {
         });
         return this;
     }
+
 
     public static <T extends Fragment> FragmentHolder<T> newStub(@NonNull Fragment parent, @IdRes int holderId, @NonNull String tag) {
         return new FragmentHolder<T>(parent, holderId, tag) {

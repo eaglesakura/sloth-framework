@@ -8,7 +8,15 @@ import com.eaglesakura.sloth.annotation.Experimental;
  * 外部からは通常の {@link android.arch.lifecycle.LiveData} として扱うことを想定する。
  */
 @Experimental
-public abstract class SlothPublicLiveData<T> extends SlothLiveData<T> {
+public class SlothPublicLiveData<T> extends SlothLiveData<T> {
+
+    public SlothPublicLiveData() {
+    }
+
+    public SlothPublicLiveData(T init) {
+        initValue(init);
+    }
+
     @Override
     public void postValue(T value) {
         super.postValue(value);

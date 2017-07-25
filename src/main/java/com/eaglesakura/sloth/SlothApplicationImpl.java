@@ -53,9 +53,6 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
     ServiceLifecycle mLifecycleDelegate = new ServiceLifecycle();
 
     @NonNull
-    PendingCallbackQueue mCallbackQueue = new PendingCallbackQueue();
-
-    @NonNull
     Set<Sloth.ApplicationStateListener> mStateListeners = new HashSet<>();
 
     int mForegroundActivities;

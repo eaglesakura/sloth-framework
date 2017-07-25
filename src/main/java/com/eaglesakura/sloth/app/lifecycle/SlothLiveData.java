@@ -1,6 +1,9 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
+import com.eaglesakura.android.thread.UIHandler;
+import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.lambda.Action1;
+import com.eaglesakura.lambda.Action2;
 import com.eaglesakura.lambda.CancelCallback;
 import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
@@ -28,14 +31,19 @@ import io.reactivex.functions.Consumer;
 @Experimental
 public abstract class SlothLiveData<T> extends LiveData<T> {
     /**
-     * データがActiveになった際のコールバックを定義する
+     * データがActiveになった際のコールバック
      */
     private Set<Action1<SlothLiveData<T>>> mOnActiveListeners = new HashSet<>();
 
     /**
-     * データがInactiveになった際のコールバックを定義する
+     * データがInactiveになった際のコールバック
      */
     private Set<Action1<SlothLiveData<T>>> mOnInactiveListeners = new HashSet<>();
+
+    /**
+     * setValueされた際のコールバック
+     */
+    private Set<Action2<SlothLiveData<T>, T>> mValueUpdateListeners = new HashSet<>();
 
     /**
      * Activeかどうかのステータス
@@ -58,12 +66,72 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
         mOnInactiveListeners.add(action);
     }
 
+    public void addOnDataSetListener(@NonNull Action2<SlothLiveData<T>, T> action) {
+        mValueUpdateListeners.add(action);
+    }
+
     public void removeOnActiveListener(@NonNull Action1<? extends SlothLiveData> action) {
         mOnActiveListeners.remove(action);
     }
 
     public void removeOnInactiveListener(@NonNull Action1<? extends SlothLiveData> action) {
         mOnInactiveListeners.remove(action);
+    }
+
+    public void removeOnDataSetListener(Action2<SlothLiveData<T>, T> action) {
+        mValueUpdateListeners.remove(action);
+    }
+
+    /**
+     * 値の初期化を行う
+     *
+     * これはどのThreadからでも呼び出せるが、getValue() == nullの場合にのみ動作する。
+     * また、UIThreadでawait()を行っている場合にデッドロックする危険性がある
+     *
+     * @param value 初期化値
+     */
+    protected void initValue(T value) {
+        if (getValue() != null) {
+            throw new IllegalStateException("not initialized");
+        }
+
+        UIHandler.await(() -> {
+            setValue(value);
+            return this;
+        });
+    }
+
+    /**
+     * データを強制的にセットする
+     *
+     * UIThreadならばその場でセットする
+     * Backgroundの場合、await==trueならばsetを待ち、そうでないならpostValueされる
+     */
+    protected void syncValue(T value, boolean await) {
+        if (AndroidThreadUtil.isUIThread()) {
+            setValue(value);
+        } else {
+            if (await) {
+                UIHandler.await(() -> {
+                    setValue(value);
+                    return this;
+                });
+            } else {
+                postValue(value);
+            }
+        }
+    }
+
+    @Override
+    protected void setValue(T value) {
+        super.setValue(value);
+        for (Action2<SlothLiveData<T>, T> action : mValueUpdateListeners) {
+            try {
+                action.action(this, value);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @CallSuper
