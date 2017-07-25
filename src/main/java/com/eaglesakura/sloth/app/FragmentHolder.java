@@ -1,6 +1,8 @@
 package com.eaglesakura.sloth.app;
 
 import com.eaglesakura.lambda.Action1;
+import com.eaglesakura.lambda.Action2;
+import com.eaglesakura.lambda.Action3;
 import com.eaglesakura.sloth.SlothLog;
 import com.eaglesakura.sloth.app.lifecycle.Lifecycle;
 import com.eaglesakura.sloth.app.lifecycle.event.OnCreateEvent;
@@ -80,12 +82,6 @@ public abstract class FragmentHolder<T extends Fragment> {
             // find fragment
             mFragment = ((T) getFragmentManager().findFragmentByTag(mFragmentTag));
         }
-
-        if (mFragment == null) {
-            throw new IllegalStateException(StringUtil.format("Fragment create/find error tag[%s]", mFragmentTag));
-        } else {
-            SlothLog.system("onCreate[%s]", mFragment.toString());
-        }
     }
 
     public void onResume() {
@@ -108,6 +104,23 @@ public abstract class FragmentHolder<T extends Fragment> {
                 .replace(mHolderId, fragment, mFragmentTag)
                 .commit();
         mFragment = fragment;
+    }
+
+    /**
+     * コンテンツを切り替える
+     *
+     * @param fragment          新たなFragment
+     * @param transactionAction (transaction, holderId, tag)を渡し、必要なトランザクション処理を行う
+     */
+    public <T2 extends T> void transaction(@NonNull T2 fragment, Action3<FragmentTransaction, Integer, String> transactionAction) {
+        try {
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transactionAction.action(transaction, mHolderId, mFragmentTag);
+            transaction.commit();
+            mFragment = fragment;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @NonNull
