@@ -1,6 +1,7 @@
 package com.eaglesakura.sloth.app.lifecycle;
 
 import com.eaglesakura.android.thread.UIHandler;
+import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.lambda.Action1;
 import com.eaglesakura.lambda.Action2;
 import com.eaglesakura.lambda.CancelCallback;
@@ -98,6 +99,27 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
             setValue(value);
             return this;
         });
+    }
+
+    /**
+     * データを強制的にセットする
+     *
+     * UIThreadならばその場でセットする
+     * Backgroundの場合、await==trueならばsetを待ち、そうでないならpostValueされる
+     */
+    protected void syncValue(T value, boolean await) {
+        if (AndroidThreadUtil.isUIThread()) {
+            setValue(value);
+        } else {
+            if (await) {
+                UIHandler.await(() -> {
+                    setValue(value);
+                    return this;
+                });
+            } else {
+                postValue(value);
+            }
+        }
     }
 
     @Override
