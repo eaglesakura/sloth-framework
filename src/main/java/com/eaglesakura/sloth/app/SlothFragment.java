@@ -159,6 +159,12 @@ public abstract class SlothFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        getLifecycle().onPause();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         getLifecycle().onCreateOptionsMenu(menu, inflater);
     }

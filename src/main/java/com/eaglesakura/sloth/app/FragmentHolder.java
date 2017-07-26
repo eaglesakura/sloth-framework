@@ -2,6 +2,7 @@ package com.eaglesakura.sloth.app;
 
 import com.eaglesakura.cerberus.event.OnCreateEvent;
 import com.eaglesakura.lambda.Action1;
+import com.eaglesakura.lambda.Action3;
 import com.eaglesakura.sloth.app.lifecycle.Lifecycle;
 import com.eaglesakura.util.ReflectionUtil;
 
@@ -74,6 +75,9 @@ public abstract class FragmentHolder<T extends Fragment> {
                     transaction.add(mHolderId, mFragment, mFragmentTag).commit();
                 }
             }
+        } else {
+            // find fragment
+            mFragment = ((T) getFragmentManager().findFragmentByTag(mFragmentTag));
         }
     }
 
@@ -97,6 +101,23 @@ public abstract class FragmentHolder<T extends Fragment> {
                 .replace(mHolderId, fragment, mFragmentTag)
                 .commit();
         mFragment = fragment;
+    }
+
+    /**
+     * コンテンツを切り替える
+     *
+     * @param fragment          新たなFragment
+     * @param transactionAction (transaction, holderId, tag)を渡し、必要なトランザクション処理を行う
+     */
+    public <T2 extends T> void transaction(@NonNull T2 fragment, Action3<FragmentTransaction, Integer, String> transactionAction) {
+        try {
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transactionAction.action(transaction, mHolderId, mFragmentTag);
+            transaction.commit();
+            mFragment = fragment;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @NonNull
