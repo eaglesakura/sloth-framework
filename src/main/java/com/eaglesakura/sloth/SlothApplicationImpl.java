@@ -60,6 +60,8 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
     @NonNull
     LocalMessageReceiver mLocalMessageReceiver;
 
+    String mProcessId = RandomUtil.randShortString();
+
     public SlothApplicationImpl(@NonNull Application application) {
         mApplication = application;
         mApplication.registerActivityLifecycleCallbacks(this);
@@ -129,6 +131,10 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
 
         // バージョンコードかバージョン名が変わったら通知を行う
         mVersionContext = new VersionContext(oldVersionName, oldVersionCode, versionName, versionCode);
+    }
+
+    public String getProcessId() {
+        return mProcessId;
     }
 
     @Override

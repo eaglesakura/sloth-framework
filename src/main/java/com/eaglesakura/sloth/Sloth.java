@@ -6,6 +6,7 @@ import com.eaglesakura.cerberus.BackgroundTaskBuilder;
 import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.ExecuteTarget;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
+import com.eaglesakura.util.RandomUtil;
 
 import android.app.Activity;
 import android.app.Application;
@@ -135,6 +136,13 @@ public class Sloth {
     public static boolean isApplicationForeground() {
         SlothApplicationImpl impl = getImpl();
         return impl.mForegroundActivities > 0;
+    }
+
+    /**
+     * プロセス起動ごと（Art/Dalvik起動）ごとに割り振られるランダムな文字列を返却する
+     */
+    public static String getProcessId() {
+        return getImpl().getProcessId();
     }
 
     /**
