@@ -15,9 +15,6 @@ public class InternalSupportFragmentUtil {
      * これは一時的な処理であるため、将来的に内部処理は削除されるのが望ましい。
      */
     public static void onCreate(@NonNull Fragment fragment, Bundle savedInstanceState) {
-        if (fragment.mChildFragmentManager != null) {
-            fragment.mChildFragmentManager.mHost = fragment.mHost;
-        }
     }
 
     /**

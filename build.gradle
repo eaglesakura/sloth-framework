@@ -90,7 +90,7 @@ configurations {
 
 
 dependencies {
-    compile "com.eaglesakura:android-commons:2.3.1"
+    compile "com.eaglesakura:android-commons:2.3.3"
     compile "com.eaglesakura:cerberus:3.0.1"
     compile "com.eaglesakura:android-text-kvs:2.4.0"
     compile "com.eaglesakura:alternet:2.3.2"

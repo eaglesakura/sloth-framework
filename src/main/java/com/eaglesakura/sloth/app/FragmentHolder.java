@@ -175,6 +175,26 @@ public abstract class FragmentHolder<T extends Fragment> {
     }
 
     /**
+     * Fragmentを削除する
+     */
+    public void removeWithBackstack() {
+        getFragmentManager().popBackStack();
+        mFragment = null;
+    }
+
+    /**
+     * 指定操作を伴ったremoveを行なう
+     */
+    public void remove(Action2<Fragment, FragmentManager> action) {
+        try {
+            action.action(mFragment, getFragmentManager());
+            mFragment = null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Android Architecture Componentsに合わせ、 {@link FragmentHolder#subscribe(Lifecycle)} を推奨
      */
     @Deprecated
