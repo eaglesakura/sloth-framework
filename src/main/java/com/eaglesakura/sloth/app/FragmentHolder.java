@@ -219,6 +219,15 @@ public abstract class FragmentHolder<T extends Fragment> {
         return this;
     }
 
+    public static <T extends Fragment> FragmentHolder<T> newStub(@NonNull Fragment parent, @NonNull String tag) {
+        return new FragmentHolder<T>(parent, 0x00, tag) {
+            @NonNull
+            @Override
+            protected T newFragmentInstance(@Nullable Bundle savedInstanceState) throws Exception {
+                return null;
+            }
+        };
+    }
 
     public static <T extends Fragment> FragmentHolder<T> newStub(@NonNull Fragment parent, @IdRes int holderId, @NonNull String tag) {
         return new FragmentHolder<T>(parent, holderId, tag) {
@@ -226,6 +235,16 @@ public abstract class FragmentHolder<T extends Fragment> {
             @Override
             protected T newFragmentInstance(@Nullable Bundle savedInstanceState) throws Exception {
                 return null;
+            }
+        };
+    }
+
+    public static <T extends Fragment> FragmentHolder<T> newInstance(@NonNull Fragment parent, @NonNull Class<? extends T> aClass) {
+        return new FragmentHolder<T>(parent, 0x00, aClass.getName()) {
+            @NonNull
+            @Override
+            protected T newFragmentInstance(@Nullable Bundle savedInstanceState) throws Exception {
+                return aClass.newInstance();
             }
         };
     }
