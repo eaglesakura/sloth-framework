@@ -137,6 +137,10 @@ public class SupportCancelCallbackBuilder {
         };
     }
 
+    public static SupportCancelCallbackBuilder from(long time, TimeUnit timeUnit) {
+        return new SupportCancelCallbackBuilder(timeout(time, timeUnit));
+    }
+
     public static SupportCancelCallbackBuilder from(BackgroundTask task) {
         return new SupportCancelCallbackBuilder(as(task));
     }
