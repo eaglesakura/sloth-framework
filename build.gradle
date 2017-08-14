@@ -19,7 +19,7 @@ buildscript {
         maven { url "https://dl.bintray.com/eaglesakura/maven/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha9'
+        classpath 'com.android.tools.build:gradle:3.0.0-beta2'
         classpath "com.eaglesakura:plugin-ci-support:1.2.200"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
@@ -76,7 +76,7 @@ android {
     }
 
     lintOptions {
-        disable "NewApi"    // try-with-resource等
+//        disable "NewApi"    // try-with-resource等
     }
 }
 
@@ -101,29 +101,38 @@ dependencies {
     compile "com.eaglesakura:garnet:1.2.0"
     compile "com.eaglesakura:light-saver:1.4.1"
 
-    androidTestImplementation "com.eaglesakura:android-devicetest-support:2.3.0"
-    testImplementation "com.eaglesakura:android-unittest-support:1.6.0"
+    androidTestImplementation "com.eaglesakura:android-commons:2.3.build-35"
+    androidTestImplementation("com.eaglesakura:android-devicetest-support:2.3.1") {
+        exclude(group: "com.eaglesakura", module: "java-commons")
+        exclude(group: "com.eaglesakura", module: "android-commons")
+        exclude(group: "com.android.support")
+    }
+    testImplementation("com.eaglesakura:android-unittest-support:1.6.0") {
+        exclude(group: "com.eaglesakura", module: "java-commons")
+        exclude(group: "com.eaglesakura", module: "android-commons")
+        exclude(group: "com.android.support")
+    }
 
     /**
      * support libs
      */
-    implementation "com.android.support:support-v4:26.0.0"
-    implementation "com.android.support:appcompat-v7:26.0.0"
-    implementation "com.android.support:cardview-v7:26.0.0"
-    implementation "com.android.support:recyclerview-v7:26.0.0"
+    implementation "com.android.support:support-v4:26.0.1"
+    implementation "com.android.support:appcompat-v7:26.0.1"
+    implementation "com.android.support:cardview-v7:26.0.1"
+    implementation "com.android.support:recyclerview-v7:26.0.1"
 //    implementation "com.android.support:palette-v7:26.0.0"
-    implementation "com.android.support:design:26.0.0"
-    implementation "com.android.support:support-annotations:26.0.0"
+    implementation "com.android.support:design:26.0.1"
+    implementation "com.android.support:support-annotations:26.0.1"
 
     /**
      * Android Architecture Components
      */
-    implementation "android.arch.lifecycle:runtime:1.0.0-alpha5"
-    implementation "android.arch.lifecycle:extensions:1.0.0-alpha5"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha5"
+    implementation "android.arch.lifecycle:runtime:1.0.0-alpha8"
+    implementation "android.arch.lifecycle:extensions:1.0.0-alpha8"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha8"
 
     // Room O/R Mapper
-    implementation "android.arch.persistence.room:runtime:1.0.0-alpha5"
+    implementation "android.arch.persistence.room:runtime:1.0.0-alpha8"
 
     /**
      * Smooth ProgressBar / 160 Method
