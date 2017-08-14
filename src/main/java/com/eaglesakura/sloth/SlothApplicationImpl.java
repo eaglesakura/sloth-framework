@@ -4,6 +4,7 @@ import com.eaglesakura.android.device.display.DisplayInfo;
 import com.eaglesakura.android.util.ContextUtil;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.json.JSON;
+import com.eaglesakura.sloth.annotation.ConstantObject;
 import com.eaglesakura.sloth.app.VersionContext;
 import com.eaglesakura.sloth.app.lifecycle.ServiceLifecycle;
 import com.eaglesakura.sloth.db.property.PropertyStore;
@@ -46,7 +47,7 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
     /**
      * 初回起動時に確定するID
      */
-    @NonNull
+    @ConstantObject
     String mInstallUniqueId;
 
     @NonNull
@@ -60,7 +61,8 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
     @NonNull
     LocalMessageReceiver mLocalMessageReceiver;
 
-    String mProcessId = RandomUtil.randShortString();
+    @NonNull
+    final String mProcessId = RandomUtil.randShortString();
 
     public SlothApplicationImpl(@NonNull Application application) {
         mApplication = application;
@@ -122,6 +124,7 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
         final int versionCode = ContextUtil.getVersionCode(mApplication);
 
         SlothLog.system("Install Unique ID [%s]", mInstallUniqueId);
+        SlothLog.system("Process Unique ID [%s]", mProcessId);
         SlothLog.system("VersionCode       [%d] -> [%d]", oldVersionCode, versionCode);
         SlothLog.system("VersionName       [%s] -> [%s]", oldVersionName, versionName);
 

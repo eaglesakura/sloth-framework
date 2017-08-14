@@ -6,6 +6,9 @@ import com.eaglesakura.cerberus.BackgroundTaskBuilder;
 import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.ExecuteTarget;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
+import com.eaglesakura.sloth.annotation.Dummy;
+import com.eaglesakura.sloth.annotation.Unused;
+import com.eaglesakura.sloth.cerberus.SupportBackgroundTaskBuilder;
 import com.eaglesakura.util.RandomUtil;
 
 import android.app.Activity;
@@ -13,6 +16,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
+import android.support.design.widget.BaseTransientBottomBar;
 
 import java.lang.ref.WeakReference;
 
@@ -75,9 +79,22 @@ public class Sloth {
      * FireAndForget/LocalQueueで処理される。必要に応じて処理スレッドを変更する。
      * MEMO : .start()は外部で呼び出す必要がある。
      */
-    public static <T> BackgroundTaskBuilder<T> newGlobalTask(BackgroundTask.Async<T> callback) {
-        return new BackgroundTaskBuilder<T>(getCallbackQueue())
+    public static <T> SupportBackgroundTaskBuilder<T> newGlobalTask(BackgroundTask.Async<T> callback) {
+        return (SupportBackgroundTaskBuilder<T>) new SupportBackgroundTaskBuilder<T>(getCallbackQueue())
                 .async(callback)
+                .callbackOn(CallbackTime.FireAndForget)
+                .executeOn(ExecuteTarget.LocalQueue);
+    }
+
+    /**
+     * グローバルに動作するタスクを取得する
+     *
+     * FireAndForget/LocalQueueで処理される。必要に応じて処理スレッドを変更する。
+     * MEMO : .start()は外部で呼び出す必要がある。
+     * MEMO : 非同期タスクはデフォルトでsetされない
+     */
+    public static <T> SupportBackgroundTaskBuilder<T> newGlobalTask(@Dummy Class<? extends T> clazz) {
+        return (SupportBackgroundTaskBuilder<T>) new SupportBackgroundTaskBuilder<T>(getCallbackQueue())
                 .callbackOn(CallbackTime.FireAndForget)
                 .executeOn(ExecuteTarget.LocalQueue);
     }

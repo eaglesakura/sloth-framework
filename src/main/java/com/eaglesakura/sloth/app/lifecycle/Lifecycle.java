@@ -6,9 +6,12 @@ import com.eaglesakura.cerberus.BackgroundTaskBuilder;
 import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.ExecuteTarget;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
+import com.eaglesakura.lambda.CancelCallback;
+import com.eaglesakura.lambda.ResultAction1;
 import com.eaglesakura.sloth.annotation.Experimental;
 import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
 import com.eaglesakura.sloth.app.lifecycle.event.State;
+import com.eaglesakura.sloth.cerberus.SupportBackgroundTaskBuilder;
 import com.eaglesakura.thread.Holder;
 
 import android.arch.lifecycle.LifecycleRegistryOwner;
@@ -161,15 +164,45 @@ public abstract class Lifecycle {
      *
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
-    public <T> BackgroundTaskBuilder<T> asyncQueue(BackgroundTask.Async<T> background) {
+    @Experimental
+    public <T> SupportBackgroundTaskBuilder<T> asyncCancelableQueue(ResultAction1<CancelCallback, ? extends T> background) {
+        return asyncCancelable(ExecuteTarget.LocalQueue, CallbackTime.Foreground, background);
+    }
+
+    /**
+     * 規定のスレッドとタイミングで非同期処理を行う
+     */
+    @Experimental
+    public <T> SupportBackgroundTaskBuilder<T> asyncCancelable(ExecuteTarget execute, CallbackTime time, ResultAction1<CancelCallback, ? extends T> background) {
+        return (SupportBackgroundTaskBuilder<T>) new SupportBackgroundTaskBuilder<T>(mCallbackQueue)
+                .asyncCancelable(background)
+                .executeOn(execute)
+                .callbackOn(time);
+    }
+
+    /**
+     * 規定のスレッドとタイミングで非同期処理を行う
+     */
+    @Experimental
+    public <T> SupportBackgroundTaskBuilder<T> asyncCancelable(ResultAction1<CancelCallback, ? extends T> background) {
+        return new SupportBackgroundTaskBuilder<T>(mCallbackQueue)
+                .asyncCancelable(background);
+    }
+
+    /**
+     * UIに関わる処理を非同期で実行する。
+     *
+     * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
+     */
+    public <T> SupportBackgroundTaskBuilder<T> asyncQueue(BackgroundTask.Async<T> background) {
         return async(ExecuteTarget.LocalQueue, CallbackTime.Foreground, background);
     }
 
     /**
      * 規定のスレッドとタイミングで非同期処理を行う
      */
-    public <T> BackgroundTaskBuilder<T> async(ExecuteTarget execute, CallbackTime time, BackgroundTask.Async<T> background) {
-        return new BackgroundTaskBuilder<T>(mCallbackQueue)
+    public <T> SupportBackgroundTaskBuilder<T> async(ExecuteTarget execute, CallbackTime time, BackgroundTask.Async<T> background) {
+        return (SupportBackgroundTaskBuilder<T>) new SupportBackgroundTaskBuilder<T>(mCallbackQueue)
                 .executeOn(execute)
                 .callbackOn(time)
                 .async(background);

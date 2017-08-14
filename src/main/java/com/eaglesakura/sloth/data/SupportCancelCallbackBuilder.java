@@ -10,6 +10,7 @@ import com.eaglesakura.sloth.view.adapter.CardAdapter;
 import com.eaglesakura.util.Timer;
 
 import android.app.Dialog;
+import android.support.v4.os.CancellationSignal;
 
 import java.util.concurrent.TimeUnit;
 
@@ -107,22 +108,26 @@ public class SupportCancelCallbackBuilder {
         return new CancelChecker(mCancelCallback);
     }
 
-    static CancelCallback as(BackgroundTask task) {
+    public static CancelCallback as(BackgroundTask task) {
         return () -> task.isCanceled();
     }
 
     /**
      * ダイアログの可視状態とリンクする
      */
-    static CancelCallback as(Dialog dialog) {
+    public static CancelCallback as(Dialog dialog) {
         return () -> !dialog.isShowing();
     }
 
     /**
      * カード状態とリンクする
      */
-    static CancelCallback as(CardAdapter.CardBind bind) {
+    public static CancelCallback as(CardAdapter.CardBind bind) {
         return () -> !bind.isBinded();
+    }
+
+    public static CancelCallback as(CancellationSignal signal) {
+        return () -> signal.isCanceled();
     }
 
     static CancelCallback timeout(long time, TimeUnit unit) {
@@ -155,6 +160,10 @@ public class SupportCancelCallbackBuilder {
 
     public static SupportCancelCallbackBuilder from(Dialog dialog) {
         return new SupportCancelCallbackBuilder(as(dialog));
+    }
+
+    public static SupportCancelCallbackBuilder from(CancellationSignal signal) {
+        return new SupportCancelCallbackBuilder(as(signal));
     }
 
     public class CancelChecker implements
