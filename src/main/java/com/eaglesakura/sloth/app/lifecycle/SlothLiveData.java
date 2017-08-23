@@ -10,17 +10,15 @@ import com.eaglesakura.sloth.app.lifecycle.event.LifecycleEvent;
 import com.eaglesakura.sloth.app.lifecycle.event.State;
 import com.eaglesakura.sloth.util.LiveDataUtil;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.reactivex.annotations.NonNull;
-import io.reactivex.annotations.Nullable;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -49,6 +47,33 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
      * Activeかどうかのステータス
      */
     private AtomicBoolean mActive = new AtomicBoolean(false);
+
+    /**
+     * 値を取得する。
+     * nullの場合、NPEを投げて通知する。
+     *
+     * @return {@link LiveData#getValue()} と同値
+     */
+    @NonNull
+    public T getValueOrThrow() throws NullPointerException {
+        T value = getValue();
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        return value;
+    }
+
+    /**
+     * {@link LiveData#getValue()}
+     */
+    public T getValueOrDefault(T defValue) {
+        T value = getValue();
+        if (value == null) {
+            return defValue;
+        } else {
+            return value;
+        }
+    }
 
     /**
      * {@link LiveData#onActive()}のListenerを定義する。
@@ -85,7 +110,7 @@ public abstract class SlothLiveData<T> extends LiveData<T> {
     /**
      * 値の初期化を行う
      *
-     * これはどのThreadからでも呼び出せるが、getValue() == nullの場合にのみ動作する。
+     * これはどのThreadからでも呼び出せるが、getValueOrDefault() == nullの場合にのみ動作する。
      * また、UIThreadでawait()を行っている場合にデッドロックする危険性がある
      *
      * @param value 初期化値
