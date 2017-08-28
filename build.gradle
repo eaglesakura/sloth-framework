@@ -129,12 +129,12 @@ dependencies {
     /**
      * Android Architecture Components
      */
-    implementation "android.arch.lifecycle:runtime:1.0.0-alpha8"
-    implementation "android.arch.lifecycle:extensions:1.0.0-alpha8"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha8"
+    implementation "android.arch.lifecycle:runtime:1.0.0-alpha9"
+    implementation "android.arch.lifecycle:extensions:1.0.0-alpha9"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha9"
 
     // Room O/R Mapper
-    implementation "android.arch.persistence.room:runtime:1.0.0-alpha8"
+    implementation "android.arch.persistence.room:runtime:1.0.0-alpha9"
 
     /**
      * Smooth ProgressBar / 160 Method
