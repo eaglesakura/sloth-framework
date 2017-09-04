@@ -26,4 +26,9 @@ public class SlothPublicLiveData<T> extends SlothLiveData<T> {
     public void setValue(T value) {
         super.setValue(value);
     }
+
+    @Override
+    public void syncValue(T value, boolean await) {
+        super.syncValue(value, await);
+    }
 }
