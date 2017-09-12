@@ -136,6 +136,7 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
         mVersionContext = new VersionContext(oldVersionName, oldVersionCode, versionName, versionCode);
     }
 
+    @NonNull
     public String getProcessId() {
         return mProcessId;
     }
@@ -164,6 +165,10 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityPaused(Activity activity) {
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
         --mForegroundActivities;
         // バックグラウンドに移動した
         if (mForegroundActivities == 0) {
@@ -173,11 +178,7 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
                 }
             }
         }
-        SlothLog.system("onActivityPaused num[%d] (%s)", mForegroundActivities, activity.toString());
-    }
-
-    @Override
-    public void onActivityStopped(Activity activity) {
+        SlothLog.system("onActivityStopped num[%d] (%s)", mForegroundActivities, activity.toString());
     }
 
     @Override
