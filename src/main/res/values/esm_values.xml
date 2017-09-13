@@ -147,4 +147,8 @@
     <dimen name="EsMaterial.Widget.Dialog.MinWidth">280dp</dimen>
 
     <integer name="EsMaterial.Widget.Fragment.Transition.Duration">1000</integer>
+
+
+    <!-- Meta情報 -->
+    <item name="ImageLoader.TargetBuilder" type="id"/>
 </resources>

@@ -3,7 +3,14 @@ package com.eaglesakura.sloth.graphics;
 import com.eaglesakura.alternet.Alternet;
 import com.eaglesakura.alternet.request.ConnectRequest;
 import com.eaglesakura.alternet.request.SimpleHttpRequest;
+import com.eaglesakura.cerberus.BackgroundTask;
+import com.eaglesakura.cerberus.CallbackTime;
+import com.eaglesakura.cerberus.ExecuteTarget;
+import com.eaglesakura.lambda.Action2;
 import com.eaglesakura.lambda.CancelCallback;
+import com.eaglesakura.sloth.R;
+import com.eaglesakura.sloth.app.lifecycle.Lifecycle;
+import com.eaglesakura.sloth.data.SupportCancelCallbackBuilder;
 import com.eaglesakura.sloth.graphics.loader.DrawableImageLoader;
 import com.eaglesakura.sloth.graphics.loader.FileImageLoader;
 import com.eaglesakura.sloth.graphics.loader.NetworkImageLoader;
@@ -16,6 +23,8 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -116,6 +125,39 @@ public class SyncImageLoader {
 
         public Builder(com.eaglesakura.sloth.graphics.loader.ImageLoader loader) {
             mLoader = loader;
+        }
+
+        /**
+         * ImageViewに対してロード&画像セットを行なう
+         *
+         * @param lifecycle 対象となるライフサイクル
+         * @param view      対象のImageView
+         */
+        public BackgroundTask<Drawable> inject(Lifecycle lifecycle, ImageView view) {
+            return inject(lifecycle, view, (v, img) -> view.setImageDrawable(img));
+        }
+
+        /**
+         * ImageViewに対してロード&画像セットを行なう
+         *
+         * @param view      対象のView
+         * @param lifecycle 対象となるライフサイクル
+         */
+        public <T extends View> BackgroundTask<Drawable> inject(Lifecycle lifecycle, T view, Action2<T, Drawable> action) {
+            view.setTag(R.id.ImageLoader_TargetBuilder, this);
+            return lifecycle.async(ExecuteTarget.LocalParallel, CallbackTime.Alive, (BackgroundTask<Drawable> task) -> {
+                return await(SupportCancelCallbackBuilder.from(task).build());
+            }).completed(result -> {
+                Builder tag = (Builder) view.getTag(R.id.ImageLoader_TargetBuilder);
+                if (tag == this) {
+                    view.setTag(R.id.ImageLoader_TargetBuilder, null);
+                    try {
+                        action.action((T) view, result);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
         }
 
         /**
