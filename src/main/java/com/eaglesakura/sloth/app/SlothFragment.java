@@ -46,7 +46,7 @@ public abstract class SlothFragment extends Fragment {
      * ライフサイクルオブジェクトを取得する
      */
     @NonNull
-    public FragmentLifecycle getLifecycle() {
+    public FragmentLifecycle getFragmentLifecycle() {
         if (mLifecycle == null) {
             synchronized (this) {
                 if (mLifecycle == null) {
@@ -68,7 +68,7 @@ public abstract class SlothFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getLifecycle().onCreateView(inflater, container, savedInstanceState);
+        getFragmentLifecycle().onCreateView(inflater, container, savedInstanceState);
         return null;
     }
 
@@ -88,7 +88,7 @@ public abstract class SlothFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        getLifecycle().onSaveInstanceState(outState);
+        getFragmentLifecycle().onSaveInstanceState(outState);
     }
 
     @Override
@@ -101,7 +101,7 @@ public abstract class SlothFragment extends Fragment {
             bindInterface(field);
         }
 
-        getLifecycle().onAttach(context);
+        getFragmentLifecycle().onAttach(context);
     }
 
     /**
@@ -134,62 +134,62 @@ public abstract class SlothFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         InternalSupportFragmentUtil.onCreate(this, savedInstanceState);
         super.onCreate(savedInstanceState);
-        getLifecycle().onCreate(savedInstanceState);
+        getFragmentLifecycle().onCreate(savedInstanceState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        getLifecycle().onStart();
+        getFragmentLifecycle().onStart();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getLifecycle().onResume();
+        getFragmentLifecycle().onResume();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        getLifecycle().onCreateOptionsMenu(menu, inflater);
+        getFragmentLifecycle().onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getLifecycle().onPause();
+        getFragmentLifecycle().onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getLifecycle().onStop();
+        getFragmentLifecycle().onStop();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getLifecycle().onDestroyView();
+        getFragmentLifecycle().onDestroyView();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         InternalSupportFragmentUtil.onDetach(this);
-        getLifecycle().onDetach();
+        getFragmentLifecycle().onDetach();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getLifecycle().onDestroy();
+        getFragmentLifecycle().onDestroy();
     }
 
     /**
      * コールバックキューを取得する
      */
     public PendingCallbackQueue getCallbackQueue() {
-        return getLifecycle().getCallbackQueue();
+        return getFragmentLifecycle().getCallbackQueue();
     }
 
     /**
@@ -198,7 +198,7 @@ public abstract class SlothFragment extends Fragment {
      * 処理順を整列するため、非同期・直列処理されたあと、アプリがフォアグラウンドのタイミングでコールバックされる。
      */
     public <T> BackgroundTaskBuilder<T> asyncQueue(BackgroundTask.Async<T> background) {
-        return getLifecycle().asyncQueue(background);
+        return getFragmentLifecycle().asyncQueue(background);
     }
 
     @Override
@@ -217,7 +217,7 @@ public abstract class SlothFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        getLifecycle().onActivityResult(requestCode, resultCode, data);
+        getFragmentLifecycle().onActivityResult(requestCode, resultCode, data);
     }
 
     public void requestPermissions(@NonNull Collection<PermissionUtil.PermissionType> permissions, int requestCode) {

@@ -115,7 +115,7 @@ public class SupportFragmentPager {
         for (PagerFragmentHolder holder : mFragments) {
             if (holder.mCacheFragment instanceof SlothFragment) {
                 SlothFragment cacheFragment = (SlothFragment) holder.mCacheFragment;
-                State lifecycleState = cacheFragment.getLifecycle().getLifecycleState();
+                State lifecycleState = cacheFragment.getFragmentLifecycle().getLifecycleState();
 
                 if (lifecycleState.ordinal() >= State.OnDestroy.ordinal()) {
                     // 廃棄済みのため、キャッシュを削除すべき

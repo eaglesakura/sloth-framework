@@ -14,7 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 public abstract class SlothActivity extends AppCompatActivity {
     private ActivityLifecycle mLifecycle;
 
-    public ActivityLifecycle getLifecycle() {
+    public ActivityLifecycle getActivityLifecycle() {
         if (mLifecycle == null) {
             synchronized (this) {
                 if (mLifecycle == null) {
@@ -35,59 +35,59 @@ public abstract class SlothActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        getLifecycle().onRestoreInstanceState(savedInstanceState);
+        getActivityLifecycle().onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLifecycle().onCreate(savedInstanceState);
+        getActivityLifecycle().onCreate(savedInstanceState);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        getLifecycle().onStart();
+        getActivityLifecycle().onStart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getLifecycle().onResume();
+        getActivityLifecycle().onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        getLifecycle().onPause();
+        getActivityLifecycle().onPause();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        getLifecycle().onSaveInstanceState(outState);
+        getActivityLifecycle().onSaveInstanceState(outState);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        getLifecycle().onStop();
+        getActivityLifecycle().onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        getLifecycle().onDestroy();
+        getActivityLifecycle().onDestroy();
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        getLifecycle().onActivityResult(requestCode, resultCode, data);
+        getActivityLifecycle().onActivityResult(requestCode, resultCode, data);
     }
 
     public PendingCallbackQueue getCallbackQueue() {
-        return getLifecycle().getCallbackQueue();
+        return getActivityLifecycle().getCallbackQueue();
     }
 }
