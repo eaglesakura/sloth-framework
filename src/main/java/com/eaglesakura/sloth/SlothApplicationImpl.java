@@ -148,8 +148,14 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityStarted(Activity activity) {
+        boolean moveToForeground = false;
         if (mForegroundActivity == null || mForegroundActivity.get() == null) {
             // フォアグラウンドに移動した
+            moveToForeground = true;
+        }
+
+        mForegroundActivity = new WeakReference<>(activity);
+        if (moveToForeground) {
             synchronized (mStateListeners) {
                 for (Sloth.ApplicationStateListener listener : mStateListeners) {
                     listener.onApplicationForeground(activity);
