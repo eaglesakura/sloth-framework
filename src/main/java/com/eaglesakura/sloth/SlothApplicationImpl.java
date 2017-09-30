@@ -2,7 +2,6 @@ package com.eaglesakura.sloth;
 
 import com.eaglesakura.android.device.display.DisplayInfo;
 import com.eaglesakura.android.util.ContextUtil;
-import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.json.JSON;
 import com.eaglesakura.sloth.annotation.ConstantObject;
 import com.eaglesakura.sloth.app.VersionContext;
@@ -24,6 +23,7 @@ import android.support.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,13 +35,11 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
     @NonNull
     final Application mApplication;
 
-    @NonNull
     SystemSettings mSettings;
 
     /**
      * 現在のバージョン情報
      */
-    @NonNull
     VersionContext mVersionContext;
 
     /**
@@ -56,13 +54,16 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
     @NonNull
     Set<Sloth.ApplicationStateListener> mStateListeners = new HashSet<>();
 
-    int mForegroundActivities;
-
     @NonNull
     LocalMessageReceiver mLocalMessageReceiver;
 
     @NonNull
     final String mProcessId = RandomUtil.randShortString();
+
+    /**
+     * Foregroundとして扱われているActivity
+     */
+    WeakReference<Activity> mForegroundActivity;
 
     public SlothApplicationImpl(@NonNull Application application) {
         mApplication = application;
@@ -147,12 +148,7 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityStarted(Activity activity) {
-    }
-
-    @Override
-    public void onActivityResumed(Activity activity) {
-        ++mForegroundActivities;
-        if (mForegroundActivities == 1) {
+        if (mForegroundActivity == null || mForegroundActivity.get() == null) {
             // フォアグラウンドに移動した
             synchronized (mStateListeners) {
                 for (Sloth.ApplicationStateListener listener : mStateListeners) {
@@ -160,7 +156,11 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
                 }
             }
         }
-        SlothLog.system("onActivityResumed num[%d] (%s)", mForegroundActivities, activity.toString());
+        SlothLog.system("onActivityResumed (%s)", activity.toString());
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
     }
 
     @Override
@@ -169,16 +169,20 @@ class SlothApplicationImpl implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityStopped(Activity activity) {
-        --mForegroundActivities;
-        // バックグラウンドに移動した
-        if (mForegroundActivities == 0) {
+        // 自身がForegroundであったのなら、参照を排除する
+        if (mForegroundActivity != null && mForegroundActivity.get() == activity) {
+            mForegroundActivity = null;
+        }
+
+        // Activityがなくなったら通知
+        if (mForegroundActivity == null) {
             synchronized (mStateListeners) {
                 for (Sloth.ApplicationStateListener listener : mStateListeners) {
                     listener.onApplicationBackground();
                 }
             }
         }
-        SlothLog.system("onActivityStopped num[%d] (%s)", mForegroundActivities, activity.toString());
+        SlothLog.system("onActivityStopped (%s)", activity.toString());
     }
 
     @Override

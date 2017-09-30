@@ -2,21 +2,17 @@ package com.eaglesakura.sloth;
 
 import com.eaglesakura.android.util.AndroidThreadUtil;
 import com.eaglesakura.cerberus.BackgroundTask;
-import com.eaglesakura.cerberus.BackgroundTaskBuilder;
 import com.eaglesakura.cerberus.CallbackTime;
 import com.eaglesakura.cerberus.ExecuteTarget;
 import com.eaglesakura.cerberus.PendingCallbackQueue;
 import com.eaglesakura.sloth.annotation.Dummy;
-import com.eaglesakura.sloth.annotation.Unused;
 import com.eaglesakura.sloth.cerberus.SupportBackgroundTaskBuilder;
-import com.eaglesakura.util.RandomUtil;
 
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
-import android.support.design.widget.BaseTransientBottomBar;
 
 import java.lang.ref.WeakReference;
 
@@ -152,7 +148,8 @@ public class Sloth {
     @UiThread
     public static boolean isApplicationForeground() {
         SlothApplicationImpl impl = getImpl();
-        return impl.mForegroundActivities > 0;
+        WeakReference<Activity> foregroundActivity = getImpl().mForegroundActivity;
+        return foregroundActivity != null && foregroundActivity.get() != null;
     }
 
     /**
