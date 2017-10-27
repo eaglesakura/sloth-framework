@@ -19,7 +19,7 @@ buildscript {
         maven { url "https://dl.bintray.com/eaglesakura/maven/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-beta6'
+        classpath 'com.android.tools.build:gradle:3.0.0'
         classpath "com.eaglesakura:plugin-ci-support:1.2.200"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
@@ -48,7 +48,7 @@ props {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -90,20 +90,18 @@ configurations {
 
 
 dependencies {
-    compile "com.eaglesakura:android-commons:2.3.4"
-    compile "com.eaglesakura:android-text-kvs:2.4.0"
-    compile "com.eaglesakura:alternet:2.3.3"
-    compile "com.eaglesakura:onactivityresult-invoke:1.3.0"
-    compile "com.eaglesakura:small-aquery:1.3.0"
-    compile "com.eaglesakura:margarineknife:1.5.0"
+    compile "com.eaglesakura:android-commons:2.3.5"
+    compile "com.eaglesakura:android-text-kvs:2.4.1"
+    compile "com.eaglesakura:alternet:2.3.4"
+    compile "com.eaglesakura:onactivityresult-invoke:1.3.1"
+    compile "com.eaglesakura:small-aquery:1.3.1"
+    compile "com.eaglesakura:margarineknife:1.5.1"
     compile "com.eaglesakura:simple-logger:2.1.0"
-    compile "com.eaglesakura:garnet:1.2.1"
-    compile "com.eaglesakura:light-saver:1.4.1"
+    compile "com.eaglesakura:garnet:1.2.2"
+    compile "com.eaglesakura:light-saver:1.4.2"
+    compile "com.eaglesakura:cerberus:3.0.3"
 
-    // FIXME: ビルドバージョンを最新版に変更する
-    compile "com.eaglesakura:cerberus:3.0.2"
-
-    androidTestImplementation "com.eaglesakura:android-commons:2.3.4"
+    androidTestImplementation "com.eaglesakura:android-commons:2.3.5"
     androidTestImplementation("com.eaglesakura:android-devicetest-support:2.3.1") {
         exclude(group: "com.eaglesakura", module: "java-commons")
         exclude(group: "com.eaglesakura", module: "android-commons")
@@ -129,7 +127,7 @@ dependencies {
     /**
      * Android Architecture Components
      */
-    implementation "android.arch.lifecycle:runtime:1.0.0"
+    implementation "android.arch.lifecycle:runtime:1.0.3"
     implementation "android.arch.lifecycle:extensions:1.0.0-alpha9-1"
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha9-1"
 
